@@ -1,7 +1,7 @@
-# Minimum frontend
+# Minimum PWA
 
 - yarn
-- parcel
+- parcel with pwa-precache
 - typescript
 
 ## How to dev
