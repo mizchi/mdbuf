@@ -57,7 +57,7 @@
     <div style="flex: 1; height: 100vh;">
       <div style="width: 100%; display: flex; justify-content: center;">
         <div style="width: 100%; max-width: 800px; margin-left: auto; margin-right: auto">
-          <textarea class="js-editor editor" spellcheck="false"></textarea>
+          <textarea class="js-editor editor" spellcheck="false">Loading...</textarea>
         </div>
       </div>
     </div>
@@ -72,13 +72,12 @@
 
   </div>
   <div style="position: absolute; right: 20px; bottom: 20px;">
-    <span>...</span>
-
+    <span class="js-wordcount" style="font-family: monospace; color: cornflowerblue;">...</span>
     <button class="js-preview-toggle">👀</button>
   </div>
-  <!-- <script type="module">
-        navigator.serviceWorker.register('/service-worker.js');
-        </script> -->
+  <script type="module">
+    navigator.serviceWorker.register('/service-worker.js');
+  </script>
 
   <script src="./index.ts"></script>
 </body>

@@ -10,6 +10,7 @@ const preview = document.querySelector(".js-preview");
 const previewContainer: any = document.querySelector(".js-preview-container");
 
 const toggle = document.querySelector(".js-preview-toggle");
+const wordcount = document.querySelector(".js-wordcount");
 
 const MarkdownCompiler: any = Comlink.proxy(new Worker("./markdownWorker.ts"));
 
@@ -20,6 +21,10 @@ const main = async () => {
   const update = async (rawValue: string) => {
     if (isComposing) {
       return;
+    }
+
+    if (wordcount) {
+      (wordcount as any).textContent = Array.from(rawValue).length;
     }
 
     console.time("compile:worker");
@@ -33,7 +38,7 @@ const main = async () => {
     });
   };
 
-  if (textarea && preview && previewContainer && toggle) {
+  if (textarea && preview && previewContainer && toggle && wordcount) {
     // Toggle button
     const SHOW_PREVIEW_KEY = "show-preview";
     const val = window.localStorage.getItem(SHOW_PREVIEW_KEY);

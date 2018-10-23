@@ -76,3 +76,4 @@ typings/
 
 
 dist
+.netlify
