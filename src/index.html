@@ -1,13 +1,17 @@
 <html>
 
 <head>
-
+  <link rel="manifest" href="/manifest.webmanifest">
 </head>
 
 <body>
   <div id="root">
     Hello
   </div>
+  <script type="module">
+    navigator.serviceWorker.register('/service-worker.js');
+  </script>
+
   <script src="./index.tsx"></script>
 </body>
 
