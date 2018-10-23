@@ -20,6 +20,7 @@
     "dexie": "^2.0.4",
     "github-markdown-css": "^2.10.0",
     "remark": "^10.0.0",
+    "remark-highlight.js": "^5.0.0",
     "remark-html": "^8.0.0",
     "remark-html-katex": "^1.1.1",
     "remark-math": "^1.0.4"
