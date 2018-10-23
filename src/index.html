@@ -2,11 +2,27 @@
 
 <head>
   <link rel="manifest" href="/manifest.webmanifest">
+  <style>
+    body {
+      margin: 0;
+    }
+  </style>
 </head>
 
 <body>
-  <div id="root">
-    Hello
+  <div id="root" style="display: flex; width: 100vw; height: 98vh; overflow: hidden;">
+    <div style="flex: 1; height: 98vh;">
+      <textarea spellcheck="false" style="width: 100%; height: 95vw; padding: 10px; outline: none; font-size: 1.1em;"></textarea>
+    </div>
+    <div style="flex: 1; height: 98vh; overflow-y: auto;">
+      <div style="height: 98vh; overflow-y: auto;">
+        <div class="js-preview" style="padding: 10px; line-height: 1.3em;">
+          ...
+        </div>
+      </div>
+
+    </div>
+
   </div>
   <script type="module">
     navigator.serviceWorker.register('/service-worker.js');
