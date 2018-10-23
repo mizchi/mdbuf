@@ -1,10 +1,14 @@
 import "@babel/polyfill";
 import "github-markdown-css/github-markdown.css";
+import "katex/dist/katex.min.css";
 
 import * as Comlink from "comlinkjs";
 
 const textarea = document.querySelector(".js-editor");
 const preview = document.querySelector(".js-preview");
+const previewContainer: any = document.querySelector(".js-preview-container");
+
+const toggle = document.querySelector(".js-preview-toggle");
 
 const MarkdownCompiler: any = Comlink.proxy(new Worker("./markdownWorker.ts"));
 
@@ -28,7 +32,34 @@ const main = async () => {
     });
   };
 
-  if (textarea && preview) {
+  if (textarea && preview && previewContainer && toggle) {
+    // Toggle button
+    const SHOW_PREVIEW_KEY = "show-preview";
+    const val = window.localStorage.getItem(SHOW_PREVIEW_KEY);
+    let showPreview: boolean = val ? JSON.parse(val) : true;
+
+    const updatePreviweContainer = () => {
+      if (showPreview) {
+        previewContainer.style.display = "block";
+      } else {
+        previewContainer.style.display = "none";
+      }
+      localStorage.setItem(SHOW_PREVIEW_KEY, String(showPreview));
+    };
+
+    toggle.addEventListener("click", () => {
+      showPreview = !showPreview;
+      updatePreviweContainer();
+    });
+
+    window.addEventListener("keydown", ev => {
+      if (ev.ctrlKey && ev.key === "1") {
+        showPreview = !showPreview;
+        updatePreviweContainer();
+      }
+    });
+    updatePreviweContainer();
+
     // IME Skip
     textarea.addEventListener("compositionstart", async (ev: any) => {
       isComposing = true;
@@ -52,6 +83,8 @@ const main = async () => {
 
     (textarea as any).value = lastState.raw;
     preview.innerHTML = lastState.html;
+
+    (textarea as any).focus();
   }
 };
 

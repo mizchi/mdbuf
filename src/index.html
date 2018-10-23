@@ -7,27 +7,52 @@
   <style>
     body {
       margin: 0;
+      background: #272822;
+      font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Yu Gothic", YuGothic, "ヒラギノ角ゴ ProN W3", Hiragino Kaku Gothic ProN, Arial, "メイリオ", Meiryo, sans-serif;
     }
 
     .editor {
       width: 100%;
-      height: 98vh;
+      height: 100vh;
       padding: 10px;
       outline: none;
       font-size: 1.1em;
-      color: #eee;
-      background: #111;
+      color: #e6db74;
+      background: #272822;
       resize: none;
+      border: none;
+    }
+
+    /*スクロールバー全体*/
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    /*スクロールバーの軌道*/
+    ::-webkit-scrollbar-track {
+      border-radius: 10px;
+      box-shadow: inset 0 0 6px rgba(0, 0, 0, .1);
+    }
+
+    /*スクロールバーの動く部分*/
+    ::-webkit-scrollbar-thumb {
+      background-color: rgba(0, 0, 50, .5);
+      border-radius: 10px;
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, .3);
     }
   </style>
 </head>
 
 <body>
-  <div id="root" style="display: flex; width: 100vw; height: 98vh; overflow: hidden;">
-    <div style="flex: 1; height: 98vh;">
-      <textarea class="js-editor editor" spellcheck="false"></textarea>
+  <div id="root" style="display: flex; width: 100vw; height: 100vh; overflow: hidden;">
+    <div style="flex: 1; height: 100vh;">
+      <div style="width: 100%; display: flex; justify-content: center;">
+        <div style="width: 100%; max-width: 800px; margin-left: auto; margin-right: auto">
+          <textarea class="js-editor editor" spellcheck="false"></textarea>
+        </div>
+      </div>
     </div>
-    <div style="flex: 1; height: 98vh; overflow-y: auto;">
+    <div class="js-preview-container" style="flex: 1; height: 100vh; overflow-y: auto; background: #eee;">
       <div style="overflow-y: auto;">
         <div class="js-preview markdown-body" style="padding: 10px; line-height: 1.3em;">
           ...
@@ -37,9 +62,12 @@
     </div>
 
   </div>
+  <div class="js-preview-toggle" style="position: absolute; right: 20px; bottom: 20px;">
+    <button>👀</button>
+  </div>
   <!-- <script type="module">
-    navigator.serviceWorker.register('/service-worker.js');
-  </script> -->
+        navigator.serviceWorker.register('/service-worker.js');
+        </script> -->
 
   <script src="./index.ts"></script>
 </body>
