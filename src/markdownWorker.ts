@@ -7,6 +7,14 @@ class MarkdownCompiler {
     const result = processor.processSync(raw).toString();
     return result;
   }
+
+  getLastState(): { raw: string; html: string } {
+    const raw = "# hello\n";
+    return {
+      raw,
+      html: processor.processSync(raw).toString()
+    };
+  }
 }
 
 Comlink.expose(MarkdownCompiler, self);

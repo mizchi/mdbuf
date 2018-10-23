@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "comlinkjs": "^3.0.3",
+    "github-markdown-css": "^2.10.0",
     "remark": "^10.0.0",
     "remark-html": "^8.0.0",
     "remark-html-katex": "^1.1.1",
