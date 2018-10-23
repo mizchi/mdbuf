@@ -13,7 +13,6 @@ const main = async () => {
   let isComposing = false;
 
   const update = async (rawValue: string) => {
-    console.log("iscomposinig", isComposing);
     if (isComposing) {
       return;
     }
@@ -30,17 +29,19 @@ const main = async () => {
   };
 
   if (textarea && preview) {
+    // IME Skip
     textarea.addEventListener("compositionstart", async (ev: any) => {
       isComposing = true;
     });
 
     textarea.addEventListener("compositionend", async (ev: any) => {
       isComposing = false;
+
+      // TODO: Ensure input and compositionend order
       update(ev.target.value);
     });
 
     textarea.addEventListener("input", async (ev: any) => {
-      console.log("iscomposinig", isComposing);
       if (isComposing) {
         return;
       }
