@@ -3,6 +3,45 @@ import * as Comlink from "comlinkjs";
 import processor from "./markdownProcessor";
 import Dexie from "dexie";
 
+import markdown from "prettier/parser-markdown";
+import prettier from "prettier/standalone";
+
+const initialText = `# Markdown Editor
+
+- Desktop PWA Support
+- Autosave
+- Off Thread Markdown Compile
+
+## Markdown
+
+**emphasis** ~~strike~~ _italic_
+
+> Quote
+
+\`\`\`js
+// code highlight
+class Foo {
+  constructor() {
+    console.log("xxx");
+  }
+}
+\`\`\`
+
+## Math by KaTeX
+$ y = x^3 + 2ax^2 + b $
+`;
+
+type Item = {
+  raw: string;
+  html: string;
+  id: string;
+  updatedAt: number;
+};
+
+function formatMarkdown(md: string) {
+  return prettier.format(md, { parser: "markdown", plugins: [markdown] });
+}
+
 const db = new Dexie("mydb");
 
 db.version(1).stores({
@@ -16,7 +55,6 @@ const Item = (db as any).items;
 class MarkdownCompiler {
   compile(raw: string) {
     const result = processor.processSync(raw).toString();
-    // Save background
     setTimeout(async () => {
       console.time("worker:save");
       await Item.put({
@@ -30,26 +68,26 @@ class MarkdownCompiler {
     return result;
   }
 
-  async getLastState(): Promise<{
-    raw: string;
-    html: string;
-    id: string;
-    updatedAt: number;
-  }> {
-    try {
-      const current = await Item.get(CURRENT);
+  async format(raw: string): Promise<string> {
+    return formatMarkdown(raw);
+  }
+
+  async getLastState(): Promise<Item> {
+    const current = await Item.get(CURRENT);
+    if (current) {
       return current;
-    } catch (e) {
-      const raw = "# Hello!\n";
-      const initialItem = {
-        id: CURRENT,
-        raw,
-        html: processor.processSync(raw).toString(),
-        updatedAt: Date.now()
-      };
-      await Item.put(initialItem);
-      return initialItem;
     }
+
+    const raw = initialText;
+    const initialItem = {
+      id: CURRENT,
+      raw,
+      html: processor.processSync(raw).toString(),
+      updatedAt: Date.now()
+    };
+    await Item.put(initialItem);
+    console.log("initialItem", initialItem);
+    return initialItem;
   }
 }
 

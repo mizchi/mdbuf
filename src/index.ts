@@ -28,7 +28,7 @@ const main = async () => {
 
     requestAnimationFrame(() => {
       console.time("innerHTML");
-      preview.innerHTML = result;
+      preview && (preview.innerHTML = result);
       console.timeEnd("innerHTML");
     });
   };
@@ -53,10 +53,19 @@ const main = async () => {
       updatePreviweContainer();
     });
 
-    window.addEventListener("keydown", ev => {
+    // keybind
+    window.addEventListener("keydown", async ev => {
       if (ev.ctrlKey && ev.key === "1") {
+        ev.preventDefault();
         showPreview = !showPreview;
         updatePreviweContainer();
+      }
+
+      if (ev.ctrlKey && ev.shiftKey && ev.key.toLowerCase() === "f") {
+        ev.preventDefault();
+        const formatted = await compiler.format((textarea as any).value);
+        (textarea as any).value = formatted;
+        update(formatted);
       }
     });
     updatePreviweContainer();
