@@ -3,7 +3,7 @@ import "github-markdown-css/github-markdown.css";
 import "katex/dist/katex.min.css";
 import "highlight.js/styles/default.css";
 
-import * as Comlink from "comlinkjs";
+import Proxy from "./lib/WorkerProxy";
 
 const textarea = document.querySelector(".js-editor");
 const preview = document.querySelector(".js-preview");
@@ -12,10 +12,8 @@ const previewContainer: any = document.querySelector(".js-preview-container");
 const toggle = document.querySelector(".js-preview-toggle");
 const wordcount = document.querySelector(".js-wordcount");
 
-const MarkdownCompiler: any = Comlink.proxy(new Worker("./worker.ts"));
-
 const main = async () => {
-  const compiler = await new MarkdownCompiler();
+  const compiler = await new Proxy();
   let isComposing = false;
 
   const update = async (rawValue: string) => {
