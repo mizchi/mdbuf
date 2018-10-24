@@ -12,7 +12,7 @@ const previewContainer: any = document.querySelector(".js-preview-container");
 const toggle = document.querySelector(".js-preview-toggle");
 const wordcount = document.querySelector(".js-wordcount");
 
-const MarkdownCompiler: any = Comlink.proxy(new Worker("./markdownWorker.ts"));
+const MarkdownCompiler: any = Comlink.proxy(new Worker("./worker.ts"));
 
 const main = async () => {
   const compiler = await new MarkdownCompiler();

@@ -1,7 +1,8 @@
 <html>
 
 <head>
-  <title>Markdown Preview</title>
+  <title>mdbuf</title>
+  <meta charset="utf-8">
   <link rel="manifest" href="/manifest.webmanifest">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
@@ -56,7 +57,7 @@
   <div id="root" style="display: flex; width: 100vw; height: 100vh; overflow: hidden;">
     <div style="flex: 1; height: 100vh;">
       <div style="width: 100%; display: flex; justify-content: center;">
-        <div style="width: 100%; max-width: 800px; margin-left: auto; margin-right: auto">
+        <div style="width: 100%; max-width: 960px; margin-left: auto; margin-right: auto">
           <textarea class="js-editor editor" spellcheck="false">Loading...</textarea>
         </div>
       </div>
@@ -76,7 +77,10 @@
     <button class="js-preview-toggle">👀</button>
   </div>
   <script type="module">
-    navigator.serviceWorker.register('/service-worker.js');
+    // Skip local
+    if (location.hostname !== 'localhost') {
+      navigator.serviceWorker.register('/service-worker.js');
+    }
   </script>
 
   <script src="./index.ts"></script>
