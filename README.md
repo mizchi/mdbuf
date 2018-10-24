@@ -1,13 +1,20 @@
-# Minimum Markdown Tool
+# mdbuf
 
-- yarn
-- parcel with pwa-precache
-- typescript
+Just a markdown edit buffer
+
+Try here https://markdown-buffer.netlify.com/
 
 ## How to dev
 
 - `yarn dev`: Start asset server on `http://localhost:7777`
 - `yarn build`: Generate SPA to `dist`
+
+## How to deploy
+
+```
+npm i -g netlify-cli
+yarn build & netlify deploy -d dist --prod
+```
 
 ## How to render on your hands
 
@@ -33,6 +40,8 @@ const processor = remark()
 
 const html = processor.processSync("# Hello!).toString()
 ```
+
+See `src/env.ts` and `src/lib/markdownProcessor.ts`
 
 ## LICENSE
 
