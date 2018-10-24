@@ -20,6 +20,7 @@ let proxy: any = null;
 
 let isComposing = false;
 const SHOW_PREVIEW_KEY = "show-preview";
+const TAB_STR = "  ";
 
 class App extends React.Component<{}, State> {
   editorRef: React.RefObject<HTMLTextAreaElement> = React.createRef();
@@ -33,6 +34,19 @@ class App extends React.Component<{}, State> {
     loaded: false,
     showPreview: true
   };
+
+  _updatePreview(raw: String): Promise<void> {
+    return new Promise(async resolve => {
+      const result = await proxy.compile(raw);
+      this.setState(
+        {
+          html: result
+        },
+        resolve
+      );
+      return;
+    });
+  }
 
   async componentDidMount() {
     const val = window.localStorage.getItem(SHOW_PREVIEW_KEY);
@@ -68,16 +82,12 @@ class App extends React.Component<{}, State> {
           const raw = this.editorRef.current.value;
           const formatted = await proxy.format(raw);
           this.editorRef.current.value = formatted;
-          const result = await proxy.compile(formatted);
-          this.setState({
-            html: result
-          });
+          this._updatePreview(formatted);
         }
         return;
       }
 
       // keybind scroll
-
       if (ev.ctrlKey && ev.shiftKey && ev.key.toLowerCase() === "j") {
         ev.preventDefault();
         if (this.previewContainerRef.current) {
@@ -107,11 +117,8 @@ class App extends React.Component<{}, State> {
     });
 
     console.time("compile:worker");
-    const result = await proxy.compile(rawValue);
+    await this._updatePreview(rawValue);
     console.timeEnd("compile:worker");
-    this.setState({
-      html: result
-    });
   }
 
   render() {
@@ -150,6 +157,62 @@ class App extends React.Component<{}, State> {
                   isComposing = false;
                   this.onChangeValue(ev);
                 }}
+                onKeyDown={e => {
+                  // Tab Indent
+                  if (e.keyCode === 9 && !isComposing) {
+                    e.preventDefault();
+                    const el: HTMLTextAreaElement = e.target as any;
+                    let start: number = el.selectionStart;
+                    let end: number = el.selectionEnd;
+                    const raw = el.value;
+                    const lineStart =
+                      raw.substr(0, start).split("\n").length - 1;
+                    const lineEnd = raw.substr(0, end).split("\n").length - 1;
+                    const lines = raw.split("\n");
+                    lines.forEach((line, i) => {
+                      if (i < lineStart || i > lineEnd || lines[i] === "") {
+                        return;
+                      }
+                      if (!e.shiftKey) {
+                        // 行頭にタブ挿入
+                        lines[i] = TAB_STR + line;
+                        start += i == lineStart ? TAB_STR.length : 0;
+                        end += TAB_STR.length;
+                      } else if (
+                        lines[i].substr(0, TAB_STR.length) === TAB_STR
+                      ) {
+                        // 行頭のタブ削除
+                        lines[i] = lines[i].substr(TAB_STR.length);
+                        start -= i == lineStart ? TAB_STR.length : 0;
+                        end -= TAB_STR.length;
+                      }
+                    });
+                    const newRaw = lines.join("\n");
+                    el.value = newRaw;
+                    el.setSelectionRange(start, end);
+                    this._updatePreview(newRaw);
+                  }
+                }}
+                onWheel={ev => {
+                  console.log("wheel", ev.ctrlKey);
+                  if (ev.ctrlKey) {
+                    ev.preventDefault();
+                    console.log("prevented");
+                    if (this.previewContainerRef.current) {
+                      const scrollTop = this.previewContainerRef.current
+                        .scrollTop;
+                      this.previewContainerRef.current.scrollTop =
+                        scrollTop + ev.deltaY;
+                    }
+                  }
+                }}
+                // onScroll={ev => {
+                //   console.log("ev", ev);
+                //   if (isCtrlPressed) {
+
+                //     console.log("scroll with ctrl");
+                //   }
+                // }}
               />
             </div>
           </div>
