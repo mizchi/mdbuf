@@ -55,27 +55,11 @@
 
 <body>
   <div id="root" style="display: flex; width: 100vw; height: 100vh; overflow: hidden;">
-    <div style="flex: 1; height: 100vh;">
-      <div style="width: 100%; display: flex; justify-content: center;">
-        <div style="width: 100%; max-width: 960px; margin-left: auto; margin-right: auto">
-          <textarea class="js-editor editor" spellcheck="false">Loading...</textarea>
-        </div>
-      </div>
-    </div>
-    <div class="js-preview-container" style="flex: 1; height: 100vh; overflow-y: auto; background: #eee;">
-      <div style="overflow-y: auto;">
-        <div class="js-preview markdown-body" style="padding: 10px; line-height: 1.3em;">
-          ...
-        </div>
-      </div>
-
-    </div>
-
   </div>
-  <div style="position: absolute; right: 20px; bottom: 20px;">
+  <!-- <div style="position: absolute; right: 20px; bottom: 20px;">
     <span class="js-wordcount" style="font-family: monospace; color: cornflowerblue;">...</span>
     <button class="js-preview-toggle">👀</button>
-  </div>
+  </div> -->
   <script type="module">
     // Skip local
     if (location.hostname !== 'localhost') {
@@ -83,7 +67,7 @@
     }
   </script>
 
-  <script src="./index.ts"></script>
+  <script src="./index.tsx"></script>
 </body>
 
 </html>

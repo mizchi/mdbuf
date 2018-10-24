@@ -8,6 +8,8 @@
     "build": "parcel build src/index.html"
   },
   "devDependencies": {
+    "@types/react": "^16.4.18",
+    "@types/react-dom": "^16.0.9",
     "parcel-bundler": "^1.10.3",
     "parcel-plugin-sw-precache": "^1.0.1",
     "typescript": "^3.1.3"
