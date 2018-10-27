@@ -139,7 +139,8 @@ class App extends React.Component<{}, State> {
                 width: "100%",
                 maxWidth: "960px",
                 marginLeft: "auto",
-                marginRight: "auto"
+                marginRight: "auto",
+                paddingTop: "8px"
               }}
             >
               <textarea
