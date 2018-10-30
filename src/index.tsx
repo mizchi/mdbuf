@@ -205,13 +205,6 @@ class App extends React.Component<{}, State> {
                     }
                   }
                 }}
-                // onScroll={ev => {
-                //   console.log("ev", ev);
-                //   if (isCtrlPressed) {
-
-                //     console.log("scroll with ctrl");
-                //   }
-                // }}
               />
             </div>
           </div>
