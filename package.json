@@ -27,7 +27,8 @@
     "remark-highlight.js": "^5.0.0",
     "remark-html": "^8.0.0",
     "remark-html-katex": "^1.1.1",
-    "remark-math": "^1.0.4"
+    "remark-math": "^1.0.4",
+    "remark-toc": "^5.1.1"
   },
   "sw-precache": {
     "maximumFileSizeToCacheInBytes": 10485760

@@ -1,18 +1,25 @@
 import "@babel/polyfill";
 import "./env";
 import Proxy from "./lib/WorkerProxy";
-import React, { SyntheticEvent } from "react";
+import React, {
+  SyntheticEvent,
+  useRef,
+  useCallback,
+  useState,
+  useEffect,
+  useLayoutEffect
+} from "react";
 import ReactDOM from "react-dom";
+import { EditableGrid, GridArea, Windowed } from "react-unite";
 
-const useState: <T>(
-  t: T
-) => [T, (prev: T | ((t: T) => T)) => void] = (React as any).useState;
-
-const useEffect: (f: () => void) => void = (React as any).useEffect;
-const useLayoutEffect: (f: () => void) => void = (React as any).useLayoutEffect;
-const useCallback: <T>(f: T, args?: Array<any>) => T = (React as any)
-  .useCallback;
-const useRef: (ref: any) => { current: null | any } = (React as any).useRef;
+const rows = ["1fr"];
+const columns = ["1fr", "1fr"];
+const areas = [["editor", "preview"]];
+const initialGrid = {
+  rows,
+  columns,
+  areas
+};
 
 // CONSTANTS
 const SHOW_PREVIEW_KEY = "show-preview";
@@ -46,6 +53,8 @@ function App() {
 
   const [state, setState] = useState(initialState);
 
+  const [grid, setGrid] = useState(initialGrid);
+
   const updatePreview = useCallback(
     async (raw: String) => {
       const result = await proxy.compile(raw);
@@ -58,7 +67,6 @@ function App() {
   );
 
   // listeners
-
   const onChangeValue = useCallback(
     async (ev: SyntheticEvent<HTMLTextAreaElement>) => {
       if (isComposing) {
@@ -73,27 +81,44 @@ function App() {
       console.time("compile:worker");
       await updatePreview(rawValue);
       console.timeEnd("compile:worker");
-    }
+    },
+    []
   );
 
-  const onWindowKeyDown = useCallback(async (ev: KeyboardEvent) => {
-    if (ev.ctrlKey && ev.key === "1") {
-      ev.preventDefault();
-      localStorage.setItem(SHOW_PREVIEW_KEY, String(!state.showPreview));
-      setState(s => ({ ...s, showPreview: !state.showPreview }));
-      return;
-    }
+  const onWindowKeyDown = useCallback(
+    async (ev: KeyboardEvent) => {
+      // Ctrl+1
+      if (ev.ctrlKey && ev.key === "1") {
+        ev.preventDefault();
+        const nextShowPreview = !state.showPreview;
+        localStorage.setItem(SHOW_PREVIEW_KEY, String(nextShowPreview));
+        setState(s => ({ ...s, showPreview: nextShowPreview }));
+        setGrid(grid => ({
+          ...grid,
+          areas: nextShowPreview
+            ? [["editor", "preview"]]
+            : [["editor", "editor"]]
+        }));
 
-    if (ev.ctrlKey && ev.shiftKey && ev.key.toLowerCase() === "f") {
-      ev.preventDefault();
-      if (editorRef.current) {
-        const raw = editorRef.current.value;
-        const formatted = await proxy.format(raw);
-        editorRef.current.value = formatted;
-        updatePreview(formatted);
+        return;
       }
-    }
-  });
+
+      // Ctrl+Shift+F || Cmd+S
+      if (
+        (ev.ctrlKey && ev.shiftKey && ev.key.toLowerCase() === "f") ||
+        (ev.metaKey && ev.key.toLowerCase() === "s")
+      ) {
+        ev.preventDefault();
+        if (editorRef.current) {
+          const raw = editorRef.current.value;
+          const formatted = await proxy.format(raw);
+          editorRef.current.value = formatted;
+          updatePreview(formatted);
+        }
+      }
+    },
+    [Math.random()]
+  );
 
   const onWheel = useCallback((ev: any) => {
     if (ev.ctrlKey) {
@@ -103,7 +128,7 @@ function App() {
         previewContainerRef.current.scrollTop = scrollTop + ev.deltaY;
       }
     }
-  });
+  }, []);
 
   const onTextareaKeydown = useCallback((e: KeyboardEvent) => {
     // Tab Indent
@@ -137,21 +162,21 @@ function App() {
       el.setSelectionRange(start, end);
       updatePreview(newRaw);
     }
-  });
+  }, []);
 
   const onCompositionStart = useCallback(() => {
     isComposing = true;
-  });
+  }, []);
 
   const onCompositionEnd = useCallback(
     (ev: SyntheticEvent<HTMLTextAreaElement>) => {
       isComposing = false;
       onChangeValue(ev);
-    }
+    },
+    []
   );
 
   // hooks
-
   useEffect(() => {
     // init proxy
     if (proxy == null && !state.loaded) {
@@ -168,6 +193,10 @@ function App() {
           html: lastState.html,
           loaded: true
         });
+        setGrid(grid => ({
+          ...grid,
+          areas: showPreview ? [["editor", "preview"]] : [["editor", "editor"]]
+        }));
       })();
     }
 
@@ -197,53 +226,70 @@ function App() {
 
   return (
     <>
-      <div style={{ flex: 1, height: "100vh" }}>
-        <div
-          style={{ width: "100%", display: "flex", justifyContent: "center" }}
-        >
-          <div
-            style={{
-              width: "100%",
-              maxWidth: "960px",
-              marginLeft: "auto",
-              marginRight: "auto",
-              paddingTop: "8px"
-            }}
-          >
-            <textarea
-              ref={editorRef}
-              className="js-editor editor"
-              spellCheck={false}
-              defaultValue={state.raw}
-              onChange={onChangeValue}
-              onCompositionStart={onCompositionStart}
-              onCompositionEnd={onCompositionEnd}
-              onKeyDown={onTextareaKeydown as any}
-              onWheel={onWheel as any}
-            />
-          </div>
-        </div>
-      </div>
-      {state.showPreview && (
-        <div
-          ref={previewContainerRef}
-          style={{
-            flex: 1,
-            height: "100vh",
-            overflowY: "auto",
-            background: "#eee"
-          }}
-        >
-          <div style={{ overflowY: "auto" }}>
-            <div
-              ref={previewRef}
-              className="markdown-body"
-              style={{ padding: "10px", lineHeight: "1.3em" }}
-              dangerouslySetInnerHTML={{ __html: state.html }}
-            />
-          </div>
-        </div>
-      )}
+      <Windowed>
+        {(width, height) => {
+          return (
+            <EditableGrid
+              width={width}
+              height={height}
+              spacerSize={3}
+              rows={grid.rows}
+              columns={grid.columns}
+              areas={grid.areas}
+              showCrossPoint={false}
+              onChangeGridData={grid => {
+                setGrid(grid);
+              }}
+            >
+              <GridArea name="editor">
+                <div
+                  style={{
+                    width: "100%",
+                    maxWidth: "960px",
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                    paddingTop: "8px"
+                  }}
+                >
+                  <textarea
+                    ref={editorRef}
+                    className="js-editor editor"
+                    spellCheck={false}
+                    defaultValue={state.raw}
+                    onChange={onChangeValue}
+                    onCompositionStart={onCompositionStart}
+                    onCompositionEnd={onCompositionEnd}
+                    onKeyDown={onTextareaKeydown as any}
+                    onWheel={onWheel as any}
+                  />
+                </div>
+              </GridArea>
+              {state.showPreview && (
+                <GridArea name="preview">
+                  <div
+                    ref={previewContainerRef}
+                    style={{
+                      flex: 1,
+                      height: "100vh",
+                      overflowY: "auto",
+                      background: "#eee"
+                    }}
+                  >
+                    <div style={{ overflowY: "auto" }}>
+                      <div
+                        ref={previewRef}
+                        className="markdown-body"
+                        style={{ padding: "10px", lineHeight: "1.3em" }}
+                        dangerouslySetInnerHTML={{ __html: state.html }}
+                      />
+                    </div>
+                  </div>
+                </GridArea>
+              )}
+            </EditableGrid>
+          );
+        }}
+      </Windowed>
       <div style={{ position: "absolute", right: "20px", bottom: "20px" }}>
         <span style={{ fontFamily: "monospace", color: "cornflowerblue" }}>
           {state.wordCount}
@@ -253,6 +299,12 @@ function App() {
           onClick={() => {
             localStorage.setItem(SHOW_PREVIEW_KEY, String(!state.showPreview));
             setState(s => ({ ...s, showPreview: !state.showPreview }));
+            setGrid(grid => ({
+              ...grid,
+              areas: state.showPreview
+                ? [["editor", "preview"]]
+                : [["editor", "editor"]]
+            }));
           }}
         >
           👀
