@@ -1,4 +1,5 @@
 import React, { SyntheticEvent, forwardRef, useCallback } from "react";
+import styled from "styled-components";
 
 const TAB_STR = "  ";
 
@@ -62,8 +63,7 @@ export const Textarea = forwardRef((props: Props, ref: any) => {
   }, []);
 
   return (
-    <textarea
-      className="editor"
+    <StyledTextarea
       ref={ref}
       spellCheck={false}
       defaultValue={props.raw}
@@ -75,3 +75,20 @@ export const Textarea = forwardRef((props: Props, ref: any) => {
     />
   );
 });
+
+const StyledTextarea = styled.textarea`
+  width: 100%;
+  height: calc(100vh - 10px);
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 24px;
+  outline: none;
+  font-size: 1.1em;
+  color: khaki;
+  background: #272822;
+  resize: none;
+  border: none;
+  line-height: 1.2;
+  font-family: MonoAscii, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+`;

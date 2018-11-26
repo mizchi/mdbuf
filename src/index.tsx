@@ -11,6 +11,7 @@ import React, {
 import ReactDOM from "react-dom";
 import { EditableGrid, GridArea, Windowed, GridData } from "react-unite";
 import { Textarea } from "./components/Textarea";
+import { BottomHelper } from "./components/BottomHelper";
 
 const rows = ["1fr"];
 const columns = ["1fr", "1fr"];
@@ -65,13 +66,15 @@ function App() {
 
   // listeners
   const onChangeValue = useCallback(async (rawValue: string) => {
+    const wordCount = Array.from(rawValue).length;
     setState(s => ({
       ...s,
-      wordCount: Array.from(rawValue).length
+      wordCount
     }));
     console.time("compile:worker");
     await updatePreview(rawValue);
     console.timeEnd("compile:worker");
+    document.title = `mdbuf(${wordCount})`;
   }, []);
 
   const onWindowKeyDown = useCallback(
@@ -232,29 +235,22 @@ function App() {
           );
         }}
       </Windowed>
-      <div style={{ position: "absolute", right: "20px", bottom: "20px" }}>
-        <span style={{ fontFamily: "monospace", color: "cornflowerblue" }}>
-          {state.wordCount}
-        </span>
-        &nbsp;
-        <button
-          onClick={() => {
-            localStorage.setItem(SHOW_PREVIEW_KEY, String(!state.showPreview));
-            setState(s => ({
-              ...s,
-              showPreview: !state.showPreview,
-              grid: {
-                ...s.grid,
-                areas: state.showPreview
-                  ? [["editor", "preview"]]
-                  : [["editor", "editor"]]
-              }
-            }));
-          }}
-        >
-          👀
-        </button>
-      </div>
+      <BottomHelper
+        wordCount={state.wordCount}
+        onClick={() => {
+          localStorage.setItem(SHOW_PREVIEW_KEY, String(!state.showPreview));
+          setState(s => ({
+            ...s,
+            showPreview: !state.showPreview,
+            grid: {
+              ...s.grid,
+              areas: state.showPreview
+                ? [["editor", "preview"]]
+                : [["editor", "editor"]]
+            }
+          }));
+        }}
+      />
     </>
   );
 }
