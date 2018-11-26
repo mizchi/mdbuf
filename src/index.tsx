@@ -48,18 +48,30 @@ const initialState: State = {
 
 function App() {
   const editorRef: React.RefObject<HTMLTextAreaElement> = useRef(null);
-  const previewRef: React.RefObject<HTMLDivElement> = useRef(null);
   const previewContainerRef: React.RefObject<HTMLDivElement> = useRef(null);
 
   const [state, setState] = useState(initialState);
 
   const updatePreview = useCallback(
     async (raw: String) => {
-      const result = await proxy.compile(raw);
-      setState(s => ({
-        ...s,
-        html: result
-      }));
+      if (editorRef.current) {
+        // console.log('up')
+        const el = editorRef.current as HTMLTextAreaElement;
+        const val = el.value;
+        const lineNo = val.substr(0, el.selectionStart).split("\n").length;
+        console.log("lineNo", lineNo);
+        const result = await proxy.compile({ raw, lineNo });
+        setState(s => ({
+          ...s,
+          html: result
+        }));
+      } else {
+        const result = await proxy.compile({ raw });
+        setState(s => ({
+          ...s,
+          html: result
+        }));
+      }
     },
     [state.raw]
   );
@@ -221,12 +233,7 @@ function App() {
                     }}
                   >
                     <div style={{ overflowY: "auto" }}>
-                      <div
-                        ref={previewRef}
-                        className="markdown-body"
-                        style={{ padding: "10px", lineHeight: "1.3em" }}
-                        dangerouslySetInnerHTML={{ __html: state.html }}
-                      />
+                      <Preview html={state.html} />
                     </div>
                   </div>
                 </GridArea>
@@ -252,6 +259,33 @@ function App() {
         }}
       />
     </>
+  );
+}
+
+function Preview(props: { html: string }) {
+  const ref: React.RefObject<HTMLDivElement> = React.createRef();
+
+  useLayoutEffect(() => {
+    requestAnimationFrame(() => {
+      if (ref.current) {
+        // debugger;
+        const focused = ref.current.querySelector(".cursor-focused");
+        if (focused) {
+          console.log("focused!", focused);
+          focused.scrollIntoView();
+        }
+      }
+      console.log("updated");
+    });
+  });
+
+  return (
+    <div
+      ref={ref}
+      className="markdown-body"
+      style={{ padding: "10px", lineHeight: "1.3em" }}
+      dangerouslySetInnerHTML={{ __html: props.html }}
+    />
   );
 }
 

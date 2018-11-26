@@ -6,10 +6,12 @@ import * as storage from "./lib/storage";
 import { Item } from "./types";
 
 class MarkdownCompiler {
-  compile(raw: string) {
+  compile(data: { raw: string; lineNo?: number }) {
     // background update
-    storage.saveCurrent(raw);
-    return processor.processSync(raw).toString();
+    storage.saveCurrent(data.raw);
+    // inject selected hint
+    (global as any).__remark_line_no = data.lineNo;
+    return processor.processSync(data.raw).toString();
   }
 
   async format(raw: string): Promise<string> {
