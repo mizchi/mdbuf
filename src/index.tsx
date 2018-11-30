@@ -9,7 +9,13 @@ import React, {
   useLayoutEffect
 } from "react";
 import ReactDOM from "react-dom";
-import { EditableGrid, GridArea, Windowed, GridData } from "react-unite";
+import {
+  EditableGrid,
+  GridArea,
+  Windowed,
+  GridData,
+  pixelsToFractions
+} from "react-unite";
 import { Textarea } from "./components/Textarea";
 import { BottomHelper } from "./components/BottomHelper";
 
@@ -200,7 +206,10 @@ function App() {
               areas={state.grid.areas}
               showCrossPoint={false}
               onChangeGridData={grid => {
-                setState(s => ({ ...s, grid }));
+                setState(s => ({
+                  ...s,
+                  grid: { ...grid, columns: pixelsToFractions(grid.columns) }
+                }));
               }}
             >
               <GridArea name="editor">
@@ -272,7 +281,10 @@ function Preview(props: { html: string }) {
         const focused = ref.current.querySelector(".cursor-focused");
         if (focused) {
           console.log("focused!", focused);
-          focused.scrollIntoView();
+          focused.scrollIntoView({
+            behavior: "smooth",
+            block: "nearest"
+          });
         }
       }
       console.log("updated");
