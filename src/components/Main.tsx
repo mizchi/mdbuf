@@ -1,5 +1,4 @@
 import React, { SyntheticEvent } from "react";
-import { GridData, EditableGrid, GridArea } from "react-unite";
 import { Textarea } from "./Textarea";
 import { Preview } from "./Preview";
 
@@ -61,18 +60,4 @@ export const Main = React.memo(function Main({
       )}
     </>
   );
-  // return (
-  //         <Textarea
-  //           ref={editorRef}
-  //           raw={raw}
-  //           onChangeValue={onChangeValue}
-  //           onWheel={onWheel}
-  //         />
-  //     {showPreview && (
-  //           <div style={{ overflowY: "auto" }}>
-  //             <Preview html={html} />
-  //           </div>
-  //       </GridArea>
-  //     )}
-  // );
 });

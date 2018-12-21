@@ -14,7 +14,6 @@ export const Preview = React.memo(function Preview(props: { html: string }) {
           });
         }
       }
-      console.log("updated");
     });
   });
 

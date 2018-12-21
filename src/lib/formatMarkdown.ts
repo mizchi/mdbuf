@@ -10,7 +10,7 @@ export default function formatMarkdown(md: string) {
 }
 
 // Start lazy load
-console.time("load-prettier");
+console.time("load:prettier");
 (async () => {
   const [p0, p1] = await Promise.all([
     import("prettier/standalone"),
@@ -18,5 +18,5 @@ console.time("load-prettier");
   ]);
   prettier = p0.default || p0;
   markdown = p1.default || p1;
-  console.timeEnd("load-prettier");
+  console.timeEnd("load:prettier");
 })();

@@ -73,9 +73,9 @@ function App() {
       ...s,
       wordCount
     }));
-    console.time("compile:worker");
+    // console.time("compile:worker");
     await updatePreview(rawValue);
-    console.timeEnd("compile:worker");
+    // console.timeEnd("compile:worker");
     document.title = `mdbuf(${wordCount})`;
   }, []);
 
