@@ -84,7 +84,7 @@ const StyledTextarea = styled.textarea`
   padding-left: 24px;
   outline: none;
   font-size: 1.1em;
-  color: khaki;
+  color: rgb(248, 248, 242);
   background: #272822;
   resize: none;
   border: none;
