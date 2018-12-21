@@ -4,3 +4,10 @@ export type Item = {
   id: string;
   updatedAt: number;
 };
+
+export type State = {
+  wordCount: number;
+  raw: string;
+  html: string;
+  showPreview: boolean;
+};
