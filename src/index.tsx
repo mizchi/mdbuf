@@ -1,27 +1,19 @@
 import "@babel/polyfill";
-import "./env";
+import "github-markdown-css/github-markdown.css";
+import "katex/dist/katex.min.css";
+import "highlight.js/styles/default.css";
+
 import Proxy from "./lib/WorkerProxy";
 import React, {
   useRef,
-  useCallback,
   useState,
   useEffect,
-  useLayoutEffect
+  useLayoutEffect,
+  useCallback
 } from "react";
 import ReactDOM from "react-dom";
-import {
-  EditableGrid,
-  GridArea,
-  Windowed,
-  GridData,
-  pixelsToFractions
-} from "react-unite";
-import { Textarea } from "./components/Textarea";
 import { BottomHelper } from "./components/BottomHelper";
-
-const rows = ["1fr"];
-const columns = ["1fr", "1fr"];
-const areas = [["editor", "preview"]];
+import { Main } from "./components/Main";
 
 // CONSTANTS
 const SHOW_PREVIEW_KEY = "show-preview";
@@ -36,7 +28,6 @@ type State = {
   raw: string;
   html: string;
   showPreview: boolean;
-  grid: GridData;
 };
 
 const initialState: State = {
@@ -44,12 +35,7 @@ const initialState: State = {
   html: "",
   wordCount: 0,
   loaded: false,
-  showPreview: true,
-  grid: {
-    rows,
-    columns,
-    areas
-  }
+  showPreview: true
 };
 
 function App() {
@@ -61,21 +47,19 @@ function App() {
   const updatePreview = useCallback(
     async (raw: String) => {
       if (editorRef.current) {
-        // console.log('up')
         const el = editorRef.current as HTMLTextAreaElement;
         const val = el.value;
         const lineNo = val.substr(0, el.selectionStart).split("\n").length;
-        console.log("lineNo", lineNo);
-        const result = await proxy.compile({ raw, lineNo });
+        const html = await proxy.compile({ raw, lineNo });
         setState(s => ({
           ...s,
-          html: result
+          html
         }));
       } else {
-        const result = await proxy.compile({ raw });
+        const html = await proxy.compile({ raw });
         setState(s => ({
           ...s,
-          html: result
+          html
         }));
       }
     },
@@ -104,13 +88,7 @@ function App() {
         localStorage.setItem(SHOW_PREVIEW_KEY, String(nextShowPreview));
         setState(s => ({
           ...s,
-          showPreview: nextShowPreview,
-          grid: {
-            ...s.grid,
-            areas: nextShowPreview
-              ? [["editor", "preview"]]
-              : [["editor", "editor"]]
-          }
+          showPreview: nextShowPreview
         }));
         return;
       }
@@ -142,7 +120,6 @@ function App() {
     }
   }, []);
 
-  // hooks
   useEffect(() => {
     // init proxy
     if (proxy == null && !state.loaded) {
@@ -156,14 +133,7 @@ function App() {
           wordCount: Array.from(lastState.raw).length,
           raw: lastState.raw,
           html: lastState.html,
-          loaded: true,
-          grid: {
-            rows,
-            columns,
-            areas: showPreview
-              ? [["editor", "preview"]]
-              : [["editor", "editor"]]
-          }
+          loaded: true
         });
       })();
     }
@@ -174,14 +144,12 @@ function App() {
     };
   });
 
-  if (state.loaded) {
-    useLayoutEffect(() => {
-      if (editorRef.current && !focusedOnce) {
-        focusedOnce = true;
-        editorRef.current.focus();
-      }
-    });
-  }
+  useLayoutEffect(() => {
+    if (state.loaded && editorRef.current && !focusedOnce) {
+      focusedOnce = true;
+      editorRef.current.focus();
+    }
+  });
 
   // Show loading message at first
   if (!state.loaded) {
@@ -194,110 +162,26 @@ function App() {
 
   return (
     <>
-      <Windowed>
-        {(width, height) => {
-          return (
-            <EditableGrid
-              width={width}
-              height={height}
-              spacerSize={3}
-              rows={state.grid.rows}
-              columns={state.grid.columns}
-              areas={state.grid.areas}
-              showCrossPoint={false}
-              onChangeGridData={grid => {
-                setState(s => ({
-                  ...s,
-                  grid: { ...grid, columns: pixelsToFractions(grid.columns) }
-                }));
-              }}
-            >
-              <GridArea name="editor">
-                <div
-                  style={{
-                    width: "100%",
-                    maxWidth: "960px",
-                    marginLeft: "auto",
-                    marginRight: "auto",
-                    paddingTop: "8px"
-                  }}
-                >
-                  <Textarea
-                    ref={editorRef}
-                    raw={state.raw}
-                    onChangeValue={onChangeValue}
-                    onWheel={onWheel}
-                  />
-                </div>
-              </GridArea>
-              {state.showPreview && (
-                <GridArea name="preview">
-                  <div
-                    ref={previewContainerRef}
-                    style={{
-                      flex: 1,
-                      height: "100vh",
-                      overflowY: "auto",
-                      background: "#eee"
-                    }}
-                  >
-                    <div style={{ overflowY: "auto" }}>
-                      <Preview html={state.html} />
-                    </div>
-                  </div>
-                </GridArea>
-              )}
-            </EditableGrid>
-          );
-        }}
-      </Windowed>
+      <Main
+        editorRef={editorRef}
+        previewContainerRef={previewContainerRef}
+        html={state.html}
+        raw={state.raw}
+        showPreview={state.showPreview}
+        onChangeValue={onChangeValue}
+        onWheel={onWheel}
+      />
       <BottomHelper
         wordCount={state.wordCount}
         onClick={() => {
           localStorage.setItem(SHOW_PREVIEW_KEY, String(!state.showPreview));
           setState(s => ({
             ...s,
-            showPreview: !state.showPreview,
-            grid: {
-              ...s.grid,
-              areas: state.showPreview
-                ? [["editor", "preview"]]
-                : [["editor", "editor"]]
-            }
+            showPreview: !state.showPreview
           }));
         }}
       />
     </>
-  );
-}
-
-function Preview(props: { html: string }) {
-  const ref: React.RefObject<HTMLDivElement> = React.createRef();
-
-  useLayoutEffect(() => {
-    requestAnimationFrame(() => {
-      if (ref.current) {
-        // debugger;
-        const focused = ref.current.querySelector(".cursor-focused");
-        if (focused) {
-          console.log("focused!", focused);
-          focused.scrollIntoView({
-            behavior: "smooth",
-            block: "nearest"
-          });
-        }
-      }
-      console.log("updated");
-    });
-  });
-
-  return (
-    <div
-      ref={ref}
-      className="markdown-body"
-      style={{ padding: "10px", lineHeight: "1.3em" }}
-      dangerouslySetInnerHTML={{ __html: props.html }}
-    />
   );
 }
 
