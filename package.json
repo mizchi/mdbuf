@@ -5,12 +5,15 @@
   "license": "MIT",
   "scripts": {
     "dev": "parcel src/index.html --port 7777",
-    "build": "parcel build src/index.html"
+    "build": "parcel build src/index.html",
+    "deploy": "yarn build && netlify deploy -d dist --prod"
   },
   "devDependencies": {
+    "@types/morphdom": "^2.3.0",
     "@types/react": "^16.7.7",
     "@types/react-dom": "^16.0.10",
     "@types/styled-components": "^4.1.1",
+    "netlify-cli": "^2.6.0",
     "parcel-bundler": "^1.10.3",
     "parcel-plugin-sw-precache": "^1.0.1",
     "ts-node": "^7.0.1",
@@ -22,6 +25,7 @@
     "dexie": "^2.0.4",
     "github-markdown-css": "^2.10.0",
     "lodash.clone": "^4.5.0",
+    "morphdom": "^2.3.3",
     "prettier": "^1.15.3",
     "react": "16.7.0-alpha.0",
     "react-dom": "16.7.0-alpha.0",

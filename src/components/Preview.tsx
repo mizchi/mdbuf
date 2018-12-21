@@ -1,9 +1,23 @@
 import React, { useLayoutEffect } from "react";
+import morphdom from "morphdom";
 
 export const Preview = React.memo(function Preview(props: { html: string }) {
   const ref: React.RefObject<HTMLDivElement> = React.createRef();
 
   useLayoutEffect(() => {
+    if (ref.current) {
+      if (ref.current.childNodes.length === 0) {
+        ref.current.innerHTML = props.html;
+      } else {
+        requestAnimationFrame(() => {
+          morphdom(
+            ref.current as HTMLElement,
+            `<div class="markdown-body">${props.html}</div>`
+          );
+        });
+      }
+    }
+
     requestAnimationFrame(() => {
       if (ref.current) {
         const focused = ref.current.querySelector(".cursor-focused");
@@ -17,12 +31,5 @@ export const Preview = React.memo(function Preview(props: { html: string }) {
     });
   });
 
-  return (
-    <div
-      ref={ref}
-      className="markdown-body"
-      style={{ padding: "10px", lineHeight: "1.3em" }}
-      dangerouslySetInnerHTML={{ __html: props.html }}
-    />
-  );
+  return <div className="markdown-body" ref={ref} />;
 });
