@@ -1,9 +1,9 @@
 import "@babel/polyfill";
 import * as Comlink from "comlinkjs";
-import processor from "./lib/markdownProcessor";
-import formatMarkdown from "./lib/formatMarkdown";
-import * as storage from "./lib/storage";
-import { Item } from "./types";
+import processor from "./markdownProcessor";
+import formatMarkdown from "./formatMarkdown";
+import * as storage from "./storage";
+import { Item } from "../types";
 
 export class WorkerAPI {
   async compile(data: { raw: string; line?: number }): Promise<string> {
