@@ -1,7 +1,9 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
   <head>
     <title>mdbuf</title>
     <meta charset="utf-8" />
+    <meta name="Description" content="Markdown Preview Tool" />
     <link rel="manifest" href="/manifest.webmanifest" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
@@ -45,13 +47,14 @@
     <div
       id="root"
       style="display: flex; width: 100vw; height: 100vh; overflow: hidden;"
-    ></div>
+    >
+      ...
+    </div>
     <script type="module">
       if (location.hostname !== "localhost") {
         navigator.serviceWorker.register("/service-worker.js");
       }
     </script>
-
     <script src="./index.tsx"></script>
   </body>
 </html>
