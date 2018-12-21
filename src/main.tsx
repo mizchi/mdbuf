@@ -22,22 +22,13 @@ const SHOW_PREVIEW_KEY = "show-preview";
 let focusedOnce = false;
 
 type State = {
-  loaded: boolean;
   wordCount: number;
   raw: string;
   html: string;
   showPreview: boolean;
 };
 
-const initialState: State = {
-  raw: "",
-  html: "",
-  wordCount: 0,
-  loaded: false,
-  showPreview: true
-};
-
-function App({ proxy }: { proxy: any }) {
+function App({ proxy, initialState }: { proxy: any; initialState: State }) {
   const editorRef: React.RefObject<HTMLTextAreaElement> = useRef(null);
   const previewContainerRef: React.RefObject<HTMLDivElement> = useRef(null);
 
@@ -120,22 +111,6 @@ function App({ proxy }: { proxy: any }) {
   }, []);
 
   useEffect(() => {
-    // init proxy
-    if (!state.loaded) {
-      (async () => {
-        const val = window.localStorage.getItem(SHOW_PREVIEW_KEY);
-        let showPreview: boolean = val ? JSON.parse(val) : true;
-        const lastState = await proxy.getLastState();
-        setState({
-          showPreview,
-          wordCount: Array.from(lastState.raw).length,
-          raw: lastState.raw,
-          html: lastState.html,
-          loaded: true
-        });
-      })();
-    }
-
     window.addEventListener("keydown", onWindowKeyDown, { passive: true });
     return () => {
       window.removeEventListener("keydown", onWindowKeyDown);
@@ -143,20 +118,11 @@ function App({ proxy }: { proxy: any }) {
   });
 
   useLayoutEffect(() => {
-    if (state.loaded && editorRef.current && !focusedOnce) {
+    if (!focusedOnce && editorRef.current) {
       focusedOnce = true;
       editorRef.current.focus();
     }
   });
-
-  // Show loading message at first
-  if (!state.loaded) {
-    return (
-      <div style={{ padding: 18 }}>
-        <span style={{ color: "white" }}>Loading...</span>
-      </div>
-    );
-  }
 
   return (
     <>
@@ -184,8 +150,23 @@ function App({ proxy }: { proxy: any }) {
 }
 
 const main = async () => {
-  const proxy = await new Proxy();
-  ReactDOM.render(<App proxy={proxy} />, document.querySelector("#root"));
+  const proxy = await new (Proxy as any)();
+
+  const val = window.localStorage.getItem(SHOW_PREVIEW_KEY);
+  let showPreview: boolean = val ? JSON.parse(val) : true;
+  const lastState = await proxy.getLastState();
+
+  const initialState: State = {
+    showPreview,
+    wordCount: Array.from(lastState.raw).length,
+    raw: lastState.raw,
+    html: lastState.html
+  };
+
+  ReactDOM.render(
+    <App proxy={proxy} initialState={initialState} />,
+    document.querySelector("#root")
+  );
 };
 
 main();
