@@ -19,7 +19,6 @@ import { Main } from "./components/Main";
 const SHOW_PREVIEW_KEY = "show-preview";
 
 // Global State
-let proxy: any = null;
 let focusedOnce = false;
 
 type State = {
@@ -38,7 +37,7 @@ const initialState: State = {
   showPreview: true
 };
 
-function App() {
+function App({ proxy }: { proxy: any }) {
   const editorRef: React.RefObject<HTMLTextAreaElement> = useRef(null);
   const previewContainerRef: React.RefObject<HTMLDivElement> = useRef(null);
 
@@ -122,11 +121,10 @@ function App() {
 
   useEffect(() => {
     // init proxy
-    if (proxy == null && !state.loaded) {
+    if (!state.loaded) {
       (async () => {
         const val = window.localStorage.getItem(SHOW_PREVIEW_KEY);
         let showPreview: boolean = val ? JSON.parse(val) : true;
-        proxy = await new Proxy();
         const lastState = await proxy.getLastState();
         setState({
           showPreview,
@@ -185,4 +183,9 @@ function App() {
   );
 }
 
-ReactDOM.render(<App />, document.querySelector("#root"));
+const main = async () => {
+  const proxy = await new Proxy();
+  ReactDOM.render(<App proxy={proxy} />, document.querySelector("#root"));
+};
+
+main();

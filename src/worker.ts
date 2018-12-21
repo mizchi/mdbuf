@@ -5,8 +5,8 @@ import formatMarkdown from "./lib/formatMarkdown";
 import * as storage from "./lib/storage";
 import { Item } from "./types";
 
-class MarkdownCompiler {
-  compile(data: { raw: string; line?: number }) {
+export class WorkerAPI {
+  async compile(data: { raw: string; line?: number }): Promise<string> {
     // background update
     storage.saveCurrent(data.raw);
     // inject selected hint
@@ -31,4 +31,4 @@ class MarkdownCompiler {
   }
 }
 
-Comlink.expose(MarkdownCompiler, self);
+Comlink.expose(WorkerAPI, self);

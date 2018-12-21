@@ -4303,7 +4303,7 @@ mdast-util-to-string@^1.0.0, mdast-util-to-string@^1.0.2:
   resolved "https://registry.yarnpkg.com/mdast-util-to-string/-/mdast-util-to-string-1.0.5.tgz#3552b05428af22ceda34f156afe62ec8e6d731ca"
   integrity sha512-2qLt/DEOo5F6nc2VFScQiHPzQ0XXcabquRJxKMhKte8nt42o08HUxNDPk7tt0YPxnWjAT11I1SYi0X0iPnfI5A==
 
-mdast-util-toc@^3.0.0:
+mdast-util-toc@^3.0.0, mdast-util-toc@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/mdast-util-toc/-/mdast-util-toc-3.0.1.tgz#78b3265b9fd9125c0dcc7a6bb4a69127acd7e93b"
   integrity sha512-Z8lKq6sQr/vDNIcUkIWzPwKo5JQIzlDLouZuzIMVajOdUAyjnkA+s98RhjVpFt7SiuJzase9oh6Iw7n4zhVNDQ==

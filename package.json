@@ -25,6 +25,7 @@
     "dexie": "^2.0.4",
     "github-markdown-css": "^2.10.0",
     "lodash.clone": "^4.5.0",
+    "mdast-util-toc": "^3.0.1",
     "morphdom": "^2.3.3",
     "prettier": "^1.15.3",
     "react": "16.7.0-alpha.0",
