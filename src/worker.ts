@@ -6,11 +6,11 @@ import * as storage from "./lib/storage";
 import { Item } from "./types";
 
 class MarkdownCompiler {
-  compile(data: { raw: string; lineNo?: number }) {
+  compile(data: { raw: string; line?: number }) {
     // background update
     storage.saveCurrent(data.raw);
     // inject selected hint
-    (global as any).__remark_line_no = data.lineNo;
+    (global as any).__remark_cursor_line = data.line;
     return processor.processSync(data.raw).toString();
   }
 

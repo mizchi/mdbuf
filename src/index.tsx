@@ -49,8 +49,8 @@ function App() {
       if (editorRef.current) {
         const el = editorRef.current as HTMLTextAreaElement;
         const val = el.value;
-        const lineNo = val.substr(0, el.selectionStart).split("\n").length;
-        const html = await proxy.compile({ raw, lineNo });
+        const line = val.substr(0, el.selectionStart).split("\n").length;
+        const html = await proxy.compile({ raw, line });
         setState(s => ({
           ...s,
           html

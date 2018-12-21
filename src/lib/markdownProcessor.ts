@@ -32,17 +32,19 @@ function highlightCursorLine() {
             className: "cursor-focused"
           }
         };
-        break;
+        return;
       }
     }
 
     // highlight last item
     const node = ast.children[ast.children.length - 1];
-    node.data = {
-      hProperties: {
-        className: "cursor-focused"
-      }
-    };
+    if (node) {
+      node.data = {
+        hProperties: {
+          className: "cursor-focused"
+        }
+      };
+    }
   };
 }
 
