@@ -138,7 +138,7 @@ function App() {
       })();
     }
 
-    window.addEventListener("keydown", onWindowKeyDown);
+    window.addEventListener("keydown", onWindowKeyDown, { passive: true });
     return () => {
       window.removeEventListener("keydown", onWindowKeyDown);
     };
