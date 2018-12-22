@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import { BottomHelper } from "./BottomHelper";
 import { Main } from "./Main";
-import { State } from "../../types";
+import { State, EditorMode } from "../../types";
 import { WorkerAPI } from "../../worker";
 
 // CONSTANTS
@@ -18,15 +18,24 @@ let focusedOnce = false;
 
 export function App({
   proxy,
-  initialState
+  initialState,
+  onUpdateState
 }: {
   proxy: WorkerAPI;
   initialState: State;
+  onUpdateState: (s: State) => void;
 }) {
   const editorRef: React.RefObject<HTMLTextAreaElement> = useRef(null);
   const previewContainerRef: React.RefObject<HTMLDivElement> = useRef(null);
 
   const [state, setState] = useState(initialState);
+
+  useEffect(
+    () => {
+      onUpdateState(state);
+    },
+    [state.showPreview, state.toolMode, state.editorMode]
+  );
 
   const updatePreview = useCallback(
     async (raw: string) => {
@@ -52,17 +61,24 @@ export function App({
     [state.raw]
   );
 
-  // listeners
   const onChangeValue = useCallback(async (rawValue: string) => {
     const wordCount = Array.from(rawValue).length;
     setState(s => ({
       ...s,
+      raw: rawValue,
       wordCount
     }));
     // console.time("compile:worker");
     await updatePreview(rawValue);
     // console.timeEnd("compile:worker");
     document.title = `mdbuf(${wordCount})`;
+  }, []);
+
+  const onChangeEditorMode = useCallback(async (editorMode: EditorMode) => {
+    setState(s => ({
+      ...s,
+      editorMode
+    }));
   }, []);
 
   const onChangeToolMode = useCallback(toolMode => {
@@ -77,8 +93,18 @@ export function App({
     }
   }, []);
 
-  const onWindowKeyDown = useCallback(
-    async (ev: KeyboardEvent) => {
+  const onWheel = useCallback((ev: any) => {
+    if (ev.ctrlKey) {
+      ev.preventDefault();
+      if (previewContainerRef.current) {
+        const scrollTop = previewContainerRef.current.scrollTop;
+        previewContainerRef.current.scrollTop = scrollTop + ev.deltaY;
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    const onWindowKeyDown = async (ev: KeyboardEvent) => {
       // Ctrl+1
       if (ev.ctrlKey && ev.key === "1") {
         ev.preventDefault();
@@ -91,38 +117,38 @@ export function App({
         return;
       }
 
+      // Ctrl+Shift+E
+      if (ev.ctrlKey && ev.shiftKey && ev.key.toLocaleLowerCase() === "e") {
+        ev.preventDefault();
+        if (state.editorMode === "textarea") {
+          onChangeEditorMode("codemirror");
+        } else if (state.editorMode === "codemirror") {
+          onChangeEditorMode("textarea");
+        }
+        return;
+      }
+
       // Ctrl+Shift+F || Cmd+S
       if (
         (ev.ctrlKey && ev.shiftKey && ev.key.toLowerCase() === "f") ||
+        (ev.ctrlKey && ev.key.toLowerCase() === "s") ||
         (ev.metaKey && ev.key.toLowerCase() === "s")
       ) {
         ev.preventDefault();
+        const formatted = await proxy.format(state.raw);
+        setState(s => ({ ...s, raw: formatted }));
+
+        // focus
         if (editorRef.current) {
-          const raw = editorRef.current.value;
-          const formatted = await proxy.format(raw);
           const start = editorRef.current.selectionStart;
           editorRef.current.value = formatted;
           editorRef.current.selectionStart = start;
           editorRef.current.selectionEnd = start;
-
           updatePreview(formatted);
         }
       }
-    },
-    [Math.random()]
-  );
+    };
 
-  const onWheel = useCallback((ev: any) => {
-    if (ev.ctrlKey) {
-      ev.preventDefault();
-      if (previewContainerRef.current) {
-        const scrollTop = previewContainerRef.current.scrollTop;
-        previewContainerRef.current.scrollTop = scrollTop + ev.deltaY;
-      }
-    }
-  }, []);
-
-  useEffect(() => {
     window.addEventListener("keydown", onWindowKeyDown);
     return () => {
       window.removeEventListener("keydown", onWindowKeyDown);
@@ -145,6 +171,7 @@ export function App({
         raw={state.raw}
         outline={state.outline}
         toolMode={state.toolMode}
+        editorMode={state.editorMode}
         showPreview={state.showPreview}
         onChangeToolMode={onChangeToolMode}
         onChangeValue={onChangeValue}

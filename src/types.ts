@@ -9,11 +9,15 @@ export type ItemWithOutline = Item & {
   outline: Array<any>;
 };
 
+export type EditorMode = "textarea" | "codemirror";
+export type ToolMode = "preview" | "outline" | "help";
+
 export type State = {
   wordCount: number;
   raw: string;
   html: string;
   outline: Array<any>;
   showPreview: boolean;
-  toolMode: "preview" | "outline" | "help";
+  toolMode: ToolMode;
+  editorMode: EditorMode;
 };

@@ -52,7 +52,6 @@ function highlightCursorLine() {
 let outline: any = [];
 function buildOutline() {
   return (ast: any) => {
-    console.log("ast", ast);
     outline = ast.children
       .filter((node: any) => {
         return node.type === "heading";

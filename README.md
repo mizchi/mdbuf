@@ -26,8 +26,6 @@ yarn deploy
 
 ## TODO
 
-- TOC Jump
-- anchor
 - Editor Select (Monaco, CodeMirror)
 - MDX
 - Search

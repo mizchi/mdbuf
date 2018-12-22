@@ -1,4 +1,9 @@
-import React, { SyntheticEvent, forwardRef, useCallback } from "react";
+import React, {
+  SyntheticEvent,
+  forwardRef,
+  useCallback,
+  useLayoutEffect
+} from "react";
 import styled from "styled-components";
 
 const TAB_STR = "  ";
@@ -59,6 +64,14 @@ export const Textarea = forwardRef((props: Props, ref: any) => {
       el.value = newRaw;
       el.setSelectionRange(start, end);
       props.onChangeValue((e as any).target.value);
+    }
+  }, []);
+
+  useLayoutEffect(() => {
+    if (ref.current) {
+      ref.current.selectionStart = 0;
+      ref.current.selectionEnd = 0;
+      ref.current.focus();
     }
   }, []);
 

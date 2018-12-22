@@ -11,29 +11,71 @@ import { State } from "../types";
 import { WorkerAPI } from "../worker";
 
 // CONSTANTS
-const SHOW_PREVIEW_KEY = "show-preview";
+const SHOW_PREVIEW_KEY = "$mdbuf-state";
 
-async function loadData(proxy: WorkerAPI): Promise<State> {
-  const val = window.localStorage.getItem(SHOW_PREVIEW_KEY);
-  let showPreview: boolean = val ? JSON.parse(val) : true;
+async function saveState(proxy: WorkerAPI, state: State): Promise<void> {
+  const partialState: State = {
+    showPreview: state.showPreview,
+    wordCount: state.wordCount,
+    toolMode: state.toolMode,
+    editorMode: state.editorMode,
+    // they are heavy
+    raw: "",
+    outline: [],
+    html: ""
+  };
+
+  // TODO: Save on background worker
+  const seriarized = JSON.stringify(partialState);
+  localStorage.setItem(SHOW_PREVIEW_KEY, seriarized);
+}
+
+async function loadFullData(proxy: WorkerAPI): Promise<State> {
+  let persisited: any = null;
+  try {
+    const stateStr: string | null = window.localStorage.getItem(
+      SHOW_PREVIEW_KEY
+    );
+    persisited = JSON.parse(stateStr as any);
+    if (!(persisited instanceof Object)) {
+      throw new Error("legacy state");
+    }
+  } catch (e) {
+    persisited = {
+      showPreview: true,
+      toolMode: "preview",
+      editorMode: "textarea",
+
+      // no
+      wordCount: 0,
+      raw: "",
+      outline: [],
+      html: ""
+    };
+  }
+
   const lastState = await proxy.getLastState();
 
   return {
-    showPreview,
-    outline: lastState.outline,
-    wordCount: Array.from(lastState.raw).length,
-    raw: lastState.raw,
-    html: lastState.html,
-    toolMode: "preview"
+    ...persisited,
+    ...lastState,
+    wordCount: Array.from(lastState.raw).length
   };
 }
 
 const main = async () => {
   const proxy: WorkerAPI = await new (Proxy as any)();
-  const initialState = await loadData(proxy);
+  const initialState = await loadFullData(proxy);
 
   ReactDOM.render(
-    <App proxy={proxy} initialState={initialState} />,
+    <App
+      proxy={proxy}
+      initialState={initialState}
+      onUpdateState={newState => {
+        console.log("save state");
+        saveState(proxy, newState);
+      }}
+    />,
     document.querySelector("#root")
   );
 };

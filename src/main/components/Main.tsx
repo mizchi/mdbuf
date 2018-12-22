@@ -1,12 +1,20 @@
 import React, { SyntheticEvent } from "react";
-import { Textarea } from "./Textarea";
-import { Preview } from "./Preview";
 import styled from "styled-components";
+import Loadable from "react-loadable";
+
+import { Textarea } from "./TextareaEditor";
+import { Preview } from "./Preview";
+
+const CodeMirrorEditor = Loadable({
+  loader: () => import("./CodeMirrorEditor"),
+  loading: () => <div>...</div>
+});
 
 export const Main = React.memo(function Main({
   editorRef,
   html,
   raw,
+  editorMode,
   toolMode,
   outline,
   onChangeToolMode,
@@ -18,6 +26,7 @@ export const Main = React.memo(function Main({
 }: {
   html: string;
   raw: string;
+  editorMode: "codemirror" | "textarea";
   toolMode: "preview" | "outline" | "help";
   showPreview: boolean;
   outline: Array<any>;
@@ -33,12 +42,17 @@ export const Main = React.memo(function Main({
       <Container>
         <Centered>
           <EditorContainer>
-            <Textarea
-              ref={editorRef}
-              raw={raw}
-              onChangeValue={onChangeValue}
-              onWheel={onWheel}
-            />
+            {editorMode === "codemirror" && (
+              <CodeMirrorEditor value={raw} onChangeValue={onChangeValue} />
+            )}
+            {editorMode === "textarea" && (
+              <Textarea
+                ref={editorRef}
+                raw={raw}
+                onChangeValue={onChangeValue}
+                onWheel={onWheel}
+              />
+            )}
           </EditorContainer>
         </Centered>
       </Container>
@@ -86,7 +100,6 @@ const Outline = (props: {
   return (
     <>
       {props.outline.map((heading, index) => {
-        console.log(heading);
         return (
           <div
             style={{
@@ -157,7 +170,6 @@ const PreviewContainer = styled.div`
   overflow-x: auto;
   overflow-y: auto;
   background: #eee;
-  /* word-break: break-all; */
 `;
 
 const TabButton = styled.div<{ selected: boolean }>`
