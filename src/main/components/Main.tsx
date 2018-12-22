@@ -153,9 +153,11 @@ const ToolTabsContainer = styled.div`
 
 const PreviewContainer = styled.div`
   height: calc(100vh - 32px);
+  width: 50vw;
   overflow-x: auto;
   overflow-y: auto;
   background: #eee;
+  /* word-break: break-all; */
 `;
 
 const TabButton = styled.div<{ selected: boolean }>`

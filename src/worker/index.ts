@@ -3,7 +3,7 @@ import * as Comlink from "comlinkjs";
 import { compile } from "./markdownProcessor";
 import formatMarkdown from "./formatMarkdown";
 import * as storage from "./storage";
-import { Item, ItemWithOutline } from "../types";
+import { ItemWithOutline } from "../types";
 
 export class WorkerAPI {
   async compile(data: {
@@ -26,6 +26,7 @@ export class WorkerAPI {
     }
     // ensure initial data
     const raw = storage.initialText;
+
     await storage.saveCurrent(raw);
     return storage.loadCurrent();
   }

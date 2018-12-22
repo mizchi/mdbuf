@@ -14,8 +14,19 @@ const Items = (db as any).items;
 
 export async function loadCurrent(): Promise<ItemWithOutline> {
   const item = await Items.get(CURRENT);
-  const ret = compile(item.raw);
-  return { ...item, outline: ret.outline };
+  // debugger;
+  try {
+    const ret = compile(item.raw);
+    return { ...item, outline: ret.outline };
+  } catch (e) {
+    return {
+      raw: initialText,
+      html: "...",
+      outline: [],
+      id: CURRENT,
+      updatedAt: Date.now()
+    };
+  }
 }
 
 export async function saveCurrent(raw: string): Promise<void> {
