@@ -1,17 +1,14 @@
 import "@babel/polyfill";
 import * as Comlink from "comlinkjs";
-import processor from "./markdownProcessor";
+import { compile } from "./markdownProcessor";
 import formatMarkdown from "./formatMarkdown";
 import * as storage from "./storage";
 import { Item } from "../types";
 
 export class WorkerAPI {
   async compile(data: { raw: string; line?: number }): Promise<string> {
-    // background update
     storage.saveCurrent(data.raw);
-    // inject selected hint
-    (global as any).__remark_cursor_line = data.line;
-    return processor.processSync(data.raw).toString();
+    return compile(data.raw, data.line).html;
   }
 
   async format(raw: string): Promise<string> {

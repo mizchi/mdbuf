@@ -5,8 +5,9 @@ import breaks from "remark-breaks";
 import katex from "remark-html-katex";
 import html from "remark-html";
 import toc from "remark-toc";
+import frontmatter from "remark-frontmatter";
 
-(global as any).__remark_cursor_line = 0; // initialize
+let __remark_cursor_line = 0; // initialize
 function highlightCursorLine() {
   return (ast: {
     children: Array<{
@@ -18,7 +19,7 @@ function highlightCursorLine() {
       };
     }>;
   }) => {
-    const curLine = (global as any).__remark_cursor_line;
+    const curLine = __remark_cursor_line;
     const starts = ast.children.map(node => node.position.start.line);
 
     // search most recent index
@@ -48,11 +49,31 @@ function highlightCursorLine() {
   };
 }
 
-export default remark()
+function buildToc() {
+  return console.dir;
+}
+
+const defaultProcessor = remark()
   .use(breaks)
   .use(highlightCursorLine)
   .use(math)
   .use(toc)
   .use(katex)
   .use(hljs)
-  .use(html);
+  .use(html)
+  .use(frontmatter, ["yaml"])
+  .use(buildToc);
+
+let processor = defaultProcessor;
+
+export const replaceProcessor = (newProcessor: any) => {
+  processor = newProcessor;
+};
+
+export const compile = (raw: string, cursor?: number) => {
+  __remark_cursor_line = cursor || 0;
+  const html = processor.processSync(raw).toString();
+  return {
+    html
+  };
+};

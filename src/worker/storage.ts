@@ -1,6 +1,6 @@
 import Dexie from "dexie";
 import { Item } from "../types";
-import processor from "./markdownProcessor";
+import { compile } from "./markdownProcessor";
 
 const db = new Dexie("mydb");
 
@@ -20,7 +20,7 @@ export async function saveCurrent(raw: string): Promise<void> {
   await Items.put({
     id: CURRENT,
     raw,
-    html: processor.processSync(raw).toString(),
+    html: compile(raw).html,
     updatedAt: Date.now()
   });
 }
@@ -29,7 +29,7 @@ export const initialText = `# Markdown Buffer
 
 - Desktop PWA Support
 - Autosave
-- Off Thread Markdown Compile
+- Off Thread Markdown Compiling
 
 ## Markdown
 

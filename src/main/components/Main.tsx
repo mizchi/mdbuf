@@ -53,6 +53,7 @@ export const Main = React.memo(function Main({
             background: "#eee"
           }}
         >
+          <div>preview</div>
           <div style={{ overflowY: "auto" }}>
             <Preview html={html} />
           </div>

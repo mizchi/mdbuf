@@ -24,6 +24,15 @@ Need netlify account httsp://www.netlify.com
 yarn deploy
 ```
 
+## TODO
+
+- TOC Jump
+- anchor
+- Editor Select (Monaco, CodeMirror)
+- MDX
+- Search
+- Input with speech
+
 ## LICENSE
 
 MIT

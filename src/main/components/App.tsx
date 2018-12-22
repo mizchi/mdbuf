@@ -85,7 +85,11 @@ export function App({
         if (editorRef.current) {
           const raw = editorRef.current.value;
           const formatted = await proxy.format(raw);
+          const start = editorRef.current.selectionStart;
           editorRef.current.value = formatted;
+          editorRef.current.selectionStart = start;
+          editorRef.current.selectionEnd = start;
+
           updatePreview(formatted);
         }
       }
@@ -104,7 +108,7 @@ export function App({
   }, []);
 
   useEffect(() => {
-    window.addEventListener("keydown", onWindowKeyDown, { passive: true });
+    window.addEventListener("keydown", onWindowKeyDown);
     return () => {
       window.removeEventListener("keydown", onWindowKeyDown);
     };
