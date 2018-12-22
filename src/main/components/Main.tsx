@@ -8,8 +8,10 @@ export const Main = React.memo(function Main({
   html,
   raw,
   toolMode,
+  outline,
   onChangeToolMode,
   onChangeValue,
+  onSelectOutlineHeading,
   onWheel,
   previewContainerRef,
   showPreview
@@ -18,10 +20,12 @@ export const Main = React.memo(function Main({
   raw: string;
   toolMode: "preview" | "outline" | "help";
   showPreview: boolean;
+  outline: Array<any>;
   editorRef: React.RefObject<HTMLTextAreaElement>;
   previewContainerRef: React.RefObject<HTMLDivElement>;
   onChangeToolMode: (value: "preview" | "outline") => void;
   onChangeValue: (value: string) => void;
+  onSelectOutlineHeading: (offset: number) => void;
   onWheel: (event: SyntheticEvent<HTMLTextAreaElement>) => void;
 }) {
   return (
@@ -44,6 +48,7 @@ export const Main = React.memo(function Main({
             {["preview", "outline", "help"].map(mode => {
               return (
                 <TabButton
+                  key={mode}
                   selected={mode === toolMode}
                   onClick={() => onChangeToolMode(mode as any)}
                 >
@@ -54,7 +59,14 @@ export const Main = React.memo(function Main({
           </ToolTabsContainer>
           <PreviewContainer ref={previewContainerRef}>
             {toolMode === "preview" && <Preview html={html} />}
-            {toolMode === "outline" && <Outline />}
+            {toolMode === "outline" && (
+              <OutlineContainer>
+                <Outline
+                  outline={outline}
+                  onSelectOutlineHeading={onSelectOutlineHeading}
+                />
+              </OutlineContainer>
+            )}
             {toolMode === "help" && <Help />}
           </PreviewContainer>
         </SideTools>
@@ -63,12 +75,51 @@ export const Main = React.memo(function Main({
   );
 });
 
-const Outline = () => {
-  return <>WIP</>;
+const OutlineContainer = styled.div`
+  padding: 10px;
+`;
+
+const Outline = (props: {
+  outline: Array<any>;
+  onSelectOutlineHeading: (offset: number) => void;
+}) => {
+  return (
+    <>
+      {props.outline.map((heading, index) => {
+        console.log(heading);
+        return (
+          <div
+            style={{
+              cursor: "pointer"
+            }}
+            key={index}
+            onClick={() => {
+              props.onSelectOutlineHeading(heading.start);
+              // console.log(heading.start, heading.end);
+            }}
+          >
+            {/* {heading.start} */}
+            {"#".repeat(heading.depth)}
+            &nbsp;
+            {heading.children[0].value}: {heading.start}~
+          </div>
+        );
+      })}
+    </>
+  );
 };
 
 const Help = () => {
-  return <>WIP</>;
+  return (
+    <div style={{ padding: 10 }}>
+      <dl>
+        <dt>Cmd-S | Windows-S</dt>
+        <dd>Run prettier</dd>
+        <dt>Ctrl-1</dt>
+        <dd>Toggle Preview</dd>
+      </dl>
+    </div>
+  );
 };
 
 const Container = styled.div`

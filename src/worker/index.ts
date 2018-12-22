@@ -3,19 +3,22 @@ import * as Comlink from "comlinkjs";
 import { compile } from "./markdownProcessor";
 import formatMarkdown from "./formatMarkdown";
 import * as storage from "./storage";
-import { Item } from "../types";
+import { Item, ItemWithOutline } from "../types";
 
 export class WorkerAPI {
-  async compile(data: { raw: string; line?: number }): Promise<string> {
+  async compile(data: {
+    raw: string;
+    line?: number;
+  }): Promise<{ html: string; outline: Array<any> }> {
     storage.saveCurrent(data.raw);
-    return compile(data.raw, data.line).html;
+    return compile(data.raw, data.line);
   }
 
   async format(raw: string): Promise<string> {
     return formatMarkdown(raw);
   }
 
-  async getLastState(): Promise<Item> {
+  async getLastState(): Promise<ItemWithOutline> {
     const current = await storage.loadCurrent();
     if (current) {
       console.log("existed current item");

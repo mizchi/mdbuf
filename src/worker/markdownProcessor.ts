@@ -49,8 +49,24 @@ function highlightCursorLine() {
   };
 }
 
-function buildToc() {
-  return console.dir;
+let outline: any = [];
+function buildOutline() {
+  return (ast: any) => {
+    console.log("ast", ast);
+    outline = ast.children
+      .filter((node: any) => {
+        return node.type === "heading";
+      })
+      .map((node: any) => {
+        return {
+          type: node.type,
+          depth: node.depth,
+          start: node.position.start.offset,
+          end: node.position.end.offset,
+          children: node.children
+        };
+      });
+  };
 }
 
 const defaultProcessor = remark()
@@ -62,7 +78,7 @@ const defaultProcessor = remark()
   .use(hljs)
   .use(html)
   .use(frontmatter, ["yaml"])
-  .use(buildToc);
+  .use(buildOutline);
 
 let processor = defaultProcessor;
 
@@ -74,6 +90,7 @@ export const compile = (raw: string, cursor?: number) => {
   __remark_cursor_line = cursor || 0;
   const html = processor.processSync(raw).toString();
   return {
-    html
+    html,
+    outline
   };
 };

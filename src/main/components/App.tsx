@@ -34,16 +34,18 @@ export function App({
         const el = editorRef.current as HTMLTextAreaElement;
         const val = el.value;
         const line = val.substr(0, el.selectionStart).split("\n").length;
-        const html = await proxy.compile({ raw, line });
+        const ret = await proxy.compile({ raw, line });
         setState(s => ({
           ...s,
-          html
+          html: ret.html,
+          outline: ret.outline
         }));
       } else {
-        const html = await proxy.compile({ raw });
+        const ret = await proxy.compile({ raw });
         setState(s => ({
           ...s,
-          html
+          html: ret.html,
+          outline: ret.outline
         }));
       }
     },
@@ -65,6 +67,14 @@ export function App({
 
   const onChangeToolMode = useCallback(toolMode => {
     setState(s => ({ ...s, toolMode }));
+  }, []);
+
+  const onSelectOutlineHeading = useCallback((start: number) => {
+    if (editorRef.current) {
+      editorRef.current.selectionStart = start;
+      editorRef.current.selectionEnd = start;
+      editorRef.current.focus();
+    }
   }, []);
 
   const onWindowKeyDown = useCallback(
@@ -133,10 +143,12 @@ export function App({
         previewContainerRef={previewContainerRef}
         html={state.html}
         raw={state.raw}
+        outline={state.outline}
         toolMode={state.toolMode}
         showPreview={state.showPreview}
         onChangeToolMode={onChangeToolMode}
         onChangeValue={onChangeValue}
+        onSelectOutlineHeading={onSelectOutlineHeading}
         onWheel={onWheel}
       />
       <BottomHelper

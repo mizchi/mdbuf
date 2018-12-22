@@ -1,5 +1,5 @@
 import Dexie from "dexie";
-import { Item } from "../types";
+import { ItemWithOutline } from "../types";
 import { compile } from "./markdownProcessor";
 
 const db = new Dexie("mydb");
@@ -12,8 +12,10 @@ const CURRENT = "$current";
 
 const Items = (db as any).items;
 
-export function loadCurrent(): Promise<Item> {
-  return Items.get(CURRENT);
+export async function loadCurrent(): Promise<ItemWithOutline> {
+  const item = await Items.get(CURRENT);
+  const ret = compile(item.raw);
+  return { ...item, outline: ret.outline };
 }
 
 export async function saveCurrent(raw: string): Promise<void> {

@@ -5,6 +5,10 @@ export type Item = {
   updatedAt: number;
 };
 
+export type ItemWithOutline = Item & {
+  outline: Array<any>;
+};
+
 export type State = {
   wordCount: number;
   raw: string;
