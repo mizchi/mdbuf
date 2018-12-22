@@ -8,6 +8,7 @@ import React, {
 import { BottomHelper } from "./BottomHelper";
 import { Main } from "./Main";
 import { State } from "../../types";
+import { WorkerAPI } from "../../worker";
 
 // CONSTANTS
 const SHOW_PREVIEW_KEY = "show-preview";
@@ -19,7 +20,7 @@ export function App({
   proxy,
   initialState
 }: {
-  proxy: any;
+  proxy: WorkerAPI;
   initialState: State;
 }) {
   const editorRef: React.RefObject<HTMLTextAreaElement> = useRef(null);
@@ -28,7 +29,7 @@ export function App({
   const [state, setState] = useState(initialState);
 
   const updatePreview = useCallback(
-    async (raw: String) => {
+    async (raw: string) => {
       if (editorRef.current) {
         const el = editorRef.current as HTMLTextAreaElement;
         const val = el.value;
@@ -60,6 +61,10 @@ export function App({
     await updatePreview(rawValue);
     // console.timeEnd("compile:worker");
     document.title = `mdbuf(${wordCount})`;
+  }, []);
+
+  const onChangeToolMode = useCallback(toolMode => {
+    setState(s => ({ ...s, toolMode }));
   }, []);
 
   const onWindowKeyDown = useCallback(
@@ -128,7 +133,9 @@ export function App({
         previewContainerRef={previewContainerRef}
         html={state.html}
         raw={state.raw}
+        toolMode={state.toolMode}
         showPreview={state.showPreview}
+        onChangeToolMode={onChangeToolMode}
         onChangeValue={onChangeValue}
         onWheel={onWheel}
       />

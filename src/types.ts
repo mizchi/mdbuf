@@ -9,5 +9,7 @@ export type State = {
   wordCount: number;
   raw: string;
   html: string;
+  outline: Array<any>;
   showPreview: boolean;
+  toolMode: "preview" | "outline" | "help";
 };

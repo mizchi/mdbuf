@@ -39,7 +39,7 @@ function highlightCursorLine() {
 
     // highlight last item
     const node = ast.children[ast.children.length - 1];
-    if (node) {
+    if (curLine !== 0 && node) {
       node.data = {
         hProperties: {
           className: "cursor-focused"
