@@ -16,6 +16,8 @@ const SHOW_PREVIEW_KEY = "show-preview";
 // Global State
 let focusedOnce = false;
 
+import { createGlobalStyle } from "styled-components";
+
 export function App({
   proxy,
   initialState,
@@ -164,6 +166,7 @@ export function App({
 
   return (
     <>
+      <GlobalStyle />
       <Main
         editorRef={editorRef}
         previewContainerRef={previewContainerRef}
@@ -191,3 +194,26 @@ export function App({
     </>
   );
 }
+
+const GlobalStyle = createGlobalStyle`
+  .markdown-body { 
+    padding: 10px;
+    line-height: 1.3em;
+  }
+
+  .cursor-focused {
+    background-color: rgba(255, 128, 128, 0.2);
+  }
+
+  ::-webkit-scrollbar {
+    width: 7px;
+  }
+
+  ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(128, 128, 128, 0.5);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: rgba(128, 128, 128, 0.5);
+  }
+`;

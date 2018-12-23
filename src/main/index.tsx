@@ -10,6 +10,55 @@ import { App } from "./components/App";
 import { State } from "../types";
 import { WorkerAPI } from "../worker";
 
+import { createGlobalStyle } from "styled-components";
+
+const GlobalStyle = createGlobalStyle`
+  .markdown-body { 
+    padding: 10px;
+    line-height: 1.3em;
+  }
+
+  .cursor-focused {
+    background-color: rgba(255, 128, 128, 0.2);
+  }
+
+  ::-webkit-scrollbar {
+    width: 7px;
+  }
+
+  ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(128, 128, 128, 0.5);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: rgba(128, 128, 128, 0.5);
+  }
+
+  .CodeMirror {
+    height: 100vh !important;
+    font-family: MonoAscii !important;
+
+    padding-left: 20px;
+    box-sizing: border-box;
+    font-size: 16px;
+    line-height: 1.2em;
+    /* -webkit-font-smoothing: antialiased; */
+  }
+
+  .react-codemirror2 {
+    height: 100vh;
+  }
+
+  .cm-variable-2 {
+    color: rgb(248, 248, 232) !important;
+  }
+
+  .cm-header {
+    font-weight: normal !important;
+    color: rgb(128, 200, 252);
+  }
+`;
+
 // CONSTANTS
 const SHOW_PREVIEW_KEY = "$mdbuf-state";
 

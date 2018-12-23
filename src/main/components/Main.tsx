@@ -4,6 +4,9 @@ import Loadable from "react-loadable";
 
 import { Textarea } from "./TextareaEditor";
 import { Preview } from "./Preview";
+import { Outline } from "./Outline";
+import { Help } from "./Help";
+import { ToolMode, EditorMode } from "../../types";
 
 const CodeMirrorEditor = Loadable({
   loader: () => import("./CodeMirrorEditor"),
@@ -26,13 +29,13 @@ export const Main = React.memo(function Main({
 }: {
   html: string;
   raw: string;
-  editorMode: "codemirror" | "textarea";
-  toolMode: "preview" | "outline" | "help";
+  editorMode: EditorMode;
+  toolMode: ToolMode;
   showPreview: boolean;
   outline: Array<any>;
   editorRef: React.RefObject<HTMLTextAreaElement>;
   previewContainerRef: React.RefObject<HTMLDivElement>;
-  onChangeToolMode: (value: "preview" | "outline") => void;
+  onChangeToolMode: (value: ToolMode) => void;
   onChangeValue: (value: string) => void;
   onSelectOutlineHeading: (offset: number) => void;
   onWheel: (event: SyntheticEvent<HTMLTextAreaElement>) => void;
@@ -93,48 +96,6 @@ const OutlineContainer = styled.div`
   padding: 10px;
 `;
 
-const Outline = (props: {
-  outline: Array<any>;
-  onSelectOutlineHeading: (offset: number) => void;
-}) => {
-  return (
-    <>
-      {props.outline.map((heading, index) => {
-        return (
-          <div
-            style={{
-              cursor: "pointer"
-            }}
-            key={index}
-            onClick={() => {
-              props.onSelectOutlineHeading(heading.start);
-              // console.log(heading.start, heading.end);
-            }}
-          >
-            {/* {heading.start} */}
-            {"#".repeat(heading.depth)}
-            &nbsp;
-            {heading.children[0].value}: {heading.start}~
-          </div>
-        );
-      })}
-    </>
-  );
-};
-
-const Help = () => {
-  return (
-    <div style={{ padding: 10 }}>
-      <dl>
-        <dt>Cmd-S | Windows-S</dt>
-        <dd>Run prettier</dd>
-        <dt>Ctrl-1</dt>
-        <dd>Toggle Preview</dd>
-      </dl>
-    </div>
-  );
-};
-
 const Container = styled.div`
   flex: 1;
   height: 100vh;
@@ -166,7 +127,7 @@ const ToolTabsContainer = styled.div`
 
 const PreviewContainer = styled.div`
   height: calc(100vh - 32px);
-  width: 50vw;
+  width: calc(100vw / 2);
   overflow-x: auto;
   overflow-y: auto;
   background: #eee;
