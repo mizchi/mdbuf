@@ -7,10 +7,20 @@ import { Preview } from "./Preview";
 import { Outline } from "./Outline";
 import { Help } from "./Help";
 import { ToolMode, EditorMode } from "../../types";
+import { editor } from "monaco-editor";
+
+const Loading = () => (
+  <div style={{ color: "#fff", paddingLeft: 20 }}>Loading...</div>
+);
 
 const CodeMirrorEditor = Loadable({
   loader: () => import("./CodeMirrorEditor"),
-  loading: () => <div>...</div>
+  loading: () => <Loading />
+});
+
+const MonacoEditor = Loadable({
+  loader: () => import("./MonacoEditor"),
+  loading: () => <Loading />
 });
 
 export const Main = React.memo(function Main({
@@ -45,6 +55,13 @@ export const Main = React.memo(function Main({
       <Container>
         <Centered>
           <EditorContainer>
+            {editorMode === "monaco" && (
+              <MonacoEditor
+                value={raw}
+                width={showPreview ? "50vw" : "100vw"}
+                onChangeValue={onChangeValue}
+              />
+            )}
             {editorMode === "codemirror" && (
               <CodeMirrorEditor value={raw} onChangeValue={onChangeValue} />
             )}

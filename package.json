@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "parcel src/index.html --port 7777",
     "build": "parcel build src/index.html",
-    "deploy": "yarn build && netlify deploy -d dist --prod"
+    "deploy": "rimraf dist && yarn build && netlify deploy -d dist --prod"
   },
   "devDependencies": {
     "@types/codemirror": "^0.0.70",
@@ -29,12 +29,14 @@
     "github-markdown-css": "^2.10.0",
     "lodash.clone": "^4.5.0",
     "mdast-util-toc": "^3.0.1",
+    "monaco-editor": "^0.15.6",
     "morphdom": "^2.3.3",
     "prettier": "^1.15.3",
     "react": "16.7.0-alpha.0",
     "react-codemirror2": "^5.1.0",
     "react-dom": "16.7.0-alpha.0",
     "react-loadable": "^5.5.0",
+    "react-monaco-editor": "^0.22.0",
     "react-unite": "^0.1.1",
     "remark": "^10.0.0",
     "remark-breaks": "^1.0.1",

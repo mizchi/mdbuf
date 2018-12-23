@@ -125,8 +125,11 @@ export function App({
         if (state.editorMode === "textarea") {
           onChangeEditorMode("codemirror");
         } else if (state.editorMode === "codemirror") {
+          onChangeEditorMode("monaco");
+        } else if (state.editorMode === "monaco") {
           onChangeEditorMode("textarea");
         }
+
         return;
       }
 

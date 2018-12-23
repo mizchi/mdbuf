@@ -9,7 +9,7 @@ export type ItemWithOutline = Item & {
   outline: Array<any>;
 };
 
-export type EditorMode = "textarea" | "codemirror";
+export type EditorMode = "textarea" | "codemirror" | "monaco";
 export type ToolMode = "preview" | "outline" | "help";
 
 export type State = {
