@@ -159,30 +159,34 @@ export default (props: {
   const editorRef = useRef(null as any);
 
   useLayoutEffect(() => {
-    const options: any = {
-      fontSize: 16,
-      minimap: {
-        enabled: false
-      },
-      selectOnLineNumbers: false,
-      lineNumbers: "off"
-    };
-
     if (editorRef.current) {
       const newEditor = monaco.editor.create(editorRef.current, {
         value: props.value,
         language: "markdown",
-        theme: "vs-dark"
+        theme: "vs-dark",
+        scrollbar: {
+          arrowSize: 11
+        },
+        fontSize: 16,
+        wordWrap: "on",
+        wordWrapMinified: true,
+        // wrappingIndent: "indent",
+        minimap: {
+          enabled: false
+        },
+        lineNumbers: "off"
       });
 
       newEditor.onDidChangeModelContent(event => {
         const value = newEditor.getValue();
         props.onChangeValue(value);
       });
-      newEditor.updateOptions(options);
       newEditor.layout();
       newEditor.focus();
       setEditor(newEditor);
+      return () => {
+        newEditor.dispose();
+      };
     }
   }, []);
 
