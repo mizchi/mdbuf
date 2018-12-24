@@ -1,4 +1,4 @@
-import React, { useContext, useReducer } from "react";
+import React, { useContext, useReducer, useCallback } from "react";
 import { AppState } from "../../types";
 
 type Action = {
@@ -17,9 +17,12 @@ export const Provider = (props: {
   children: React.ReactNode;
 }) => {
   const [state, dispatch] = useReducer(props.reducer, props.initialState);
+  const newDispatch = useCallback((action: any) => {
+    dispatch(action);
+  }, []);
   return (
     <AppStateContext.Provider value={state}>
-      <DispatchContext.Provider value={dispatch}>
+      <DispatchContext.Provider value={newDispatch}>
         {props.children}
       </DispatchContext.Provider>
     </AppStateContext.Provider>

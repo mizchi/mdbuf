@@ -1,17 +1,17 @@
-import React, {
-  useRef,
-  useState,
-  useEffect,
-  useLayoutEffect,
-  useCallback,
-  useReducer
-} from "react";
+import React, { useRef, useEffect, useLayoutEffect, useCallback } from "react";
 import { BottomHelper } from "./BottomHelper";
 import { Main } from "./Main";
-import { AppState, EditorMode } from "../../types";
+import { AppState } from "../../types";
 import { WorkerAPI } from "../../worker";
 import { createGlobalStyle } from "styled-components";
-import { useAppState } from "../contexts/RootStateContext";
+import { useAppState, useDispatch } from "../contexts/RootStateContext";
+import {
+  changeToolMode,
+  updateHtmlAndOutline,
+  updateRaw,
+  changeEditorMode,
+  updateShowPreview
+} from "../reducers";
 
 // CONSTANTS
 const SHOW_PREVIEW_KEY = "show-preview";
@@ -21,17 +21,16 @@ let focusedOnce = false;
 
 export function App({
   proxy,
-  initialState,
+  // initialState,
   onUpdateState
 }: {
   proxy: WorkerAPI;
-  initialState: AppState;
   onUpdateState: (s: AppState) => void;
 }) {
+  const state = useAppState();
+  const dispatch = useDispatch();
   const editorRef: React.RefObject<HTMLTextAreaElement> = useRef(null);
   const previewContainerRef: React.RefObject<HTMLDivElement> = useRef(null);
-
-  const [state, setState] = useState(initialState);
 
   useEffect(
     () => {
@@ -44,48 +43,39 @@ export function App({
     async (raw: string) => {
       if (editorRef.current) {
         const el = editorRef.current as HTMLTextAreaElement;
-        const val = el.value;
-        const line = val.substr(0, el.selectionStart).split("\n").length;
+
+        const line = el.value.substr(0, el.selectionStart).split("\n").length;
         const ret = await proxy.compile({ raw, line });
-        setState(s => ({
-          ...s,
-          html: ret.html,
-          outline: ret.outline
-        }));
+        dispatch(
+          updateHtmlAndOutline({
+            html: ret.html,
+            outline: ret.outline
+          })
+        );
       } else {
         const ret = await proxy.compile({ raw });
-        setState(s => ({
-          ...s,
-          html: ret.html,
-          outline: ret.outline
-        }));
+        dispatch(
+          updateHtmlAndOutline({
+            html: ret.html,
+            outline: ret.outline
+          })
+        );
       }
     },
     [state.raw]
   );
 
   const onChangeValue = useCallback(async (rawValue: string) => {
-    const wordCount = Array.from(rawValue).length;
-    setState(s => ({
-      ...s,
-      raw: rawValue,
-      wordCount
-    }));
-    // console.time("compile:worker");
+    dispatch(updateRaw(rawValue));
     await updatePreview(rawValue);
-    // console.timeEnd("compile:worker");
-    document.title = `mdbuf(${wordCount})`;
-  }, []);
-
-  const onChangeEditorMode = useCallback(async (editorMode: EditorMode) => {
-    setState(s => ({
-      ...s,
-      editorMode
-    }));
+    requestAnimationFrame(() => {
+      const wordCount = Array.from(rawValue).length;
+      document.title = `mdbuf(${wordCount})`;
+    });
   }, []);
 
   const onChangeToolMode = useCallback(toolMode => {
-    setState(s => ({ ...s, toolMode }));
+    dispatch(changeToolMode(toolMode));
   }, []);
 
   const onSelectOutlineHeading = useCallback((start: number) => {
@@ -113,10 +103,7 @@ export function App({
         ev.preventDefault();
         const nextShowPreview = !state.showPreview;
         localStorage.setItem(SHOW_PREVIEW_KEY, String(nextShowPreview));
-        setState(s => ({
-          ...s,
-          showPreview: nextShowPreview
-        }));
+        dispatch(updateShowPreview(nextShowPreview));
         return;
       }
 
@@ -124,13 +111,12 @@ export function App({
       if (ev.ctrlKey && ev.shiftKey && ev.key.toLocaleLowerCase() === "e") {
         ev.preventDefault();
         if (state.editorMode === "textarea") {
-          onChangeEditorMode("codemirror");
+          dispatch(changeEditorMode("codemirror"));
         } else if (state.editorMode === "codemirror") {
-          onChangeEditorMode("monaco");
+          dispatch(changeEditorMode("monaco"));
         } else if (state.editorMode === "monaco") {
-          onChangeEditorMode("textarea");
+          dispatch(changeEditorMode("textarea"));
         }
-
         return;
       }
 
@@ -142,7 +128,7 @@ export function App({
       ) {
         ev.preventDefault();
         const formatted = await proxy.format(state.raw);
-        setState(s => ({ ...s, raw: formatted }));
+        dispatch(updateRaw(formatted));
 
         // focus
         if (editorRef.current) {
@@ -189,10 +175,7 @@ export function App({
         wordCount={state.wordCount}
         onClick={() => {
           localStorage.setItem(SHOW_PREVIEW_KEY, String(!state.showPreview));
-          setState(s => ({
-            ...s,
-            showPreview: !state.showPreview
-          }));
+          dispatch(updateShowPreview(!state.showPreview));
         }}
       />
     </>

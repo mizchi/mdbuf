@@ -10,6 +10,7 @@ import { App } from "./components/App";
 import { AppState } from "../types";
 import { WorkerAPI } from "../worker";
 import { Provider } from "./contexts/RootStateContext";
+import { reducer } from "./reducers";
 
 // CONSTANTS
 const SHOW_PREVIEW_KEY = "$mdbuf-state";
@@ -69,17 +70,14 @@ const main = async () => {
   const initialState = await loadFullData(proxy);
 
   ReactDOM.render(
-    <Provider reducer={t => t} initialState={initialState}>
+    <Provider reducer={reducer} initialState={initialState}>
       <App
         proxy={proxy}
-        initialState={initialState}
         onUpdateState={newState => {
-          console.log("save state");
           saveState(proxy, newState);
         }}
       />
     </Provider>,
-
     document.querySelector("#root")
   );
 };
