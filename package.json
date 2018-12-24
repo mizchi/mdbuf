@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "parcel src/index.html --port 7777",
     "build": "parcel build src/index.html",
-    "deploy": "rimraf dist && yarn build && netlify deploy -d dist --prod"
+    "deploy": "rimraf dist && yarn build && netlify deploy -d dist --prod",
+    "test": "jest"
   },
   "devDependencies": {
     "@types/codemirror": "^0.0.70",
