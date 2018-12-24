@@ -100,7 +100,7 @@ import "monaco-editor/esm/vs/editor/contrib/suggest/suggestController.js";
 // import * as MonacoEditor from "monaco-editor/esm/vs/editor/editor.api";
 
 (self as any).MonacoEnvironment = {
-  getWorker(moduleId: string, label: string) {
+  getWorker(_moduleId: string, label: string) {
     if (label === "json") {
       return new Worker(
         "../../../node_modules/monaco-editor/esm/vs/language/json/json.worker.js"
