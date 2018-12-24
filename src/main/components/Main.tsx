@@ -1,25 +1,23 @@
 import React, { SyntheticEvent } from "react";
 import styled from "styled-components";
 import Loadable from "react-loadable";
-
-import { Textarea } from "./TextareaEditor";
+import { Textarea } from "./editors/TextareaEditor";
 import { Preview } from "./Preview";
 import { Outline } from "./Outline";
 import { Help } from "./Help";
 import { ToolMode, EditorMode } from "../../types";
-import { editor } from "monaco-editor";
 
 const Loading = () => (
   <div style={{ color: "#fff", paddingLeft: 20 }}>Loading...</div>
 );
 
 const CodeMirrorEditor = Loadable({
-  loader: () => import("./CodeMirrorEditor"),
+  loader: () => import("./editors/CodeMirrorEditor"),
   loading: () => <Loading />
 });
 
 const MonacoEditor = Loadable({
-  loader: () => import("./MonacoEditor"),
+  loader: () => import("./editors/MonacoEditor"),
   loading: () => <Loading />
 });
 

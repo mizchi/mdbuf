@@ -128,7 +128,7 @@ import "monaco-editor/esm/vs/editor/contrib/suggest/suggestController.js";
 };
 
 import React, { useState, useRef, useLayoutEffect, useEffect } from "react";
-import { ResizeDetector } from "./ResizeDetector";
+import { ResizeDetector } from "../ResizeDetector";
 
 export default (props: {
   value: string;
