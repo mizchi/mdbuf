@@ -7,63 +7,15 @@ import React from "react";
 import ReactDOM from "react-dom";
 import Proxy from "./WorkerProxy";
 import { App } from "./components/App";
-import { State } from "../types";
+import { AppState } from "../types";
 import { WorkerAPI } from "../worker";
-
-import { createGlobalStyle } from "styled-components";
-
-const GlobalStyle = createGlobalStyle`
-  .markdown-body { 
-    padding: 10px;
-    line-height: 1.3em;
-  }
-
-  .cursor-focused {
-    background-color: rgba(255, 128, 128, 0.2);
-  }
-
-  ::-webkit-scrollbar {
-    width: 7px;
-  }
-
-  ::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 6px rgba(128, 128, 128, 0.5);
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background-color: rgba(128, 128, 128, 0.5);
-  }
-
-  .CodeMirror {
-    height: 100vh !important;
-    font-family: MonoAscii !important;
-
-    padding-left: 20px;
-    box-sizing: border-box;
-    font-size: 16px;
-    line-height: 1.2em;
-    /* -webkit-font-smoothing: antialiased; */
-  }
-
-  .react-codemirror2 {
-    height: 100vh;
-  }
-
-  .cm-variable-2 {
-    color: rgb(248, 248, 232) !important;
-  }
-
-  .cm-header {
-    font-weight: normal !important;
-    color: rgb(128, 200, 252);
-  }
-`;
+import { Provider } from "./contexts/RootStateContext";
 
 // CONSTANTS
 const SHOW_PREVIEW_KEY = "$mdbuf-state";
 
-async function saveState(proxy: WorkerAPI, state: State): Promise<void> {
-  const partialState: State = {
+async function saveState(proxy: WorkerAPI, state: AppState): Promise<void> {
+  const partialState: AppState = {
     showPreview: state.showPreview,
     wordCount: state.wordCount,
     toolMode: state.toolMode,
@@ -79,7 +31,7 @@ async function saveState(proxy: WorkerAPI, state: State): Promise<void> {
   localStorage.setItem(SHOW_PREVIEW_KEY, seriarized);
 }
 
-async function loadFullData(proxy: WorkerAPI): Promise<State> {
+async function loadFullData(proxy: WorkerAPI): Promise<AppState> {
   let persisited: any = null;
   try {
     const stateStr: string | null = window.localStorage.getItem(
@@ -117,14 +69,17 @@ const main = async () => {
   const initialState = await loadFullData(proxy);
 
   ReactDOM.render(
-    <App
-      proxy={proxy}
-      initialState={initialState}
-      onUpdateState={newState => {
-        console.log("save state");
-        saveState(proxy, newState);
-      }}
-    />,
+    <Provider reducer={t => t} initialState={initialState}>
+      <App
+        proxy={proxy}
+        initialState={initialState}
+        onUpdateState={newState => {
+          console.log("save state");
+          saveState(proxy, newState);
+        }}
+      />
+    </Provider>,
+
     document.querySelector("#root")
   );
 };

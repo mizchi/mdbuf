@@ -3,12 +3,15 @@ import React, {
   useState,
   useEffect,
   useLayoutEffect,
-  useCallback
+  useCallback,
+  useReducer
 } from "react";
 import { BottomHelper } from "./BottomHelper";
 import { Main } from "./Main";
-import { State, EditorMode } from "../../types";
+import { AppState, EditorMode } from "../../types";
 import { WorkerAPI } from "../../worker";
+import { createGlobalStyle } from "styled-components";
+import { useAppState } from "../contexts/RootStateContext";
 
 // CONSTANTS
 const SHOW_PREVIEW_KEY = "show-preview";
@@ -16,16 +19,14 @@ const SHOW_PREVIEW_KEY = "show-preview";
 // Global State
 let focusedOnce = false;
 
-import { createGlobalStyle } from "styled-components";
-
 export function App({
   proxy,
   initialState,
   onUpdateState
 }: {
   proxy: WorkerAPI;
-  initialState: State;
-  onUpdateState: (s: State) => void;
+  initialState: AppState;
+  onUpdateState: (s: AppState) => void;
 }) {
   const editorRef: React.RefObject<HTMLTextAreaElement> = useRef(null);
   const previewContainerRef: React.RefObject<HTMLDivElement> = useRef(null);

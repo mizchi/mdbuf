@@ -12,7 +12,7 @@ export type ItemWithOutline = Item & {
 export type EditorMode = "textarea" | "codemirror" | "monaco";
 export type ToolMode = "preview" | "outline" | "help";
 
-export type State = {
+export type AppState = {
   wordCount: number;
   raw: string;
   html: string;

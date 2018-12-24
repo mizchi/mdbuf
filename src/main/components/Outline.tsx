@@ -6,6 +6,9 @@ export const Outline = (props: {
   return (
     <>
       {props.outline.map((heading, index) => {
+        const title =
+          heading.children && heading.children[0] && heading.children[0].value;
+
         return (
           <div
             style={{
@@ -18,7 +21,7 @@ export const Outline = (props: {
           >
             {"#".repeat(heading.depth)}
             &nbsp;
-            {heading.children[0].value}: {heading.start}~
+            {title}: {heading.start}~
           </div>
         );
       })}
