@@ -22,6 +22,11 @@ const MonacoEditor = Loadable({
   loading: () => <Loading />
 });
 
+const Share = Loadable({
+  loader: () => import("./tools/Share"),
+  loading: () => <Loading />
+});
+
 export const Main = React.memo(function Main({
   editorRef,
   html,
@@ -77,8 +82,8 @@ export const Main = React.memo(function Main({
       </Container>
       {showPreview && (
         <SideTools>
-          <ToolTabsContainer>
-            {["preview", "outline", "help", "recorder"].map(mode => {
+          <ToolSelector>
+            {["preview", "outline", "recorder", "share", "help"].map(mode => {
               return (
                 <TabButton
                   key={mode}
@@ -89,8 +94,8 @@ export const Main = React.memo(function Main({
                 </TabButton>
               );
             })}
-          </ToolTabsContainer>
-          <PreviewContainer ref={previewContainerRef}>
+          </ToolSelector>
+          <ToolContainer ref={previewContainerRef}>
             {toolMode === "preview" && <Preview html={html} />}
             {toolMode === "outline" && (
               <OutlineContainer>
@@ -102,7 +107,8 @@ export const Main = React.memo(function Main({
             )}
             {toolMode === "help" && <Help />}
             {toolMode === "recorder" && <Recorder />}
-          </PreviewContainer>
+            {toolMode === "share" && <Share />}
+          </ToolContainer>
         </SideTools>
       )}
     </>
@@ -137,12 +143,12 @@ const SideTools = styled.div`
   height: 100vh;
 `;
 
-const ToolTabsContainer = styled.div`
+const ToolSelector = styled.div`
   height: 32px;
   color: white;
 `;
 
-const PreviewContainer = styled.div`
+const ToolContainer = styled.div`
   height: calc(100vh - 32px);
   width: calc(100vw / 2);
   overflow-x: auto;
