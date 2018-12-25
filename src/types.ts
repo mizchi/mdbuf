@@ -10,7 +10,7 @@ export type ItemWithOutline = Item & {
 };
 
 export type EditorMode = "textarea" | "codemirror" | "monaco";
-export type ToolMode = "preview" | "outline" | "help";
+export type ToolMode = "preview" | "outline" | "help" | "recorder";
 
 export type AppState = {
   wordCount: number;

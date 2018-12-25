@@ -1,4 +1,5 @@
 import React from "react";
+
 export const Outline = (props: {
   outline: Array<any>;
   onSelectOutlineHeading: (offset: number) => void;

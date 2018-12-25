@@ -11,6 +11,7 @@
   },
   "devDependencies": {
     "@types/codemirror": "^0.0.70",
+    "@types/diff": "^3.5.2",
     "@types/jest": "^23.3.10",
     "@types/morphdom": "^2.3.0",
     "@types/react": "^16.7.7",
@@ -30,7 +31,9 @@
     "comlinkjs": "^3.0.3",
     "core-js": "^2.5.7",
     "dexie": "^2.0.4",
+    "diff": "^3.5.0",
     "github-markdown-css": "^2.10.0",
+    "jsondiffpatch": "^0.3.11",
     "lodash.clone": "^4.5.0",
     "mdast-util-toc": "^3.0.1",
     "monaco-editor": "^0.15.6",

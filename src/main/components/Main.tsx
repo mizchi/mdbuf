@@ -2,10 +2,11 @@ import React, { SyntheticEvent } from "react";
 import styled from "styled-components";
 import Loadable from "react-loadable";
 import { Textarea } from "./editors/TextareaEditor";
-import { Preview } from "./Preview";
-import { Outline } from "./Outline";
-import { Help } from "./Help";
+import { Preview } from "./tools/Preview";
+import { Outline } from "./tools/Outline";
+import { Help } from "./tools/Help";
 import { ToolMode, EditorMode } from "../../types";
+import { Recorder } from "./tools/Recorder";
 
 const Loading = () => (
   <div style={{ color: "#fff", paddingLeft: 20 }}>Loading...</div>
@@ -77,7 +78,7 @@ export const Main = React.memo(function Main({
       {showPreview && (
         <SideTools>
           <ToolTabsContainer>
-            {["preview", "outline", "help"].map(mode => {
+            {["preview", "outline", "help", "recorder"].map(mode => {
               return (
                 <TabButton
                   key={mode}
@@ -100,6 +101,7 @@ export const Main = React.memo(function Main({
               </OutlineContainer>
             )}
             {toolMode === "help" && <Help />}
+            {toolMode === "recorder" && <Recorder />}
           </PreviewContainer>
         </SideTools>
       )}
