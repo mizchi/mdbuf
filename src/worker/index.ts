@@ -50,7 +50,7 @@ class WorkerAPIImpl implements WorkerAPI {
       showPreview: true,
       toolMode: "preview",
       editorMode: "textarea",
-      share: null
+      ipfsRepo: String(Math.random() + Date.now())
     };
     return initialState;
   }

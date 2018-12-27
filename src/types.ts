@@ -13,24 +13,13 @@ export type Item = {
 
 export type EditorMode = "textarea" | "codemirror" | "monaco";
 export type ToolMode = "preview" | "outline" | "help" | "recorder" | "share";
-export type ShareState = {
-  repo: string;
-  uploading: boolean;
-  nodeLoaded: boolean;
-  lastSharedRaw: string;
-  uploadHistory: Array<{
-    title: string;
-    hash: string;
-  }>;
-};
-
 export type AppState = {
+  ipfsRepo: string;
   wordCount: number;
   raw: string;
   showPreview: boolean;
   toolMode: ToolMode;
   editorMode: EditorMode;
-  share: ShareState | null;
   // server built state
   html: string;
   outline: Outline;

@@ -1,78 +1,57 @@
 import React, { useEffect, useState, useCallback } from "react";
 import * as ipfsUtils from "../../api/ipfsUtils";
-import { useAppState, useDispatch } from "../../contexts/RootStateContext";
-import IPFS from "ipfs";
-import { ShareState } from "../../../types";
-import { updateShareState } from "../../reducers";
+import { useAppState } from "../../contexts/RootStateContext";
+import { Item, WorkerAPI } from "../../../types";
 import { useWorkerAPI } from "../../contexts/WorkerAPIContext";
+import sortBy from "lodash.sortby";
 
 // reuse connection on session
 let ipfsNode: any = null;
 
 export default () => {
-  const api = useWorkerAPI();
-
   const app = useAppState();
-  const dispatch = useDispatch();
-
-  const onChangeShareState = useCallback((share: ShareState) => {
-    dispatch(updateShareState(share));
-  }, []);
-
-  const onCreateDocument = useCallback(() => {
-    // wip
-  }, []);
-
   return (
     <Share
-      initialState={app.share}
       raw={app.raw}
-      onChangeState={onChangeShareState}
-      onCreateDocument={onCreateDocument}
+      repo={app.ipfsRepo || Date.now().toString() + Math.random().toString()}
     />
   );
 };
 
 type Props = {
-  initialState?: ShareState | null;
   raw: string;
-  onChangeState: (state: State) => void;
-  onCreateDocument: () => void;
+  repo: string;
 };
 
-type State = ShareState;
+type State = {
+  uploading: boolean;
+  nodeLoaded: boolean;
+  lastSharedRaw: string;
+  items: Array<Item>;
+};
 
 function Share(props: Props) {
-  const [state, setState] = useState<State>(
-    props.initialState != null
-      ? // migration
-        {
-          uploadHistory: [],
-          ...props.initialState,
-          nodeLoaded: !!ipfsNode
-        }
-      : // initialize
-        {
-          repo: String(Math.random() + Date.now()),
-          uploading: false,
-          nodeLoaded: !!ipfsNode,
-          lastSharedRaw: "",
-          uploadHistory: []
-        }
-  );
+  const api = useWorkerAPI();
+
+  const [state, setState] = useState<State>({
+    items: [],
+    uploading: false,
+    nodeLoaded: !!ipfsNode,
+    lastSharedRaw: ""
+  });
 
   // update onChange
-  useEffect(
-    () => {
-      props.onChangeState(state);
-    },
-    [state]
-  );
+  useEffect(() => {
+    (async () => {
+      const items = await getSortedItems(api);
+      setState(s => ({ ...s, items }));
+    })();
+    // props.onChangeState(state);
+  }, []);
 
   useEffect(() => {
     if (ipfsNode == null) {
-      ipfsNode = new IPFS({ repo: state.repo });
-      console.log("start connection");
+      ipfsNode = ipfsUtils.getIpfsNode(props.repo);
       ipfsNode.on("ready", async () => {
         console.log("connected");
         setState(s => ({ ...s, nodeLoaded: true }));
@@ -84,21 +63,23 @@ function Share(props: Props) {
     async ev => {
       ev.preventDefault();
       if (ipfsNode != null) {
-        const title = props.raw.split("\n")[0];
-
         setState(s => ({ ...s, uploading: true, hash: null }));
         const hash = await ipfsUtils.shareText(ipfsNode, props.raw);
-        const uploaded = {
-          title,
-          hash
-        };
+
+        await api.saveItem({
+          raw: props.raw,
+          id: hash
+        });
+
+        const items = await api.getAllItems();
+        const itemsSorted = sortBy(items, (i: Item) => i.updatedAt).reverse();
 
         setState(s => ({
           ...s,
+          items: itemsSorted,
           uploading: false,
           sharedHash: hash,
-          lastSharedRaw: props.raw,
-          uploadHistory: [uploaded, ...s.uploadHistory]
+          lastSharedRaw: props.raw
         }));
       }
     },
@@ -112,33 +93,44 @@ function Share(props: Props) {
         <>...</>
       ) : (
         <>
+          <p>
+            NOTICE: Publishing data will be shared on IPFS (P2P Network).
+            <br />
+            You have to open this app as P2P node at first to deliver.
+          </p>
+
           <button
             disabled={props.raw === state.lastSharedRaw}
             onClick={onClickShare}
           >
             Share current buffer
           </button>
-          {state.uploadHistory.map(item => {
+          {state.items.map(item => {
             return (
               <IpfsObjectStatus
-                hash={item.hash}
-                title={item.title}
-                key={item.hash}
+                updatedAt={item.updatedAt}
+                hash={item.id}
+                title={item.raw.split("\n")[0]}
+                key={item.id}
+                onClickRetry={async () => {
+                  await ipfsUtils.shareText(ipfsNode, item.raw);
+                  console.log("retry");
+                }}
               />
             );
           })}
-          <p>
-            NOTICE: Publishing data will be shared on IPFS (P2P Network).
-            <br />
-            You have to open this app as P2P node at first to deliver.
-          </p>
         </>
       )}
     </div>
   );
 }
 
-function IpfsObjectStatus(props: { hash: string; title: string }) {
+function IpfsObjectStatus(props: {
+  hash: string;
+  title: string;
+  updatedAt: number;
+  onClickRetry: () => void;
+}) {
   const [state, setState] = useState<{
     status: "delivering..." | "delivered" | "error";
   }>({ status: "delivering..." });
@@ -157,11 +149,27 @@ function IpfsObjectStatus(props: { hash: string; title: string }) {
 
   return (
     <div>
-      <span>{props.title}</span>:
-      <a href={link} target="_blank">
-        {link}
-      </a>
-      :<span>{state.status}</span>
+      <hr />
+      <div>
+        <span>{new Date(props.updatedAt).toString()}</span>|
+        <span>{state.status}</span>
+        {state.status !== "delivered" && (
+          <button onClick={() => props.onClickRetry()}>retry</button>
+        )}
+      </div>
+      <div>
+        <pre>{props.title}</pre>:
+      </div>
+      <div>
+        <a href={link} target="_blank">
+          {link}
+        </a>
+      </div>
     </div>
   );
+}
+
+async function getSortedItems(api: WorkerAPI) {
+  const items = await api.getAllItems();
+  return sortBy(items, (i: Item) => i.updatedAt).reverse();
 }

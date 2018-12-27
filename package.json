@@ -36,6 +36,7 @@
     "ipfs": "^0.33.1",
     "jsondiffpatch": "^0.3.11",
     "lodash.clone": "^4.5.0",
+    "lodash.sortby": "^4.7.0",
     "mdast-util-toc": "^3.0.1",
     "monaco-editor": "^0.15.6",
     "morphdom": "^2.3.3",

@@ -1,5 +1,9 @@
 import IPFS from "ipfs";
 
+export function getIpfsNode(repo: string) {
+  return new IPFS({ repo });
+}
+
 export async function shareText(node: any, text: string) {
   const filesAdded = await node.files.add({
     path: "doc.md",
