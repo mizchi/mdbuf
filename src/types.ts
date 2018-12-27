@@ -14,7 +14,6 @@ export type Item = {
 export type EditorMode = "textarea" | "codemirror" | "monaco";
 export type ToolMode = "preview" | "outline" | "help" | "recorder" | "share";
 export type AppState = {
-  ipfsRepo: string;
   wordCount: number;
   raw: string;
   showPreview: boolean;

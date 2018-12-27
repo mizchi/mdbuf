@@ -10,17 +10,11 @@ let ipfsNode: any = null;
 
 export default () => {
   const app = useAppState();
-  return (
-    <Share
-      raw={app.raw}
-      repo={app.ipfsRepo || Date.now().toString() + Math.random().toString()}
-    />
-  );
+  return <Share raw={app.raw} />;
 };
 
 type Props = {
   raw: string;
-  repo: string;
 };
 
 type State = {
@@ -51,11 +45,17 @@ function Share(props: Props) {
 
   useEffect(() => {
     if (ipfsNode == null) {
-      ipfsNode = ipfsUtils.getIpfsNode(props.repo);
+      ipfsNode = ipfsUtils.getIpfsNode();
+      (global as any).ipfs = ipfsNode;
+
       ipfsNode.on("ready", async () => {
         console.log("connected");
         setState(s => ({ ...s, nodeLoaded: true }));
       });
+      return () => {
+        ipfsNode.stop();
+        ipfsNode = null;
+      };
     }
   }, []);
 

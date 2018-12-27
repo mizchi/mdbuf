@@ -1,7 +1,9 @@
 import IPFS from "ipfs";
 
-export function getIpfsNode(repo: string) {
-  return new IPFS({ repo });
+export function getIpfsNode() {
+  return new IPFS({
+    repo: Date.now().toString() + "-" + Math.random().toString()
+  });
 }
 
 export async function shareText(node: any, text: string) {
