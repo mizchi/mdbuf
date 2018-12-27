@@ -7,79 +7,41 @@ import React from "react";
 import ReactDOM from "react-dom";
 import Proxy from "./WorkerProxy";
 import { App } from "./components/App";
-import { AppState } from "../types";
-import { WorkerAPI } from "../worker";
+import { AppState, WorkerAPI } from "../types";
 import { Provider } from "./contexts/RootStateContext";
+import { WorkerAPIContext } from "./contexts/WorkerAPIContext";
+
 import { reducer } from "./reducers";
 
-// CONSTANTS
-const SHOW_PREVIEW_KEY = "$mdbuf-state";
-
-async function saveState(proxy: WorkerAPI, state: AppState): Promise<void> {
-  const partialState: AppState = {
-    showPreview: state.showPreview,
-    wordCount: state.wordCount,
-    toolMode: state.toolMode,
-    editorMode: state.editorMode,
-    // they are heavy
-    raw: "",
-    outline: [],
-    html: ""
-  };
-
-  // TODO: Save on background worker
-  const seriarized = JSON.stringify(partialState);
-  localStorage.setItem(SHOW_PREVIEW_KEY, seriarized);
-}
-
-async function loadFullData(proxy: WorkerAPI): Promise<AppState> {
-  let persisited: any = null;
-  try {
-    const stateStr: string | null = window.localStorage.getItem(
-      SHOW_PREVIEW_KEY
-    );
-    persisited = JSON.parse(stateStr as any);
-    if (!(persisited instanceof Object)) {
-      throw new Error("legacy state");
-    }
-  } catch (e) {
-    persisited = {
-      showPreview: true,
-      toolMode: "preview",
-      editorMode: "textarea",
-
-      // no
-      wordCount: 0,
-      raw: "",
-      outline: [],
-      html: ""
-    };
-  }
-
-  const lastState = await proxy.getLastState();
-
-  return {
-    ...persisited,
-    ...lastState,
-    wordCount: Array.from(lastState.raw).length
-  };
-}
-
 const main = async () => {
+  console.time("mount");
   const proxy: WorkerAPI = await new (Proxy as any)();
-  const initialState = await loadFullData(proxy);
+  const firstState = await loadState(proxy);
 
   ReactDOM.render(
-    <Provider reducer={reducer} initialState={initialState}>
-      <App
-        proxy={proxy}
-        onUpdateState={newState => {
-          saveState(proxy, newState);
-        }}
-      />
-    </Provider>,
+    <WorkerAPIContext.Provider value={proxy}>
+      <Provider reducer={reducer} initialState={firstState}>
+        <App
+          proxy={proxy}
+          onUpdateState={newState => {
+            saveState(proxy, newState);
+          }}
+        />
+      </Provider>
+    </WorkerAPIContext.Provider>,
+
     document.querySelector("#root")
   );
+  console.timeEnd("mount");
 };
 
 main();
+
+// helpers
+async function saveState(proxy: WorkerAPI, state: AppState): Promise<void> {
+  proxy.saveCurrentState(state);
+}
+
+async function loadState(proxy: WorkerAPI): Promise<AppState> {
+  return proxy.getLastState();
+}

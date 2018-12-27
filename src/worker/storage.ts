@@ -1,41 +1,51 @@
 import Dexie from "dexie";
-import { ItemWithOutline } from "../types";
+import { AppState, Item, Save } from "../types";
 import { compile } from "./markdownProcessor";
+
+export const CURRENT_ITEM_KEY = "$current";
+export const CURRENT_SAVE_KEY = "$current-save";
 
 const db = new Dexie("mydb");
 
-db.version(1).stores({
+db.version(2).stores({
+  saves: "id, state",
   items: "id, raw, html, updatedAt"
 });
 
-const CURRENT = "$current";
+const Items: Dexie.Table<Item, any> = (db as any).items;
+const Saves: Dexie.Table<Save, any> = (db as any).saves;
 
-const Items = (db as any).items;
-
-export async function loadCurrent(): Promise<ItemWithOutline> {
-  const item = await Items.get(CURRENT);
-  // debugger;
-  try {
-    const ret = compile(item.raw);
-    return { ...item, outline: ret.outline };
-  } catch (e) {
-    return {
-      raw: initialText,
-      html: "...",
-      outline: [],
-      id: CURRENT,
-      updatedAt: Date.now()
-    };
-  }
+export async function saveCurrentSave(state: AppState): Promise<void> {
+  await Saves.put({
+    id: CURRENT_SAVE_KEY,
+    state: JSON.stringify(state)
+  });
 }
 
-export async function saveCurrent(raw: string): Promise<void> {
+export async function loadCurrentSave(): Promise<AppState | void> {
+  const save = await Saves.get(CURRENT_SAVE_KEY);
+  if (save != null) {
+    return JSON.parse(save.state);
+  }
+  return undefined;
+}
+
+export async function saveItem(id: string, raw: string): Promise<void> {
   await Items.put({
-    id: CURRENT,
+    id,
     raw,
     html: compile(raw).html,
     updatedAt: Date.now()
   });
+}
+
+export async function getItem(id: string): Promise<Item | void> {
+  return Items.get(id);
+}
+
+export async function getItems(): Promise<Item[]> {
+  const items = await Items.toArray();
+  return items.filter(t => t.id !== CURRENT_ITEM_KEY);
 }
 
 export const initialText = `# Markdown Buffer

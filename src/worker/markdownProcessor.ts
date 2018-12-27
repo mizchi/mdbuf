@@ -6,6 +6,7 @@ import katex from "remark-html-katex";
 import html from "remark-html";
 import toc from "remark-toc";
 import frontmatter from "remark-frontmatter";
+import { Outline } from "../types";
 
 let __remark_cursor_line = 0; // initialize
 function highlightCursorLine() {
@@ -49,7 +50,8 @@ function highlightCursorLine() {
   };
 }
 
-let outline: any = [];
+let outline: Outline = [];
+
 function buildOutline() {
   return (ast: any) => {
     outline = ast.children
@@ -85,7 +87,10 @@ export const replaceProcessor = (newProcessor: any) => {
   processor = newProcessor;
 };
 
-export const compile = (raw: string, cursor?: number) => {
+export const compile = (
+  raw: string,
+  cursor?: number
+): { html: string; outline: Outline } => {
   __remark_cursor_line = cursor || 0;
   const html = processor.processSync(raw).toString();
   return {

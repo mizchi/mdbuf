@@ -1,29 +1,29 @@
 import React, { SyntheticEvent } from "react";
 import styled from "styled-components";
 import Loadable from "react-loadable";
-import { Textarea } from "./editors/TextareaEditor";
-import { Preview } from "./tools/Preview";
-import { Outline } from "./tools/Outline";
-import { Help } from "./tools/Help";
+import { Textarea } from "./_atoms/TextareaEditor";
+import { Preview } from "./_organisms/Preview";
+import { Outline } from "./_organisms/Outline";
+import { Help } from "./_organisms/Help";
 import { ToolMode, EditorMode } from "../../types";
-import { Recorder } from "./tools/Recorder";
+import { Recorder } from "./_organisms/Recorder";
 
 const Loading = () => (
   <div style={{ color: "#fff", paddingLeft: 20 }}>Loading...</div>
 );
 
 const CodeMirrorEditor = Loadable({
-  loader: () => import("./editors/CodeMirrorEditor"),
+  loader: () => import("./_atoms/CodeMirrorEditor"),
   loading: () => <Loading />
 });
 
 const MonacoEditor = Loadable({
-  loader: () => import("./editors/MonacoEditor"),
+  loader: () => import("./_atoms/MonacoEditor"),
   loading: () => <Loading />
 });
 
 const Share = Loadable({
-  loader: () => import("./tools/Share"),
+  loader: () => import("./_organisms/Share"),
   loading: () => <Loading />
 });
 

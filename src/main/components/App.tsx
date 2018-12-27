@@ -13,9 +13,6 @@ import {
   updateShowPreview
 } from "../reducers";
 
-// CONSTANTS
-const SHOW_PREVIEW_KEY = "show-preview";
-
 // Global State
 let focusedOnce = false;
 
@@ -32,15 +29,19 @@ export function App({
   const editorRef: React.RefObject<HTMLTextAreaElement> = useRef(null);
   const previewContainerRef: React.RefObject<HTMLDivElement> = useRef(null);
 
-  useEffect(
-    () => {
-      onUpdateState(state);
-    },
-    [state.showPreview, state.toolMode, state.editorMode]
-  );
+  useEffect(() => onUpdateState(state), [
+    state.showPreview,
+    state.toolMode,
+    state.editorMode,
+    state.raw,
+    state.html,
+    state.outline,
+    state.share
+  ]);
 
   const updatePreview = useCallback(
     async (raw: string) => {
+      dispatch(updateRaw(raw));
       if (editorRef.current) {
         const el = editorRef.current as HTMLTextAreaElement;
 
@@ -66,7 +67,6 @@ export function App({
   );
 
   const onChangeValue = useCallback(async (rawValue: string) => {
-    dispatch(updateRaw(rawValue));
     await updatePreview(rawValue);
     requestAnimationFrame(() => {
       const wordCount = Array.from(rawValue).length;
@@ -102,7 +102,6 @@ export function App({
       if (ev.ctrlKey && ev.key === "1") {
         ev.preventDefault();
         const nextShowPreview = !state.showPreview;
-        localStorage.setItem(SHOW_PREVIEW_KEY, String(nextShowPreview));
         dispatch(updateShowPreview(nextShowPreview));
         return;
       }
@@ -128,7 +127,7 @@ export function App({
       ) {
         ev.preventDefault();
         const formatted = await proxy.format(state.raw);
-        dispatch(updateRaw(formatted));
+        updatePreview(formatted);
 
         // focus
         if (editorRef.current) {
@@ -174,7 +173,6 @@ export function App({
       <BottomHelper
         wordCount={state.wordCount}
         onClick={() => {
-          localStorage.setItem(SHOW_PREVIEW_KEY, String(!state.showPreview));
           dispatch(updateShowPreview(!state.showPreview));
         }}
       />
