@@ -2,11 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useAppState } from "../../contexts/RootStateContext";
 import * as diff from "diff";
 import { startRecognition } from "../../api/startRecognition";
-
-type PatchWithTimestamp = {
-  value: string;
-  timestamp: number;
-};
+import { PatchWithTimestamp } from "../../../types";
+import { Replayer } from "../_atoms/Replayer";
 
 type State = {
   startedAt: number;
@@ -107,70 +104,6 @@ export function Recorder() {
           )}
         </>
       )}
-    </div>
-  );
-}
-
-type ReplayerState = {
-  current: string;
-  index: number;
-  playing: boolean;
-  startedAt: number;
-};
-function Replayer(props: {
-  start: string;
-  patches: {
-    value: string;
-    timestamp: number;
-  }[];
-}) {
-  const [state, setState] = useState<ReplayerState>({
-    current: props.start,
-    index: 0,
-    playing: true,
-    startedAt: Date.now()
-  });
-  useEffect(
-    () => {
-      const checkloop = () => {
-        if (!state.playing) {
-          return;
-        }
-        requestAnimationFrame(() => {
-          const now = Date.now();
-          const currentPatch = props.patches[state.index];
-          if (currentPatch && currentPatch.timestamp > now - state.startedAt) {
-            const nextValue = diff.applyPatch(
-              state.current,
-              currentPatch.value
-            );
-            // debugger;
-            if (props.patches[state.index + 1]) {
-              setState(s => ({
-                ...s,
-                index: state.index + 1,
-                current: nextValue
-              }));
-            } else {
-              setState(s => ({
-                ...s,
-                playing: false,
-                current: nextValue
-              }));
-            }
-          } else {
-            checkloop();
-          }
-        });
-      };
-      checkloop();
-    },
-    [state.index, state.playing]
-  );
-  return (
-    <div>
-      <h4>Replayer</h4>
-      <pre>{state.current}</pre>
     </div>
   );
 }

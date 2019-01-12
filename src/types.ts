@@ -52,3 +52,8 @@ export type WorkerAPI = {
   // format by prettier
   format(raw: string): Promise<string>;
 };
+
+export type PatchWithTimestamp = {
+  value: string;
+  timestamp: number;
+};
