@@ -47,9 +47,6 @@ async function loadState(proxy: WorkerAPI): Promise<AppState> {
 }
 
 window.addEventListener("beforeinstallprompt", (ev: any) => {
-  // beforeinstallprompt Event fired
-  debugger;
-
   // e.userChoice will return a Promise.
   // For more details read: https://developers.google.com/web/fundamentals/getting-started/primers/promises
   ev.userChoice.then((choiceResult: any) => {
