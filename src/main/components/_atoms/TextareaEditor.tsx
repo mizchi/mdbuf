@@ -2,9 +2,11 @@ import React, {
   SyntheticEvent,
   forwardRef,
   useCallback,
-  useLayoutEffect
+  useLayoutEffect,
+  useEffect
 } from "react";
 import styled from "styled-components";
+import console = require("console");
 
 const TAB_STR = "  ";
 
@@ -74,6 +76,16 @@ export const Textarea = forwardRef((props: Props, ref: any) => {
       ref.current.focus();
     }
   }, []);
+
+  useLayoutEffect(() => {
+    // console.log(ref);
+    if (ref.current && ref.current.value !== props.raw) {
+      ref.current.value = props.raw;
+    }
+    // debugger;
+    // if (ref.current) {
+    // }
+  }, [props.raw]);
 
   return (
     <StyledTextarea

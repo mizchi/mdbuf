@@ -1,6 +1,8 @@
 import Dexie from "dexie";
 import { AppState, Item, Save } from "../types";
 import { compile } from "./markdownProcessor";
+import { ulid } from "ulid";
+import { sortBy } from "lodash-es";
 
 export const CURRENT_ITEM_KEY = "$current";
 export const CURRENT_SAVE_KEY = "$current-save";
@@ -15,11 +17,30 @@ db.version(2).stores({
 const Items: Dexie.Table<Item, any> = (db as any).items;
 const Saves: Dexie.Table<Save, any> = (db as any).saves;
 
-export async function saveCurrentSave(state: AppState): Promise<void> {
+export async function saveToCurrent(state: AppState): Promise<void> {
   await Saves.put({
     id: CURRENT_SAVE_KEY,
     state: JSON.stringify(state)
   });
+}
+
+export async function saveNewItem(raw: string): Promise<void> {
+  await Items.put({
+    id: ulid(),
+    raw,
+    html: compile(raw).html,
+    updatedAt: Date.now()
+  });
+}
+
+export async function deleteItem(id: string): Promise<void> {
+  await Items.delete(id);
+}
+
+export async function loadAllItems(): Promise<Item[]> {
+  const items = await Items.toArray();
+  return sortBy(items, i => -i.updatedAt);
+  // return items;
 }
 
 export async function loadCurrentSave(): Promise<AppState | void> {

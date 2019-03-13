@@ -12,7 +12,7 @@ export type Item = {
 };
 
 export type EditorMode = "textarea" | "codemirror" | "monaco";
-export type ToolMode = "preview" | "outline" | "help";
+export type ToolMode = "preview" | "outline" | "save" | "help";
 export type AppState = {
   wordCount: number;
   raw: string;
@@ -38,6 +38,10 @@ export type WorkerAPI = {
   getAllItems(): Promise<Item[]>;
 
   saveItem(data: { raw: string; id: string }): Promise<void>;
+
+  saveNewItem(data: { raw: string }): Promise<Item[]>;
+  deleteItem(data: { id: string }): Promise<Item[]>;
+  getAllItems(): Promise<Item[]>;
 
   saveCurrentState(data: AppState): Promise<void>;
 

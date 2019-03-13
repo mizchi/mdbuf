@@ -4,6 +4,7 @@ import Loadable from "react-loadable";
 import { Textarea } from "./_atoms/TextareaEditor";
 import { Preview } from "./_organisms/Preview";
 import { Outline } from "./_organisms/Outline";
+import { Save } from "./_organisms/Save";
 import { Help } from "./_organisms/Help";
 import { ToolMode, EditorMode } from "../../types";
 
@@ -77,7 +78,7 @@ export const Main = React.memo(function Main({
       {showPreview && (
         <SideTools>
           <ToolSelector>
-            {["preview", "outline", "help"].map(mode => {
+            {["preview", "outline", "save", "help"].map(mode => {
               return (
                 <TabButton
                   key={mode}
@@ -91,6 +92,7 @@ export const Main = React.memo(function Main({
           </ToolSelector>
           <ToolContainer ref={previewContainerRef}>
             {toolMode === "preview" && <Preview html={html} />}
+            {toolMode === "save" && <Save editorRef={editorRef} />}
             {toolMode === "outline" && (
               <OutlineContainer>
                 <Outline

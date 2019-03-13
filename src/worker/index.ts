@@ -18,8 +18,22 @@ class WorkerAPIImpl implements WorkerAPI {
     await storage.saveItem(data.id, data.raw);
   }
 
+  async saveNewItem(data: { raw: string }) {
+    await storage.saveNewItem(data.raw);
+    return storage.loadAllItems();
+  }
+
+  async deleteItem(data: { id: string }) {
+    await storage.deleteItem(data.id);
+    return storage.loadAllItems();
+  }
+
+  async loadAllItems() {
+    return storage.loadAllItems();
+  }
+
   async saveCurrentState(data: AppState): Promise<void> {
-    await storage.saveCurrentSave(data);
+    await storage.saveToCurrent(data);
     console.log("save current state in worker");
   }
 
