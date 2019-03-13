@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useLayoutEffect, useCallback } from "react";
 import { BottomHelper } from "./BottomHelper";
 import { Main } from "./Main";
 import { AppState } from "../../types";
-import { WorkerAPI } from "../../worker";
+import { WorkerAPI } from "../../types";
 import { createGlobalStyle } from "styled-components";
 import { useAppState, useDispatch } from "../contexts/RootStateContext";
 import {
@@ -35,8 +35,7 @@ export function App({
     state.editorMode,
     state.raw,
     state.html,
-    state.outline,
-    state.share
+    state.outline
   ]);
 
   const updatePreview = useCallback(

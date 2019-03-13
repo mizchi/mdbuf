@@ -12,7 +12,7 @@ export type Item = {
 };
 
 export type EditorMode = "textarea" | "codemirror" | "monaco";
-export type ToolMode = "preview" | "outline" | "help" | "recorder" | "share";
+export type ToolMode = "preview" | "outline" | "help";
 export type AppState = {
   wordCount: number;
   raw: string;

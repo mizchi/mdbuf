@@ -18,7 +18,11 @@ export const Provider = (props: {
 }) => {
   const [state, dispatch] = useReducer(props.reducer, props.initialState);
   const newDispatch = useCallback((action: any) => {
-    dispatch(action);
+    if (action instanceof Function) {
+      action(dispatch);
+    } else {
+      dispatch(action);
+    }
   }, []);
   return (
     <AppStateContext.Provider value={state}>

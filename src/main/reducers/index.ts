@@ -1,6 +1,6 @@
 import actionCreatorFactory from "typescript-fsa";
 import { reducerWithoutInitialState } from "typescript-fsa-reducers";
-import { AppState, ToolMode, EditorMode, ShareState } from "../../types";
+import { AppState, ToolMode, EditorMode } from "../../types";
 
 const actionCreator = actionCreatorFactory();
 
@@ -17,8 +17,6 @@ export const updateRaw = actionCreator<string>("update-raw");
 
 export const updateShowPreview = actionCreator<boolean>("update-show-preview");
 
-export const updateShareState = actionCreator<ShareState>("update-share-state");
-
 export const reducer = reducerWithoutInitialState<AppState>()
   .case(updateRaw, (state, raw) => {
     return {
@@ -27,18 +25,15 @@ export const reducer = reducerWithoutInitialState<AppState>()
       wordCount: Array.from(raw).length
     };
   })
-  .case(updateShowPreview, (state, showPreview) => {
+  .case(updateShowPreview as any, (state: AppState, showPreview: any) => {
     return { ...state, showPreview };
   })
-  .case(changeToolMode, (state, toolMode) => {
+  .case(changeToolMode as any, (state: AppState, toolMode: any) => {
     return { ...state, toolMode };
   })
-  .case(changeEditorMode, (state, editorMode) => {
+  .case(changeEditorMode as any, (state: AppState, editorMode: any) => {
     return { ...state, editorMode };
   })
-  .case(updateShareState, (state, share) => {
-    return { ...state, share };
-  })
-  .case(updateHtmlAndOutline, (state, payload) => {
+  .case(updateHtmlAndOutline, (state: AppState, payload: any) => {
     return { ...state, ...payload };
   });

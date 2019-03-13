@@ -6,7 +6,6 @@ import { Preview } from "./_organisms/Preview";
 import { Outline } from "./_organisms/Outline";
 import { Help } from "./_organisms/Help";
 import { ToolMode, EditorMode } from "../../types";
-import { Recorder } from "./_organisms/Recorder";
 
 const Loading = () => (
   <div style={{ color: "#fff", paddingLeft: 20 }}>Loading...</div>
@@ -19,11 +18,6 @@ const CodeMirrorEditor = Loadable({
 
 const MonacoEditor = Loadable({
   loader: () => import("./_atoms/MonacoEditor"),
-  loading: () => <Loading />
-});
-
-const Share = Loadable({
-  loader: () => import("./_organisms/Share"),
   loading: () => <Loading />
 });
 
@@ -83,7 +77,7 @@ export const Main = React.memo(function Main({
       {showPreview && (
         <SideTools>
           <ToolSelector>
-            {["preview", "outline", "recorder", "share", "help"].map(mode => {
+            {["preview", "outline", "help"].map(mode => {
               return (
                 <TabButton
                   key={mode}
@@ -106,8 +100,6 @@ export const Main = React.memo(function Main({
               </OutlineContainer>
             )}
             {toolMode === "help" && <Help />}
-            {toolMode === "recorder" && <Recorder />}
-            {toolMode === "share" && <Share />}
           </ToolContainer>
         </SideTools>
       )}

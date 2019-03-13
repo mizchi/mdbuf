@@ -45,3 +45,20 @@ async function saveState(proxy: WorkerAPI, state: AppState): Promise<void> {
 async function loadState(proxy: WorkerAPI): Promise<AppState> {
   return proxy.getLastState();
 }
+
+window.addEventListener("beforeinstallprompt", (ev: any) => {
+  // beforeinstallprompt Event fired
+  debugger;
+
+  // e.userChoice will return a Promise.
+  // For more details read: https://developers.google.com/web/fundamentals/getting-started/primers/promises
+  ev.userChoice.then((choiceResult: any) => {
+    console.log(choiceResult.outcome);
+
+    if (choiceResult.outcome == "dismissed") {
+      console.log("User cancelled home screen install");
+    } else {
+      console.log("User added to home screen");
+    }
+  });
+});
