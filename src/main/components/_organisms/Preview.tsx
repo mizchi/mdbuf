@@ -23,7 +23,7 @@ export const Preview = React.memo(function Preview(props: { html: string }) {
         const focused = ref.current.querySelector(".cursor-focused");
         if (focused) {
           focused.scrollIntoView({
-            behavior: "smooth",
+            // behavior: "smooth",
             block: "nearest"
           });
         }
