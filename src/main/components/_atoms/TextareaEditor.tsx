@@ -6,7 +6,6 @@ import React, {
   useEffect
 } from "react";
 import styled from "styled-components";
-import console = require("console");
 
 const TAB_STR = "  ";
 

@@ -108,13 +108,19 @@ export function App({
       // Ctrl+Shift+E
       if (ev.ctrlKey && ev.shiftKey && ev.key.toLocaleLowerCase() === "e") {
         ev.preventDefault();
+        // if (state.editorMode === "textarea") {
+        //   dispatch(changeEditorMode("codemirror"));
+        // } else if (state.editorMode === "codemirror") {
+        //   dispatch(changeEditorMode("monaco"));
+        // } else if (state.editorMode === "monaco") {
+        //   dispatch(changeEditorMode("textarea"));
+        // }
         if (state.editorMode === "textarea") {
           dispatch(changeEditorMode("codemirror"));
         } else if (state.editorMode === "codemirror") {
-          dispatch(changeEditorMode("monaco"));
-        } else if (state.editorMode === "monaco") {
           dispatch(changeEditorMode("textarea"));
         }
+
         return;
       }
 

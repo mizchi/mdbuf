@@ -17,10 +17,10 @@ const CodeMirrorEditor = Loadable({
   loading: () => <Loading />
 });
 
-const MonacoEditor = Loadable({
-  loader: () => import("./_atoms/MonacoEditor"),
-  loading: () => <Loading />
-});
+// const MonacoEditor = Loadable({
+//   loader: () => import("./_atoms/MonacoEditor"),
+//   loading: () => <Loading />
+// });
 
 export const Main = React.memo(function Main({
   editorRef,
@@ -54,13 +54,13 @@ export const Main = React.memo(function Main({
       <Container>
         <Centered>
           <EditorContainer>
-            {editorMode === "monaco" && (
+            {/* {editorMode === "monaco" && (
               <MonacoEditor
                 value={raw}
                 width={showPreview ? "50vw" : "100vw"}
                 onChangeValue={onChangeValue}
               />
-            )}
+            )} */}
             {editorMode === "codemirror" && (
               <CodeMirrorEditor value={raw} onChangeValue={onChangeValue} />
             )}
