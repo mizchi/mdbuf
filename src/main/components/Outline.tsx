@@ -11,9 +11,7 @@ export const Outline = (props: {
 
         return (
           <div
-            style={{
-              cursor: "pointer"
-            }}
+            className="outline-item"
             key={index}
             onClick={() => {
               props.onSelectOutlineHeading(heading.start);

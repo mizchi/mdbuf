@@ -2,16 +2,16 @@ import React from "react";
 
 export const Help = React.memo(() => {
   return (
-    <div style={{ padding: 10 }}>
-      <dl>
-        <dt>Cmd-S | Windows-S</dt>
-        <dd>Run prettier</dd>
+    <div className="help-block">
+      <dl className="help-item">
+        <dt className="help-item__dt">Cmd-S | Windows-S</dt>
+        <dd className="help-item__dd">Run prettier</dd>
 
-        <dt>Ctrl-1</dt>
-        <dd>Toggle Preview</dd>
+        <dt className="help-item__dt">Ctrl-1</dt>
+        <dd className="help-item__dd">Toggle Preview</dd>
 
-        <dt>Ctrl-Shift-E</dt>
-        <dd>Switch editor-mode</dd>
+        <dt className="help-item__dt">Ctrl-Shift-E</dt>
+        <dd className="help-item__dd">Switch editor-mode</dd>
       </dl>
     </div>
   );

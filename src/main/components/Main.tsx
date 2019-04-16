@@ -85,6 +85,7 @@ export const Main = React.memo(function Main({
                   key={mode}
                   selected={mode === toolMode}
                   onClick={() => onChangeToolMode(mode as any)}
+                  className="tab"
                 >
                   {mode}
                 </TabButton>
@@ -110,7 +111,7 @@ export const Main = React.memo(function Main({
 });
 
 const OutlineContainer = styled.div`
-  padding: 10px;
+  line-height: 2rem;
 `;
 
 const Container = styled.div`
@@ -133,30 +134,44 @@ const EditorContainer = styled.div`
 `;
 
 const SideTools = styled.div`
-  flex: 1;
+  flex: 1 1 0%;
   height: 100vh;
 `;
 
 const ToolTabsContainer = styled.div`
-  height: 32px;
+  display: felx;
+  height: 2.4rem
+  padding-left: 0.5rem;
   color: white;
+  letter-spacing: 0.02rem;
+  background: #273842;
+  font-size: 0.8rem;
 `;
 
 const PreviewContainer = styled.div`
-  height: calc(100vh - 32px);
+  display: flex;
+  height: calc(100vh - 2.5rem);
   width: calc(100vw / 2);
+  padding: 2rem;
+  color: #263842;
   overflow-x: auto;
   overflow-y: auto;
-  background: #eee;
+  background: white;
+  border-radius: 3px;
 `;
 
 const TabButton = styled.div<{ selected: boolean }>`
-  background-color: ${(p: any) => (p.selected ? "#eee" : "#272822")};
-  color: ${(p: any) => (p.selected ? "#272822" : "#eee")};
+  display: flex;
+  border-top: ${(p: any) => (p.selected ? "4px solid #3f9dd4" : "none")};
+  background: ${(p: any) => (p.selected ? "rgba(255,255,255,.8)" : "none")};
+  color: ${(p: any) => (p.selected ? "#273842" : "rgba(255,255,255,.5)")};
   cursor: ${(p: any) => (p.selected ? "auto" : "pointer")};
-  display: inline-flex;
-  height: 100%;
+  margin-top: 2px;
+  padding: 0 1.2rem;
   min-width: 80px;
+  font-family: 'Roboto Mono', monospace;
+  font-weight: bold;
+  border-radius: 2px 2px 0 0;
   align-items: center;
   justify-content: center;
 `;
