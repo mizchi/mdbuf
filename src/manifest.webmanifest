@@ -1,11 +1,11 @@
 {
-  "name": "MarkdownBuffer",
-  "short_name": "MB",
+  "name": "mdbuf",
+  "short_name": "mdbuf",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#fff",
   "theme_color": "#ccc",
-  "description": "MarkdownBuffer",
+  "description": "Markdown Preview",
   "icons": [
     {
       "src": "/assets/48x48.png",
