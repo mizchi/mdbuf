@@ -92,7 +92,6 @@ export const Textarea = forwardRef((props: Props, ref: any) => {
 const StyledTextarea = styled.textarea`
   width: 100%;
   height: calc(100vh - 10px);
-  padding-top: 3rem;
   padding-bottom: 3rem;
   padding-left: 1.5rem;
   box-sizing: border-box;

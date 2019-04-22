@@ -223,6 +223,15 @@ const GlobalStyle = createGlobalStyle`
   .markdown-body h1,h2,h3 {
     color: #263842;
   }
+  .header-title {
+    margin: 0 0.5rem;
+  }
+  .header-link:hover {
+    opacity: 0.8;
+  }
+  .header-logo {
+    height: 30px;
+  }
   .markdown-body .highlight pre, .markdown-body pre {
     background-color: #e2e2e2;
   }
