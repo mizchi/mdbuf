@@ -289,4 +289,8 @@ const GlobalStyle = createGlobalStyle`
     font-size: 0.85rem;
     font-weight: bold;
   }
+  .icon-symbol {
+    width: 29px;
+    height: 32px;
+  }
 `;
