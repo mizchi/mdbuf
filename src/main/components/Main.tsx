@@ -127,10 +127,13 @@ const Container = styled.div`
 `;
 
 const HeaderTitle = styled.h1`
-  margin: 0 0.5rem;
+  height: 40px;
+  margin: 0 1.5rem;
 `;
 
 const HeaderLink = styled.a`
+  display: inline-block;
+  cursor: pointer;
   &:hover {
     opacity: 0.8;
   }
@@ -138,6 +141,7 @@ const HeaderLink = styled.a`
 
 const LogoArea = styled.div`
   height: 30px;
+  line-height: 0;
 `;
 
 
@@ -150,7 +154,6 @@ const Centered = styled.div`
 const EditorContainer = styled.div`
   width: 100%;
   max-width: 960px;
-  margin-top: 1rem;
   margin-left: auto;
   margin-right: auto;
   padding-top: 8px;
@@ -162,7 +165,7 @@ const SideTools = styled.div`
 `;
 
 const ToolTabsContainer = styled.div`
-  display: felx;
+  display: flex;
   height: 2.4rem
   padding-left: 0.5rem;
   color: white;
@@ -198,6 +201,6 @@ const TabButton = styled.div<{ selected: boolean }>`
   align-items: center;
   justify-content: center;
   &:hover {
-    color: white;
+    color: ${(p: any) => (p.selected ? "#273842" : "white")};
   }
 `;

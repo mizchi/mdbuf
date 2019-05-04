@@ -92,15 +92,14 @@ export const Textarea = forwardRef((props: Props, ref: any) => {
 const StyledTextarea = styled.textarea`
   width: 100%;
   height: calc(100vh - 10px);
-  padding-bottom: 3rem;
-  padding-left: 1.5rem;
-  box-sizing: border-box;
-  outline: none;
+  padding: 1rem 1.5rem 3rem;
+  background: #273842;
   font-family: 'Roboto Mono', monospace;
   font-size: 0.9em;
   color: white;
-  background: #273842;
-  resize: none;
-  border: none;
   line-height: 1.2;
+  box-sizing: border-box;
+  outline: none;
+  border: none;
+  resize: none;
 `;
