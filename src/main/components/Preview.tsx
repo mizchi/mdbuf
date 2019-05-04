@@ -1,5 +1,6 @@
 import React, { useLayoutEffect } from "react";
 import morphdom from "morphdom";
+import { createGlobalStyle } from "styled-components";
 
 export const Preview = React.memo(function Preview(props: { html: string }) {
   const ref: React.RefObject<HTMLDivElement> = React.createRef();
@@ -33,3 +34,22 @@ export const Preview = React.memo(function Preview(props: { html: string }) {
 
   return <div className="markdown-body" ref={ref} />;
 });
+
+
+const GlobalStyle = createGlobalStyle`
+  .markdown-body { 
+    line-height: 1.3em;
+    flex: 1;
+  }
+  .markdown-body h1,h2,h3 {
+    color: #263842;
+  }
+
+  .markdown-body .highlight pre, .markdown-body pre {
+    background-color: #e2e2e2;
+  }
+
+  .cursor-focused {
+    background-color: rgba(255, 128, 128, 0.2);
+  }
+`;

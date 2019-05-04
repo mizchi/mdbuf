@@ -54,11 +54,13 @@ export const Main = React.memo(function Main({
   return (
     <>
       <Container>
-      <h1 className="header-title">
-        <a href="/" className="header-link">
-          <LogoSvg />
-        </a>
-      </h1>
+        <HeaderTitle>
+          <HeaderLink>
+            <LogoArea>
+              <LogoSvg />
+            </LogoArea>
+          </HeaderLink>
+        </HeaderTitle>
         <Centered>
           <EditorContainer>
             {editorMode === "monaco" && (
@@ -91,7 +93,6 @@ export const Main = React.memo(function Main({
                   key={mode}
                   selected={mode === toolMode}
                   onClick={() => onChangeToolMode(mode as any)}
-                  className="tab"
                 >
                   {mode}
                 </TabButton>
@@ -124,6 +125,21 @@ const Container = styled.div`
   flex: 1;
   height: 100vh;
 `;
+
+const HeaderTitle = styled.h1`
+  margin: 0 0.5rem;
+`;
+
+const HeaderLink = styled.a`
+  &:hover {
+    opacity: 0.8;
+  }
+`;
+
+const LogoArea = styled.div`
+  height: 30px;
+`;
+
 
 const Centered = styled.div`
   width: 100%;
@@ -181,4 +197,7 @@ const TabButton = styled.div<{ selected: boolean }>`
   border-radius: 2px 2px 0 0;
   align-items: center;
   justify-content: center;
+  &:hover {
+    color: white;
+  }
 `;

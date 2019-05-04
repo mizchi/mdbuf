@@ -2,7 +2,7 @@ import React from "react";
 
 export const SymbolLogoSvg = React.memo(() => {
   return (
-    <svg viewBox="0 0 29 32" className="icon-symbol">
+    <svg viewBox="0 0 29 32" height="100%">
       <g id="Page-1" fill="none" fillRule="evenodd">
         <g id="Artboard" transform="translate(-1)">
           <g id="M" transform="translate(1)" fillRule="nonzero">
