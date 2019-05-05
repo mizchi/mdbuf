@@ -87,17 +87,21 @@ export const Main = React.memo(function Main({
       {showPreview && (
         <SideTools>
           <ToolTabsContainer>
-            {["preview", "outline", "help"].map(mode => {
-              return (
-                <TabButton
-                  key={mode}
-                  selected={mode === toolMode}
-                  onClick={() => onChangeToolMode(mode as any)}
-                >
-                  {mode}
-                </TabButton>
-              );
-            })}
+            <ToolTabsContainerList>
+              {["preview", "outline", "help"].map(mode => {
+                return (
+                  <ToolTabsItem>
+                    <TabButton
+                      key={mode}
+                      selected={mode === toolMode}
+                      onClick={() => onChangeToolMode(mode as any)}
+                    >
+                      {mode}
+                    </TabButton>
+                  </ToolTabsItem>
+                );
+              })}
+            </ToolTabsContainerList>
           </ToolTabsContainer>
           <PreviewContainer ref={previewContainerRef}>
             {toolMode === "preview" && <Preview html={html} />}
@@ -164,14 +168,22 @@ const SideTools = styled.div`
   height: 100vh;
 `;
 
-const ToolTabsContainer = styled.div`
+const ToolTabsContainer = styled.nav`
+  display:block;
+`;
+const ToolTabsContainerList = styled.ul`
   display: flex;
   height: 2.4rem
+  margin: 0;
   padding-left: 0.5rem;
-  color: white;
   letter-spacing: 0.02rem;
   background: #273842;
   font-size: 0.8rem;
+  list-style: none;
+`;
+
+const ToolTabsItem = styled.li`
+  display:flex;
 `;
 
 const PreviewContainer = styled.div`
@@ -186,7 +198,7 @@ const PreviewContainer = styled.div`
   border-radius: 3px;
 `;
 
-const TabButton = styled.div<{ selected: boolean }>`
+const TabButton = styled.a<{ selected: boolean }>`
   display: flex;
   border-top: ${(p: any) => (p.selected ? "4px solid #3f9dd4" : "none")};
   background: ${(p: any) => (p.selected ? "rgba(255,255,255,.8)" : "none")};
@@ -196,7 +208,6 @@ const TabButton = styled.div<{ selected: boolean }>`
   padding: 0 1.2rem;
   min-width: 80px;
   font-family: 'Roboto Mono', monospace;
-  font-weight: bold;
   border-radius: 2px 2px 0 0;
   align-items: center;
   justify-content: center;
