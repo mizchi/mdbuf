@@ -3,6 +3,7 @@ const CleanPlugin = require("webpack-clean-plugin");
 const HTMLPlugin = require("html-webpack-plugin");
 const WorkerPlugin = require("worker-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
+const { GenerateSW } = require("workbox-webpack-plugin");
 
 module.exports = {
   entry: {
@@ -48,6 +49,13 @@ module.exports = {
         from: "src/assets",
         to: "assets"
       }
-    ])
+    ]),
+    new GenerateSW({
+      globDirectory: path.join(__dirname, "dist"),
+      globPatterns: ["*.{html,js,css}"],
+      swDest: "service-worker.js",
+      clientsClaim: true,
+      skipWaiting: true
+    })
   ]
 };

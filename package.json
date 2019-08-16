@@ -36,6 +36,7 @@
     "webpack-clean-plugin": "^0.2.3",
     "webpack-cli": "^3.3.6",
     "webpack-dev-server": "^3.8.0",
+    "workbox-webpack-plugin": "^4.3.1",
     "worker-plugin": "^3.1.0"
   },
   "dependencies": {
