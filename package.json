@@ -4,8 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "parcel src/index.html --port 7777",
-    "build": "parcel build src/index.html",
+    "dev": "webpack-dev-server",
+    "build": "webpack --mode production",
     "deploy": "rimraf dist && yarn build && netlify deploy -d dist --prod",
     "test": "jest"
   },
@@ -21,6 +21,7 @@
     "@types/styled-components": "^4.1.18",
     "copy-webpack-plugin": "^5.0.4",
     "css-loader": "^3.2.0",
+    "file-loader": "^4.2.0",
     "html-webpack-plugin": "^3.2.0",
     "jest": "^24.8.0",
     "netlify-cli": "^2.12.0",
