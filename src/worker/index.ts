@@ -1,4 +1,4 @@
-import "@babel/polyfill";
+import "regenerator-runtime/runtime";
 import * as Comlink from "comlinkjs";
 import { compile } from "./markdownProcessor";
 import formatMarkdown from "./formatMarkdown";

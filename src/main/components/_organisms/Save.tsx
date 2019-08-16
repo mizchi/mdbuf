@@ -4,7 +4,7 @@ import { Item } from "../../../types";
 import { useDispatch, useAppState } from "../../contexts/RootStateContext";
 import { updateRaw } from "../../reducers";
 import { sortBy } from "lodash-es";
-import { format } from "date-fns/esm";
+import format from "date-fns/format";
 
 export const Save = React.memo(
   (_props: { editorRef: React.RefObject<any> }) => {
