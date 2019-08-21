@@ -1,5 +1,5 @@
 import "regenerator-runtime/runtime";
-import * as Comlink from "comlinkjs";
+import * as Comlink from "comlink";
 import { compile } from "./markdownProcessor";
 import formatMarkdown from "./formatMarkdown";
 import * as storage from "./storage";
@@ -76,4 +76,4 @@ class WorkerAPIImpl implements WorkerAPI {
   }
 }
 
-Comlink.expose(WorkerAPIImpl, self);
+Comlink.expose(WorkerAPIImpl);

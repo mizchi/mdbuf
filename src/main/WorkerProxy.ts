@@ -1,5 +1,5 @@
-import * as Comlink from "comlinkjs";
+import * as Comlink from "comlink";
 
-export default Comlink.proxy(
+export default Comlink.wrap(
   new Worker("../worker/index.ts", { type: "module" })
 );

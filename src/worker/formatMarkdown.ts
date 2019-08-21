@@ -1,7 +1,7 @@
 let markdown: any = null;
 let prettier: any = null;
 
-export default function formatMarkdown(md: string) {
+export default function formatMarkdown(md: string): string {
   if (prettier && markdown) {
     return prettier.format(md, { parser: "markdown", plugins: [markdown] });
   } else {
@@ -13,8 +13,8 @@ export default function formatMarkdown(md: string) {
 console.time("load:prettier");
 (async () => {
   const [p0, p1] = await Promise.all([
-    import("prettier/standalone"),
-    import("prettier/parser-markdown")
+    import(/* webpackChunkName: "prettier" */ "prettier/standalone"),
+    import(/* webpackChunkName: "prettier" */ "prettier/parser-markdown")
   ]);
   prettier = p0.default || p0;
   markdown = p1.default || p1;

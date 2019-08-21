@@ -38,11 +38,13 @@
     "webpack-cli": "^3.3.6",
     "webpack-dev-server": "^3.8.0",
     "workbox-webpack-plugin": "^4.3.1",
+    "worker-loader": "^2.0.0",
     "worker-plugin": "^3.1.0"
   },
   "dependencies": {
+    "clean-webpack-plugin": "^3.0.0",
     "codemirror": "^5.48.2",
-    "comlinkjs": "^3.2.0",
+    "comlink": "^4.0.2",
     "core-js": "^3.2.1",
     "date-fns": "^1.30.1",
     "dexie": "^2.0.4",

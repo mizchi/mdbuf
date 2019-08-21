@@ -1,19 +1,46 @@
 const path = require("path");
-const CleanPlugin = require("webpack-clean-plugin");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const HTMLPlugin = require("html-webpack-plugin");
 const WorkerPlugin = require("worker-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
 const { GenerateSW } = require("workbox-webpack-plugin");
 
+const tsLoader = {
+  loader: "ts-loader",
+  options: {
+    transpileOnly: true
+  }
+};
+
 module.exports = {
   entry: {
-    main: path.join(__dirname, "src/main/index")
+    compile: path.join(__dirname, "src/third_party/compile"),
+    format: path.join(__dirname, "src/third_party/format"),
+    main: path.join(__dirname, "src/main")
+  },
+  output: {
+    globalObject: "self",
+    filename: "[name].js",
+    chunkFilename: "[name].[id].[contenthash].js"
   },
   resolve: {
     extensions: [".js", ".ts", ".tsx"]
   },
   module: {
     rules: [
+      {
+        test: /\.w\.ts$/,
+        use: [
+          {
+            loader: "worker-loader",
+            options: {
+              publicPath: process.env.ASSET_HOST || "/",
+              inline: true
+            }
+          },
+          tsLoader
+        ]
+      },
       {
         test: /\.css$/i,
         use: ["style-loader", "css-loader"]
@@ -31,22 +58,18 @@ module.exports = {
       },
       {
         test: /\.tsx?/,
-        use: [
-          {
-            loader: "ts-loader",
-            options: {
-              transpileOnly: true
-            }
-          }
-        ]
+        use: [tsLoader]
       }
     ]
   },
 
   plugins: [
-    new CleanPlugin(),
+    new CleanWebpackPlugin(),
     new WorkerPlugin(),
-    new HTMLPlugin({ template: path.join(__dirname, "src/index.html") }),
+    new HTMLPlugin({
+      template: path.join(__dirname, "src/index.html"),
+      inject: false
+    }),
     new CopyPlugin([
       {
         from: "src/manifest.webmanifest",
