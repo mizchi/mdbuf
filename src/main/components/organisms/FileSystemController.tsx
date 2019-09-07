@@ -42,7 +42,7 @@ function _FileSystemController(props: {
 }) {
   const [writeHandler, setWriteHandler] = useState(null);
   const [currentFilename, setFilename] = useState<string | null>(null);
-  const appState = useSelector((s: AppState) => s);
+  const appState = useSelector((s: AppState) => ({ raw: s.raw }));
 
   const dispatch = useDispatch();
 

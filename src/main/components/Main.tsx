@@ -1,11 +1,11 @@
 import React, { SyntheticEvent } from "react";
 import styled from "styled-components";
 import Loadable from "react-loadable";
-import { Textarea } from "./_atoms/TextareaEditor";
-import { Preview } from "./_organisms/Preview";
-import { Outline } from "./_organisms/Outline";
-import { Save } from "./_organisms/Save";
-import { Help } from "./_organisms/Help";
+import { Textarea } from "./elements/TextareaEditor";
+import { Preview } from "./organisms/Preview";
+import { Outline } from "./organisms/Outline";
+import { Save } from "./organisms/Save";
+import { Help } from "./organisms/Help";
 import { ToolMode, EditorMode } from "../../types";
 
 const Loading = () => (
@@ -13,7 +13,7 @@ const Loading = () => (
 );
 
 const CodeMirrorEditor = Loadable({
-  loader: () => import("./_atoms/CodeMirrorEditor"),
+  loader: () => import("./elements/CodeMirrorEditor"),
   loading: () => <Loading />
 });
 

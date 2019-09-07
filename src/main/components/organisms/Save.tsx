@@ -11,7 +11,7 @@ import { FileSystemController } from "./FileSystemController";
 export const Save = React.memo(
   (_props: { editorRef: React.RefObject<any> }) => {
     const api = useWorkerAPI();
-    const app = useSelector((s: AppState) => s);
+    const app = useSelector((s: AppState) => ({ raw: s.raw }));
     const [items, setItems] = useState<Item[]>([]);
     const dispatch = useDispatch();
 
