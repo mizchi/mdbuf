@@ -14,8 +14,8 @@ const tsLoader = {
 
 module.exports = {
   entry: {
-    compile: path.join(__dirname, "src/third_party/compile"),
-    format: path.join(__dirname, "src/third_party/format"),
+    // compile: path.join(__dirname, "src/third_party/compile"),
+    // format: path.join(__dirname, "src/third_party/format"),
     main: path.join(__dirname, "src/main")
   },
   output: {
@@ -81,8 +81,8 @@ module.exports = {
       }
     ]),
     new GenerateSW({
-      globDirectory: path.join(__dirname, "dist"),
-      globPatterns: ["*.{html,js,css}"],
+      // globDirectory: path.join(__dirname, "dist"),
+      // globPatterns: ["*.{html,js,css}"],
       swDest: "service-worker.js",
       clientsClaim: true,
       skipWaiting: true

@@ -126,9 +126,11 @@ export function App({
 
       // Ctrl+Shift+F || Cmd+S
       if (
-        (ev.ctrlKey && ev.shiftKey && ev.key.toLowerCase() === "f") ||
-        (ev.ctrlKey && ev.key.toLowerCase() === "s") ||
-        (ev.metaKey && ev.key.toLowerCase() === "s")
+        ev.ctrlKey &&
+        ev.shiftKey &&
+        ev.key.toLowerCase() === "f"
+        // (ev.ctrlKey && ev.key.toLowerCase() === "s") ||
+        // (ev.metaKey && ev.key.toLowerCase() === "s")
       ) {
         ev.preventDefault();
         const formatted = await proxy.format(state.raw);

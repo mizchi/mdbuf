@@ -5,6 +5,7 @@ import { useDispatch, useAppState } from "../../contexts/RootStateContext";
 import { updateRaw } from "../../reducers";
 import { sortBy } from "lodash-es";
 import format from "date-fns/format";
+import { FileSystemController } from "./FileSystemController";
 
 export const Save = React.memo(
   (_props: { editorRef: React.RefObject<any> }) => {
@@ -21,6 +22,12 @@ export const Save = React.memo(
     }, []);
     return (
       <div style={{ padding: 10 }}>
+        <FileSystemController
+          editorRef={_props.editorRef}
+          onStartHandle={() => {}}
+          onEndHandle={() => {}}
+        />
+        <hr />
         <div>
           <button
             onClick={async () => {
@@ -32,10 +39,9 @@ export const Save = React.memo(
               setItems(nextItems);
             }}
           >
-            save
+            save snapshot
           </button>
         </div>
-        <hr />
         {sortBy(items, i => -i.updatedAt).map(item => {
           const formatted = format(new Date(item.updatedAt), "yyy/MM/dd");
           return (
