@@ -14,10 +14,6 @@ const Loading = () => (
   <div style={{ color: "#fff", paddingLeft: 20 }}>Loading...</div>
 );
 
-const CodeMirrorEditor = React.lazy(() =>
-  import("./elements/CodeMirrorEditor")
-);
-
 const MonacoEditor = React.lazy(() => import("./elements/MonacoEditor"));
 
 export const Main = React.memo(function Main({
@@ -70,16 +66,6 @@ export const Main = React.memo(function Main({
                 />
               </Suspense>
             )}
-            {editorMode === "codemirror" && (
-              <Suspense fallback={<Loading />}>
-                <CodeMirrorEditor value={raw} onChangeValue={onChangeValue} />
-              </Suspense>
-            )}
-            {/* {editorMode === "monaco" && (
-              <Suspense fallback={<Loading />}>
-                <MonacoEditor value={raw} onChangeValue={onChangeValue} />
-              </Suspense>
-            )} */}
             {editorMode === "textarea" && (
               <TextareaEditor
                 ref={editorRef}

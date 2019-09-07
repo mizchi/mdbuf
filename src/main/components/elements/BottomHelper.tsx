@@ -19,12 +19,16 @@ export const BottomHelper = React.memo(function BottomHelper(props: Props) {
         right: "20px",
         bottom: "20px",
         padding: 3,
-        borderRadius: 4,
-        background: "#8a3"
+        paddingRight: 7,
+        borderRadius: 2,
+        background: "#333",
+        color: "#fff"
       }}
     >
       &nbsp;
-      <button onClick={props.onClick}>👀</button>
+      <button style={{ borderRadius: 3 }} onClick={props.onClick}>
+        👀
+      </button>
       &nbsp;
       <span>wc:{size}</span>
       {writer.handler && (
