@@ -3,7 +3,6 @@ import { useDispatch } from "react-redux";
 import { useRemote } from "../contexts/RemoteContext";
 import { updateRaw } from "../reducers";
 import { useCurrentBuffer } from "../contexts/CurrentBufferContext";
-// import console = require("console");
 
 export function useAction<T extends Function>(
   action: T,
@@ -35,8 +34,12 @@ export function useFormat() {
     async (currentText: string) => {
       const text = await remote.format(currentText);
       dispatch(updateRaw.action({ raw: text, remote }));
-      currentBuffer.setValue(text);
+      if (currentBuffer) {
+        const pos = currentBuffer.getCursorPosition();
+        currentBuffer.setValue(text);
+        currentBuffer.setCursorPosition(pos);
+      }
     },
-    [remote, currentBuffer.buffer]
+    [remote, currentBuffer]
   );
 }

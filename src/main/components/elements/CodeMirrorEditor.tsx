@@ -1,6 +1,8 @@
 // codemirror theme
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/material.css";
+// import "codemirror/theme/monokai.css";
+
 // highlight language
 import "codemirror/mode/gfm/gfm";
 import "codemirror/mode/javascript/javascript";
@@ -25,6 +27,7 @@ import "codemirror/mode/css/css";
 import React, { useState, useEffect } from "react";
 import { Controlled as CodeMirror } from "react-codemirror2";
 import { createGlobalStyle } from "styled-components";
+import { useCurrentBufferContext } from "../../contexts/CurrentBufferContext";
 
 type Props = {
   value: string;
@@ -35,6 +38,7 @@ export default (props: Props) => {
   // react to outer change by prettier
   const [initialValue, setInitialValue] = useState(props.value);
   const [localValue, setValue] = useState(props.value);
+  const buffer = useCurrentBufferContext();
 
   useEffect(() => {
     if (initialValue !== props.value) {
@@ -42,6 +46,12 @@ export default (props: Props) => {
       setValue(props.value);
     }
   });
+
+  useEffect(() => {
+    return () => {
+      buffer.set(null);
+    };
+  }, []);
 
   return (
     <>
@@ -62,11 +72,49 @@ export default (props: Props) => {
           } as any
         }
         editorDidMount={editor => {
+          //@ts-ignore
+          global.editor = editor;
           // Patch for Google IME
           editor.getInputField().style.marginBottom = "-2em";
           editor.refresh();
+          // @ts-ignore
           editor.setCursor({ line: 0, ch: 0 });
           editor.focus();
+          // debugger;
+          buffer.set({
+            setCursorPosition(pos) {
+              const line =
+                editor
+                  .getValue()
+                  .substr(0, pos)
+                  .split("\n").length - 1;
+              // @ts-ignore
+              editor.setCursor({ line, ch: 0 });
+            },
+            getCursorPosition() {
+              // @ts-ignore
+              const { line } = editor.getCursor();
+
+              // FIXME
+              const sum =
+                editor
+                  .getValue()
+                  .split("\n")
+                  .slice(0, line + 1)
+                  .join("\n").length - 1;
+
+              return sum;
+            },
+            focus() {
+              editor.focus();
+            },
+            getValue() {
+              return editor.getValue();
+            },
+            setValue(value: string) {
+              editor.setValue(value);
+            }
+          });
         }}
         onChange={(editor, data, currentValue) => {
           // setValue(currentValue);

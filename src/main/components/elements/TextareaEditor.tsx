@@ -5,7 +5,7 @@ import React, {
   useLayoutEffect
 } from "react";
 import styled from "styled-components";
-import { useCurrentBuffer } from "../../contexts/CurrentBufferContext";
+import { useCurrentBufferContext } from "../../contexts/CurrentBufferContext";
 
 const TAB_STR = "  ";
 
@@ -16,7 +16,7 @@ type Props = {
 };
 
 export const TextareaEditor = forwardRef((props: Props, ref: any) => {
-  const buffer = useCurrentBuffer();
+  const buffer = useCurrentBufferContext();
 
   let isComposing = false;
 
@@ -67,13 +67,30 @@ export const TextareaEditor = forwardRef((props: Props, ref: any) => {
   // focus on first mount
   useLayoutEffect(() => {
     if (ref.current) {
-      buffer.setBuffer("textarea", ref.current);
+      buffer.set({
+        getCursorPosition() {
+          return ref.current.selectionStart;
+        },
+        setCursorPosition(pos: number) {
+          ref.current.selectionStart = pos;
+          ref.current.selectionEnd = pos;
+        },
+        focus() {
+          ref.current.focus();
+        },
+        getValue() {
+          return ref.current.value;
+        },
+        setValue(value: string) {
+          ref.current.value = value;
+        }
+      });
       ref.current.selectionStart = 0;
       ref.current.selectionEnd = 0;
       ref.current.focus();
     }
     return () => {
-      buffer.setBuffer("textarea", null);
+      buffer.set(null);
     };
   }, []);
 

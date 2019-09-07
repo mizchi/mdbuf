@@ -51,3 +51,11 @@ export type PatchWithTimestamp = {
   value: string;
   timestamp: number;
 };
+
+export type EditorAPI = {
+  getCursorPosition(): number;
+  setCursorPosition(position: number): void;
+  focus(): void;
+  setValue(value: string): void;
+  getValue(): string;
+};

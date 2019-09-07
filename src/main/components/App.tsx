@@ -35,13 +35,13 @@ export function App({
 
   const onChangeToolMode = useAction(changeToolMode);
 
-  const onSelectOutlineHeading = useCallback((start: number) => {
-    if (editorRef.current) {
-      editorRef.current.selectionStart = start;
-      editorRef.current.selectionEnd = start;
-      editorRef.current.focus();
-    }
-  }, []);
+  // const onSelectOutlineHeading = useCallback((start: number) => {
+  //   if (editorRef.current) {
+  //     editorRef.current.selectionStart = start;
+  //     editorRef.current.selectionEnd = start;
+  //     editorRef.current.focus();
+  //   }
+  // }, []);
 
   const onWheel = useCallback((ev: any) => {
     if (ev.ctrlKey) {
@@ -68,7 +68,6 @@ export function App({
         editorRef={editorRef}
         previewContainerRef={previewContainerRef}
         onChangeToolMode={onChangeToolMode}
-        onSelectOutlineHeading={onSelectOutlineHeading}
         onWheel={onWheel}
       />
       <BottomHelper

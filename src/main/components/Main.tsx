@@ -21,14 +21,12 @@ const CodeMirrorEditor = React.lazy(() =>
 export const Main = React.memo(function Main({
   editorRef,
   onChangeToolMode,
-  onSelectOutlineHeading,
   onWheel,
   previewContainerRef
 }: {
   editorRef: React.RefObject<HTMLTextAreaElement>;
   previewContainerRef: React.RefObject<HTMLDivElement>;
   onChangeToolMode: (value: ToolMode) => void;
-  onSelectOutlineHeading: (offset: number) => void;
   onWheel: (event: SyntheticEvent<HTMLTextAreaElement>) => void;
 }) {
   const api = useRemote();
@@ -103,10 +101,7 @@ export const Main = React.memo(function Main({
             {toolMode === "preview" && <Preview html={html} />}
             {toolMode === "outline" && (
               <OutlineContainer>
-                <Outline
-                  outline={outline}
-                  onSelectOutlineHeading={onSelectOutlineHeading}
-                />
+                <Outline outline={outline} />
               </OutlineContainer>
             )}
             {toolMode === "help" && <Help />}
