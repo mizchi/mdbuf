@@ -1,5 +1,8 @@
 import React from "react";
 import { useWriter } from "../../contexts/WriterContext";
+import { useSelector } from "react-redux";
+import { AppState } from "../../../types";
+import { format } from "date-fns";
 
 type Props = {
   wordCount: number;
@@ -8,6 +11,7 @@ type Props = {
 
 export const BottomHelper = React.memo(function BottomHelper(props: Props) {
   const writer = useWriter();
+  const size = useSelector((s: AppState) => s.raw.length);
   return (
     <div
       style={{
@@ -16,15 +20,20 @@ export const BottomHelper = React.memo(function BottomHelper(props: Props) {
         bottom: "20px",
         padding: 3,
         borderRadius: 4,
-        background: "wheat"
+        background: "#8a3"
       }}
     >
       &nbsp;
       <button onClick={props.onClick}>👀</button>
       &nbsp;
-      {writer.handler && <span>{writer.handler.name}</span>}
-      &nbsp;
-      {writer.handler && <span>{writer.timestamp}</span>}
+      <span>wc:{size}</span>
+      {writer.handler && (
+        <>
+          &nbsp;
+          <span>{writer.handler.name}</span>
+          <span>{format(writer.timestamp, "HH:mm:ss")}</span>
+        </>
+      )}
     </div>
   );
 });

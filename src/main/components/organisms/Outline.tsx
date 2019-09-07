@@ -6,6 +6,7 @@ export const Outline = (props: {
 }) => {
   return (
     <>
+      {props.outline.length === 0 && <span>(No heading block)</span>}
       {props.outline.map((heading, index) => {
         const title =
           heading.children && heading.children[0] && heading.children[0].value;

@@ -34,6 +34,14 @@ export function KeyHandler() {
         }
       }
 
+      // cmd + shift + s
+      if (meta && ev.shiftKey && ev.key.toLocaleLowerCase() === "s") {
+        ev.preventDefault();
+        const handler = await writer.open(false);
+        await writer.write(handler, raw);
+        return;
+      }
+
       // cmd + s
       if (meta && ev.key.toLocaleLowerCase() === "s") {
         ev.preventDefault();

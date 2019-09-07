@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { useRemote } from "../contexts/RemoteContext";
 import { updateRaw } from "../reducers";
 import { useCurrentBuffer } from "../contexts/CurrentBufferContext";
+// import console = require("console");
 
 export function useAction<T extends Function>(
   action: T,
@@ -36,6 +37,6 @@ export function useFormat() {
       dispatch(updateRaw.action({ raw: text, remote }));
       currentBuffer.setValue(text);
     },
-    [remote]
+    [remote, currentBuffer.buffer]
   );
 }
