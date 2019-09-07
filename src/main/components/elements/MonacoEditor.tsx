@@ -187,16 +187,31 @@ export default (props: {
       newEditor.focus();
       setEditor(newEditor);
       // @ts-ignore
-      global.editor = newEditor;
+      // global.editor = newEditor;
+      if (false && buffer.lastOffset) {
+        // const lines = newEditor
+        //   .getValue()
+        //   .substr(0, buffer.lastOffset)
+        //   .split("\n");
+        // const line = lines.length;
+        // lines[lines.length - 1];
+        // const ch = Array.from(lines[lines.length - 1]).length;
+        // // debugger;
+        // newEditor.setSelection(
+        //   monaco.Range.fromPositions(new monaco.Position(line, ch))
+        // );
+      }
+
       buffer.set({
         setCursorPosition(pos) {
-          const line = newEditor
+          const lines = newEditor
             .getValue()
             .substr(0, pos)
-            .split("\n").length;
+            .split("\n");
+          const ch = lines[lines.length - 1].length;
 
           newEditor.setSelection(
-            monaco.Range.fromPositions(new monaco.Position(line, 0))
+            monaco.Range.fromPositions(new monaco.Position(lines.length, ch))
           );
         },
         getCursorPosition() {
@@ -215,7 +230,11 @@ export default (props: {
         }
       });
       return () => {
+        const p = newEditor.getPosition() as monaco.Position;
+        const offset = newEditor.getOffsetForColumn(p.lineNumber, p.column);
+        buffer.setOffset(offset);
         newEditor.dispose();
+        buffer.set(null);
       };
     }
   }, []);

@@ -85,11 +85,18 @@ export const TextareaEditor = forwardRef((props: Props, ref: any) => {
           ref.current.value = value;
         }
       });
-      ref.current.selectionStart = 0;
-      ref.current.selectionEnd = 0;
+      if (false && buffer.lastOffset) {
+        ref.current.selectionStart = buffer.lastOffset;
+        ref.current.selectionEnd = buffer.lastOffset;
+      } else {
+        ref.current.selectionStart = 0;
+        ref.current.selectionEnd = 0;
+      }
       ref.current.focus();
     }
     return () => {
+      buffer.setOffset(ref.current.selectionStart);
+      // debugger;
       buffer.set(null);
     };
   }, []);

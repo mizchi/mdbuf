@@ -3,16 +3,22 @@ import { EditorAPI } from "../../types";
 
 export const CurrentBufferContext = React.createContext<{
   set: (api: EditorAPI | null) => void;
+  setOffset(pos: number): void;
   api: null | EditorAPI;
+  lastOffset: null | number;
 }>(null as any);
 
 export const Provider = function(props: { children: any }) {
   const [api, set] = useState<null | EditorAPI>(null);
+  const [offset, setOffset] = useState<null | number>(null);
+
   return (
     <CurrentBufferContext.Provider
       value={{
         api,
-        set
+        set,
+        lastOffset: offset,
+        setOffset
       }}
     >
       {props.children}
