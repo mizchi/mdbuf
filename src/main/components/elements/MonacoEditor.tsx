@@ -128,7 +128,7 @@ import "monaco-editor/esm/vs/editor/contrib/suggest/suggestController.js";
 };
 
 import React, { useState, useRef, useLayoutEffect, useEffect } from "react";
-import { ResizeDetector } from "../ResizeDetector";
+import { ResizeDetector } from "./ResizeDetector";
 
 export default (props: {
   value: string;
@@ -143,18 +143,15 @@ export default (props: {
   // react to outer change by prettier
   const [initialValue, setInitialValue] = useState(props.value);
 
-  useLayoutEffect(
-    () => {
-      if (initialValue !== props.value) {
-        setInitialValue(props.value);
+  useLayoutEffect(() => {
+    if (initialValue !== props.value) {
+      setInitialValue(props.value);
 
-        if (editor && editor.getValue() !== props.value) {
-          editor.setValue(props.value);
-        }
+      if (editor && editor.getValue() !== props.value) {
+        editor.setValue(props.value);
       }
-    },
-    [props.value]
-  );
+    }
+  }, [props.value]);
 
   const editorRef = useRef(null as any);
 

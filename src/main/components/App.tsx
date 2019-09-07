@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useLayoutEffect, useCallback } from "react";
-import { BottomHelper } from "./BottomHelper";
+import { BottomHelper } from "./elements/BottomHelper";
 import { Main } from "./Main";
 import { AppState } from "../../types";
 import { WorkerAPI } from "../../types";
@@ -167,12 +167,6 @@ export function App({
       <Main
         editorRef={editorRef}
         previewContainerRef={previewContainerRef}
-        html={state.html}
-        raw={state.raw}
-        outline={state.outline}
-        toolMode={state.toolMode}
-        editorMode={state.editorMode}
-        showPreview={state.showPreview}
         onChangeToolMode={onChangeToolMode}
         onChangeValue={onChangeValue}
         onSelectOutlineHeading={onSelectOutlineHeading}

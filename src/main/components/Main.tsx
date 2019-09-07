@@ -1,47 +1,29 @@
-import React, { SyntheticEvent } from "react";
+import React, { SyntheticEvent, Suspense } from "react";
 import styled from "styled-components";
-import Loadable from "react-loadable";
 import { Textarea } from "./elements/TextareaEditor";
 import { Preview } from "./organisms/Preview";
 import { Outline } from "./organisms/Outline";
 import { Save } from "./organisms/Save";
 import { Help } from "./organisms/Help";
-import { ToolMode, EditorMode } from "../../types";
+import { ToolMode, EditorMode, AppState } from "../../types";
+import { useSelector } from "react-redux";
 
 const Loading = () => (
   <div style={{ color: "#fff", paddingLeft: 20 }}>Loading...</div>
 );
 
-const CodeMirrorEditor = Loadable({
-  loader: () => import("./elements/CodeMirrorEditor"),
-  loading: () => <Loading />
-});
-
-// const MonacoEditor = Loadable({
-//   loader: () => import("./_atoms/MonacoEditor"),
-//   loading: () => <Loading />
-// });
+const CodeMirrorEditor = React.lazy(() =>
+  import("./elements/CodeMirrorEditor")
+);
 
 export const Main = React.memo(function Main({
   editorRef,
-  html,
-  raw,
-  editorMode,
-  toolMode,
-  outline,
   onChangeToolMode,
   onChangeValue,
   onSelectOutlineHeading,
   onWheel,
-  previewContainerRef,
-  showPreview
+  previewContainerRef
 }: {
-  html: string;
-  raw: string;
-  editorMode: EditorMode;
-  toolMode: ToolMode;
-  showPreview: boolean;
-  outline: Array<any>;
   editorRef: React.RefObject<HTMLTextAreaElement>;
   previewContainerRef: React.RefObject<HTMLDivElement>;
   onChangeToolMode: (value: ToolMode) => void;
@@ -49,6 +31,17 @@ export const Main = React.memo(function Main({
   onSelectOutlineHeading: (offset: number) => void;
   onWheel: (event: SyntheticEvent<HTMLTextAreaElement>) => void;
 }) {
+  const { html, raw, outline, editorMode, toolMode, showPreview } = useSelector(
+    (s: AppState) => ({
+      html: s.html,
+      raw: s.raw,
+      outline: s.outline,
+      toolMode: s.toolMode,
+      editorMode: s.editorMode,
+      showPreview: s.showPreview
+    })
+  );
+
   return (
     <>
       <Container>
@@ -62,7 +55,9 @@ export const Main = React.memo(function Main({
               />
             )} */}
             {editorMode === "codemirror" && (
-              <CodeMirrorEditor value={raw} onChangeValue={onChangeValue} />
+              <Suspense fallback={<Loading />}>
+                <CodeMirrorEditor value={raw} onChangeValue={onChangeValue} />
+              </Suspense>
             )}
             {editorMode === "textarea" && (
               <Textarea
