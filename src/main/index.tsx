@@ -10,15 +10,17 @@ import { App } from "./components/App";
 import { AppState, WorkerAPI } from "../types";
 import { Provider } from "react-redux";
 import { WorkerAPIContext } from "./contexts/WorkerAPIContext";
+import thunkMiddleware, { ThunkMiddleware } from "redux-thunk";
 
 import { reducer } from "./reducers";
-import { createStore } from "redux";
+import { createStore, applyMiddleware, AnyAction } from "redux";
 
 const main = async () => {
   console.time("mount");
+  const thunk: ThunkMiddleware<AppState, AnyAction> = thunkMiddleware;
   const proxy: WorkerAPI = await new (Proxy as any)();
   const firstState = await loadState(proxy);
-  const store = createStore(reducer, firstState);
+  const store = createStore(reducer, firstState, applyMiddleware(thunk));
 
   ReactDOM.render(
     <WorkerAPIContext.Provider value={proxy}>

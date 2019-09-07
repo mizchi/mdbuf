@@ -5,8 +5,11 @@ import { Preview } from "./organisms/Preview";
 import { Outline } from "./organisms/Outline";
 import { Save } from "./organisms/Save";
 import { Help } from "./organisms/Help";
-import { ToolMode, EditorMode, AppState } from "../../types";
+import { ToolMode, AppState } from "../../types";
 import { useSelector } from "react-redux";
+import { useAction } from "./helpers";
+import { updateRaw } from "../reducers";
+import { useWorkerAPI } from "../contexts/WorkerAPIContext";
 
 const Loading = () => (
   <div style={{ color: "#fff", paddingLeft: 20 }}>Loading...</div>
@@ -19,7 +22,6 @@ const CodeMirrorEditor = React.lazy(() =>
 export const Main = React.memo(function Main({
   editorRef,
   onChangeToolMode,
-  onChangeValue,
   onSelectOutlineHeading,
   onWheel,
   previewContainerRef
@@ -27,10 +29,10 @@ export const Main = React.memo(function Main({
   editorRef: React.RefObject<HTMLTextAreaElement>;
   previewContainerRef: React.RefObject<HTMLDivElement>;
   onChangeToolMode: (value: ToolMode) => void;
-  onChangeValue: (value: string) => void;
   onSelectOutlineHeading: (offset: number) => void;
   onWheel: (event: SyntheticEvent<HTMLTextAreaElement>) => void;
 }) {
+  const api = useWorkerAPI();
   const { html, raw, outline, editorMode, toolMode, showPreview } = useSelector(
     (s: AppState) => ({
       html: s.html,
@@ -40,6 +42,19 @@ export const Main = React.memo(function Main({
       editorMode: s.editorMode,
       showPreview: s.showPreview
     })
+  );
+
+  const onChangeValue = useAction(
+    (raw: string) => {
+      if (editorRef.current) {
+        const el = editorRef.current as HTMLTextAreaElement;
+        const line = el.value.substr(0, el.selectionStart).split("\n").length;
+        return updateRaw.action({ raw, api, line });
+      } else {
+        return updateRaw.action({ raw, api });
+      }
+    },
+    [raw]
   );
 
   return (

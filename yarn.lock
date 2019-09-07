@@ -12615,7 +12615,7 @@ prompts@^2.0.1:
     kleur "^3.0.3"
     sisteransi "^1.0.3"
 
-prop-types@^15.5.0, prop-types@^15.5.4, prop-types@^15.6.2, prop-types@^15.7.2:
+prop-types@^15.5.4, prop-types@^15.6.2, prop-types@^15.7.2:
   version "15.7.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -13058,13 +13058,6 @@ react-is@^16.6.0, react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.4, react-is
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.9.0.tgz#21ca9561399aad0ff1a7701c01683e8ca981edcb"
   integrity sha512-tJBzzzIgnnRfEm046qRcURvwQnZVXmuCbscxUO5RWrGTXpon2d4c8mI0D8WE6ydVIm29JiLB6+RslkIvym9Rjw==
 
-react-loadable@^5.5.0:
-  version "5.5.0"
-  resolved "https://registry.yarnpkg.com/react-loadable/-/react-loadable-5.5.0.tgz#582251679d3da86c32aae2c8e689c59f1196d8c4"
-  integrity sha512-C8Aui0ZpMd4KokxRdVAm2bQtI03k2RMRNzOB+IipV3yxFTSVICv7WoUr5L9ALB5BmKO1iHgZtWM8EvYG83otdg==
-  dependencies:
-    prop-types "^15.5.0"
-
 react-monaco-editor@^0.31.0:
   version "0.31.0"
   resolved "https://registry.yarnpkg.com/react-monaco-editor/-/react-monaco-editor-0.31.0.tgz#67d7e9e6e810c8fa1241f9c41304510b19d66c0e"
@@ -13238,6 +13231,11 @@ redeyed@~2.1.0:
   integrity sha1-iYS1gV2ZyyIEacme7v/jiRPmzAs=
   dependencies:
     esprima "~4.0.0"
+
+redux-thunk@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/redux-thunk/-/redux-thunk-2.3.0.tgz#51c2c19a185ed5187aaa9a2d08b666d0d6467622"
+  integrity sha512-km6dclyFnmcvxhAcrQV2AkZmPQjzPDjgVlQtR0EQjxZPyJ0BnMf3in1ryuR8A2qU0HldVRfxYXbFSKlI3N7Slw==
 
 redux@^4.0.0, redux@^4.0.4:
   version "4.0.4"
@@ -15379,6 +15377,14 @@ typescript-fsa-reducers@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/typescript-fsa-reducers/-/typescript-fsa-reducers-1.2.1.tgz#2af1a85f7b88fb0dfb9fa59d5da51a5d7ac6543f"
   integrity sha512-Qgn7zEnAU5n3YEWEL5ooEmIWZl9B4QyXD4Y/0DqpUzF0YuTrcsLa7Lht0gFXZ+xqLJXQwo3fEiTfQTDF1fBnMg==
+
+typescript-fsa-redux-thunk@^2.1.4:
+  version "2.1.4"
+  resolved "https://registry.yarnpkg.com/typescript-fsa-redux-thunk/-/typescript-fsa-redux-thunk-2.1.4.tgz#f712a0dc09d3103fcf93aebc14c1f520f9766824"
+  integrity sha512-Krpdg2267gsBhtv9ud9AzlmVZbe9BXrW7BqnHg1lG0/NLptfLS9bX4fMmJWgAZS1Sq1piFbSuRx1+aSgoskvXw==
+  dependencies:
+    redux-thunk "^2.3.0"
+    typescript-fsa "^3.0.0-beta-2"
 
 typescript-fsa@^3.0.0-beta-2:
   version "3.0.0-beta-2"

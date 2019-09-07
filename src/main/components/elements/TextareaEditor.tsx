@@ -77,13 +77,9 @@ export const Textarea = forwardRef((props: Props, ref: any) => {
   }, []);
 
   useLayoutEffect(() => {
-    // console.log(ref);
     if (ref.current && ref.current.value !== props.raw) {
       ref.current.value = props.raw;
     }
-    // debugger;
-    // if (ref.current) {
-    // }
   }, [props.raw]);
 
   return (

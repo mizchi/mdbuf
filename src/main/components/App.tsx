@@ -5,21 +5,15 @@ import { AppState } from "../../types";
 import { WorkerAPI } from "../../types";
 import { createGlobalStyle } from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
+import { KeyHandler } from "./KeyHandler";
 
-import {
-  changeToolMode,
-  updateHtmlAndOutline,
-  updateRaw,
-  changeEditorMode,
-  updateShowPreview
-} from "../reducers";
+import { changeToolMode, updateRaw, updateShowPreview } from "../reducers";
 
 // Global State
 let focusedOnce = false;
 
 export function App({
   proxy,
-  // initialState,
   onUpdateState
 }: {
   proxy: WorkerAPI;
@@ -39,44 +33,7 @@ export function App({
     state.outline
   ]);
 
-  const updatePreview = useCallback(
-    async (raw: string) => {
-      dispatch(updateRaw(raw));
-      if (editorRef.current) {
-        const el = editorRef.current as HTMLTextAreaElement;
-
-        const line = el.value.substr(0, el.selectionStart).split("\n").length;
-        const ret = await proxy.compile({ raw, line });
-        dispatch(
-          updateHtmlAndOutline({
-            html: ret.html,
-            outline: ret.outline
-          })
-        );
-      } else {
-        const ret = await proxy.compile({ raw });
-        dispatch(
-          updateHtmlAndOutline({
-            html: ret.html,
-            outline: ret.outline
-          })
-        );
-      }
-    },
-    [state.raw]
-  );
-
-  const onChangeValue = useCallback(async (rawValue: string) => {
-    await updatePreview(rawValue);
-    requestAnimationFrame(() => {
-      const wordCount = Array.from(rawValue).length;
-      document.title = `mdbuf(${wordCount})`;
-    });
-  }, []);
-
-  const onChangeToolMode = useCallback(toolMode => {
-    dispatch(changeToolMode(toolMode));
-  }, []);
+  const onChangeToolMode = useAction(changeToolMode);
 
   const onSelectOutlineHeading = useCallback((start: number) => {
     if (editorRef.current) {
@@ -96,64 +53,6 @@ export function App({
     }
   }, []);
 
-  useEffect(() => {
-    const onWindowKeyDown = async (ev: KeyboardEvent) => {
-      // Ctrl+1
-      if (ev.ctrlKey && ev.key === "1") {
-        ev.preventDefault();
-        const nextShowPreview = !state.showPreview;
-        dispatch(updateShowPreview(nextShowPreview));
-        return;
-      }
-
-      // Ctrl+Shift+E
-      if (ev.ctrlKey && ev.shiftKey && ev.key.toLocaleLowerCase() === "e") {
-        ev.preventDefault();
-        // if (state.editorMode === "textarea") {
-        //   dispatch(changeEditorMode("codemirror"));
-        // } else if (state.editorMode === "codemirror") {
-        //   dispatch(changeEditorMode("monaco"));
-        // } else if (state.editorMode === "monaco") {
-        //   dispatch(changeEditorMode("textarea"));
-        // }
-        if (state.editorMode === "textarea") {
-          dispatch(changeEditorMode("codemirror"));
-        } else if (state.editorMode === "codemirror") {
-          dispatch(changeEditorMode("textarea"));
-        }
-
-        return;
-      }
-
-      // Ctrl+Shift+F || Cmd+S
-      if (
-        ev.ctrlKey &&
-        ev.shiftKey &&
-        ev.key.toLowerCase() === "f"
-        // (ev.ctrlKey && ev.key.toLowerCase() === "s") ||
-        // (ev.metaKey && ev.key.toLowerCase() === "s")
-      ) {
-        ev.preventDefault();
-        const formatted = await proxy.format(state.raw);
-        updatePreview(formatted);
-
-        // focus
-        if (editorRef.current) {
-          const start = editorRef.current.selectionStart;
-          editorRef.current.value = formatted;
-          editorRef.current.selectionStart = start;
-          editorRef.current.selectionEnd = start;
-          updatePreview(formatted);
-        }
-      }
-    };
-
-    window.addEventListener("keydown", onWindowKeyDown);
-    return () => {
-      window.removeEventListener("keydown", onWindowKeyDown);
-    };
-  });
-
   useLayoutEffect(() => {
     if (!focusedOnce && editorRef.current) {
       focusedOnce = true;
@@ -164,11 +63,11 @@ export function App({
   return (
     <>
       <GlobalStyle />
+      <KeyHandler editorRef={editorRef} />
       <Main
         editorRef={editorRef}
         previewContainerRef={previewContainerRef}
         onChangeToolMode={onChangeToolMode}
-        onChangeValue={onChangeValue}
         onSelectOutlineHeading={onSelectOutlineHeading}
         onWheel={onWheel}
       />
@@ -204,3 +103,11 @@ const GlobalStyle = createGlobalStyle`
     background-color: rgba(128, 128, 128, 0.5);
   }
 `;
+
+function useAction<T extends Function>(action: T, keys: Array<any> = []): T {
+  const dispatch = useDispatch();
+  // @ts-ignore
+  return useCallback((...args: any) => {
+    return dispatch(action(...args));
+  }, keys);
+}
