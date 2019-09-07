@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useWorkerAPI } from "../../contexts/WorkerAPIContext";
-import { Item } from "../../../types";
-import { useDispatch, useAppState } from "../../contexts/RootStateContext";
+import { Item, AppState } from "../../../types";
+import { useDispatch, useSelector } from "react-redux";
+
 import { updateRaw } from "../../reducers";
 import { sortBy } from "lodash-es";
 import format from "date-fns/format";
@@ -10,7 +11,7 @@ import { FileSystemController } from "./FileSystemController";
 export const Save = React.memo(
   (_props: { editorRef: React.RefObject<any> }) => {
     const api = useWorkerAPI();
-    const app = useAppState();
+    const app = useSelector((s: AppState) => s);
     const [items, setItems] = useState<Item[]>([]);
     const dispatch = useDispatch();
 

@@ -4,7 +4,8 @@ import { Main } from "./Main";
 import { AppState } from "../../types";
 import { WorkerAPI } from "../../types";
 import { createGlobalStyle } from "styled-components";
-import { useAppState, useDispatch } from "../contexts/RootStateContext";
+import { useDispatch, useSelector } from "react-redux";
+
 import {
   changeToolMode,
   updateHtmlAndOutline,
@@ -24,7 +25,7 @@ export function App({
   proxy: WorkerAPI;
   onUpdateState: (s: AppState) => void;
 }) {
-  const state = useAppState();
+  const state = useSelector((s: AppState) => s);
   const dispatch = useDispatch();
   const editorRef: React.RefObject<HTMLTextAreaElement> = useRef(null);
   const previewContainerRef: React.RefObject<HTMLDivElement> = useRef(null);

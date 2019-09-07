@@ -8,19 +8,21 @@ import ReactDOM from "react-dom";
 import Proxy from "./WorkerProxy";
 import { App } from "./components/App";
 import { AppState, WorkerAPI } from "../types";
-import { Provider } from "./contexts/RootStateContext";
+import { Provider } from "react-redux";
 import { WorkerAPIContext } from "./contexts/WorkerAPIContext";
 
 import { reducer } from "./reducers";
+import { createStore } from "redux";
 
 const main = async () => {
   console.time("mount");
   const proxy: WorkerAPI = await new (Proxy as any)();
   const firstState = await loadState(proxy);
+  const store = createStore(reducer, firstState);
 
   ReactDOM.render(
     <WorkerAPIContext.Provider value={proxy}>
-      <Provider reducer={reducer} initialState={firstState}>
+      <Provider store={store}>
         <App
           proxy={proxy}
           onUpdateState={newState => {

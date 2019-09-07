@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { useAppState, useDispatch } from "../../contexts/RootStateContext";
+import { useDispatch, useSelector } from "react-redux";
 import { updateRaw } from "../../reducers";
+import { AppState } from "../../../types";
 
 export function FileSystemController(props: {
   editorRef: React.RefObject<any>;
@@ -41,7 +42,7 @@ function _FileSystemController(props: {
 }) {
   const [writeHandler, setWriteHandler] = useState(null);
   const [currentFilename, setFilename] = useState<string | null>(null);
-  const appState = useAppState();
+  const appState = useSelector((s: AppState) => s);
 
   const dispatch = useDispatch();
 
@@ -96,15 +97,6 @@ function _FileSystemController(props: {
     setFilename(null);
     setWriteHandler(null);
   }, []);
-
-  // auto write
-  // useEffect(() => {
-  //   (async () => {
-  //     if (writeHandler) {
-  //       await writeFile(writeHandler, appState.raw);
-  //     }
-  //   })();
-  // }, [appState.raw]);
 
   useEffect(() => {
     const keydown = (ev: any) => {
