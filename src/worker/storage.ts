@@ -37,12 +37,6 @@ export async function deleteItem(id: string): Promise<void> {
   await Items.delete(id);
 }
 
-export async function loadAllItems(): Promise<Item[]> {
-  const items = await Items.toArray();
-  return sortBy(items, i => -i.updatedAt);
-  // return items;
-}
-
 export async function loadCurrentSave(): Promise<AppState | void> {
   const save = await Saves.get(CURRENT_SAVE_KEY);
   if (save != null) {

@@ -2,8 +2,7 @@ import React, {
   SyntheticEvent,
   forwardRef,
   useCallback,
-  useLayoutEffect,
-  useEffect
+  useLayoutEffect
 } from "react";
 import styled from "styled-components";
 
@@ -15,23 +14,17 @@ type Props = {
   onWheel: (event: SyntheticEvent<HTMLTextAreaElement>) => void;
 };
 
-export const Textarea = forwardRef((props: Props, ref: any) => {
+export const TextareaEditor = forwardRef((props: Props, ref: any) => {
   let isComposing = false;
 
-  const onCompositionStart = useCallback(() => {
-    isComposing = true;
-  }, []);
-
+  // IME Control
+  const onCompositionStart = useCallback(() => (isComposing = true), []);
   const onCompositionEnd = useCallback((ev: any) => {
     isComposing = false;
     props.onChangeValue(ev.target.value);
   }, []);
-
   const onChange = useCallback((ev: any) => {
-    if (isComposing) {
-      return true;
-    }
-    props.onChangeValue(ev.target.value);
+    if (!isComposing) props.onChangeValue(ev.target.value);
   }, []);
 
   const onKeydown = useCallback((e: KeyboardEvent) => {
@@ -68,6 +61,7 @@ export const Textarea = forwardRef((props: Props, ref: any) => {
     }
   }, []);
 
+  // focus on first mount
   useLayoutEffect(() => {
     if (ref.current) {
       ref.current.selectionStart = 0;
@@ -76,9 +70,13 @@ export const Textarea = forwardRef((props: Props, ref: any) => {
     }
   }, []);
 
+  // outer effect
   useLayoutEffect(() => {
+    console.log("change detcted!");
     if (ref.current && ref.current.value !== props.raw) {
+      console.log("change detcted!");
       ref.current.value = props.raw;
+      ref.current.focus();
     }
   }, [props.raw]);
 

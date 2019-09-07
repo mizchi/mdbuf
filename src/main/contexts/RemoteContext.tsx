@@ -3,6 +3,6 @@ import React, { useContext } from "react";
 
 export const WorkerAPIContext = React.createContext<WorkerAPI>(null as any);
 
-export const useWorkerAPI = () => {
+export const useRemote = () => {
   return useContext(WorkerAPIContext);
 };

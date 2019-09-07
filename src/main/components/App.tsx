@@ -63,7 +63,7 @@ export function App({
   return (
     <>
       <GlobalStyle />
-      <KeyHandler editorRef={editorRef} />
+      <KeyHandler />
       <Main
         editorRef={editorRef}
         previewContainerRef={previewContainerRef}

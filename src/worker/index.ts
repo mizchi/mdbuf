@@ -6,32 +6,6 @@ import * as storage from "./storage";
 import { AppState, Item, WorkerAPI } from "../types";
 
 class WorkerAPIImpl implements WorkerAPI {
-  async getItem(data: { id: string }): Promise<Item | void> {
-    return await storage.getItem(data.id);
-  }
-
-  async getAllItems(): Promise<Item[]> {
-    return await storage.getItems();
-  }
-
-  async saveItem(data: { raw: string; id: string }): Promise<void> {
-    await storage.saveItem(data.id, data.raw);
-  }
-
-  async saveNewItem(data: { raw: string }) {
-    await storage.saveNewItem(data.raw);
-    return storage.loadAllItems();
-  }
-
-  async deleteItem(data: { id: string }) {
-    await storage.deleteItem(data.id);
-    return storage.loadAllItems();
-  }
-
-  async loadAllItems() {
-    return storage.loadAllItems();
-  }
-
   async saveCurrentState(data: AppState): Promise<void> {
     await storage.saveToCurrent(data);
     console.log("save current state in worker");

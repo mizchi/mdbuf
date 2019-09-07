@@ -20,9 +20,9 @@ const nextIdleFrame =
   window.setTimeout;
 
 export const updateRaw = asyncCreator<
-  { raw: string; line?: number; api: WorkerAPI },
+  { raw: string; line?: number; remote: WorkerAPI },
   { html: string; outline: any }
->("updateRawWithPreview", async ({ raw, line, api }) => {
+>("updateRawWithPreview", async ({ raw, line, remote: api }) => {
   nextIdleFrame(() => {
     const wordCount = Array.from(raw).length;
     document.title = `mdbuf(${wordCount})`;
@@ -32,23 +32,15 @@ export const updateRaw = asyncCreator<
 });
 
 export const formatRaw = asyncCreator<
-  { raw: string; api: WorkerAPI; ref: React.RefObject<HTMLTextAreaElement> },
+  { raw: string; remote: WorkerAPI },
   { html: string; outline: any }
->("formatRaw", async ({ raw, api, ref }) => {
+>("formatRaw", async ({ raw, remote: api }) => {
   nextIdleFrame(() => {
     const wordCount = Array.from(raw).length;
     document.title = `mdbuf(${wordCount})`;
   });
 
   const formatted = await api.format(raw);
-
-  // focus after set
-  if (ref.current != null) {
-    const start = ref.current.selectionStart;
-    ref.current.value = formatted;
-    ref.current.selectionStart = start;
-    ref.current.selectionEnd = start;
-  }
 
   return await api.compile({ raw: formatted });
 });
@@ -81,7 +73,6 @@ export const reducer = reducerWithoutInitialState<AppState>()
       ...result
     };
   })
-
   .case(updateShowPreview, (state, showPreview) => {
     return { ...state, showPreview };
   })

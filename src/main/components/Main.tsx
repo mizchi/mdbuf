@@ -1,15 +1,14 @@
 import React, { SyntheticEvent, Suspense } from "react";
 import styled from "styled-components";
-import { Textarea } from "./elements/TextareaEditor";
+import { TextareaEditor } from "./elements/TextareaEditor";
 import { Preview } from "./organisms/Preview";
 import { Outline } from "./organisms/Outline";
-import { Save } from "./organisms/Save";
 import { Help } from "./organisms/Help";
 import { ToolMode, AppState } from "../../types";
 import { useSelector } from "react-redux";
 import { useAction } from "./helpers";
 import { updateRaw } from "../reducers";
-import { useWorkerAPI } from "../contexts/WorkerAPIContext";
+import { useRemote } from "../contexts/RemoteContext";
 
 const Loading = () => (
   <div style={{ color: "#fff", paddingLeft: 20 }}>Loading...</div>
@@ -32,7 +31,7 @@ export const Main = React.memo(function Main({
   onSelectOutlineHeading: (offset: number) => void;
   onWheel: (event: SyntheticEvent<HTMLTextAreaElement>) => void;
 }) {
-  const api = useWorkerAPI();
+  const api = useRemote();
   const { html, raw, outline, editorMode, toolMode, showPreview } = useSelector(
     (s: AppState) => ({
       html: s.html,
@@ -49,9 +48,9 @@ export const Main = React.memo(function Main({
       if (editorRef.current) {
         const el = editorRef.current as HTMLTextAreaElement;
         const line = el.value.substr(0, el.selectionStart).split("\n").length;
-        return updateRaw.action({ raw, api, line });
+        return updateRaw.action({ raw, remote: api, line });
       } else {
-        return updateRaw.action({ raw, api });
+        return updateRaw.action({ raw, remote: api });
       }
     },
     [raw]
@@ -75,7 +74,7 @@ export const Main = React.memo(function Main({
               </Suspense>
             )}
             {editorMode === "textarea" && (
-              <Textarea
+              <TextareaEditor
                 ref={editorRef}
                 raw={raw}
                 onChangeValue={onChangeValue}
@@ -88,7 +87,7 @@ export const Main = React.memo(function Main({
       {showPreview && (
         <SideTools>
           <ToolSelector>
-            {["preview", "outline", "save", "help"].map(mode => {
+            {["preview", "outline", "help"].map(mode => {
               return (
                 <TabButton
                   key={mode}
@@ -102,7 +101,6 @@ export const Main = React.memo(function Main({
           </ToolSelector>
           <ToolContainer ref={previewContainerRef}>
             {toolMode === "preview" && <Preview html={html} />}
-            {toolMode === "save" && <Save editorRef={editorRef} />}
             {toolMode === "outline" && (
               <OutlineContainer>
                 <Outline

@@ -19,6 +19,7 @@ export type AppState = {
   showPreview: boolean;
   toolMode: ToolMode;
   editorMode: EditorMode;
+  writingHandlerName?: string;
   // server built state
   html: string;
   outline: Outline;
@@ -33,18 +34,7 @@ export type Outline = Array<{
 }>;
 
 export type WorkerAPI = {
-  getItem(data: { id: string }): Promise<Item | void>;
-
-  getAllItems(): Promise<Item[]>;
-
-  saveItem(data: { raw: string; id: string }): Promise<void>;
-
-  saveNewItem(data: { raw: string }): Promise<Item[]>;
-  deleteItem(data: { id: string }): Promise<Item[]>;
-  getAllItems(): Promise<Item[]>;
-
   saveCurrentState(data: AppState): Promise<void>;
-
   compile(data: {
     raw: string;
     line?: number;

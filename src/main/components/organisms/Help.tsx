@@ -1,14 +1,51 @@
 import React from "react";
+// @ts-ignore
+const canUseFs = !!window.chooseFileSystemEntries;
 
 export const Help = React.memo(() => {
   return (
     <div style={{ padding: 10 }}>
+      {canUseFs && (
+        <div
+          style={{
+            padding: "4px 2px",
+            outline: "1px solid black",
+            boxSizing: "border-box"
+          }}
+        >
+          <strong>Exprerimental: Use native file systems</strong>
+          <p>
+            To use native fs, use Chrome Canary (78>=).&nbsp;
+            <a
+              target="_blank"
+              href="https://www.google.com/intl/ja/chrome/canary/"
+            >
+              Download
+            </a>
+            <br />
+            ... and Open{" "}
+            <code
+              style={{
+                width: "95%",
+                fontSize: "1.2em",
+                padding: 3,
+                background: "wheat"
+              }}
+              // style={{ padding: 5, background: "wheat" }}
+            >
+              chrome://flags/#native-file-system-api
+            </code>{" "}
+            . Enable it!
+          </p>
+        </div>
+      )}
+
       <dl>
         <dt>Meta + O</dt>
-        <dd>(Exprimental) Open file</dd>
+        <dd>(Native FS) Open file</dd>
 
         <dt>Meta + S</dt>
-        <dd>(Exprimental) Save file</dd>
+        <dd>(Native FS) Save file</dd>
 
         <dt>Ctrl-1</dt>
         <dd>Toggle Preview</dd>
