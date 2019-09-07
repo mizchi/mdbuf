@@ -25,6 +25,7 @@
     "file-loader": "^4.2.0",
     "html-webpack-plugin": "^3.2.0",
     "jest": "^24.9.0",
+    "monaco-editor-webpack-plugin": "^1.7.0",
     "netlify-cli": "^2.13.1",
     "parcel-bundler": "^1.12.3",
     "parcel-plugin-sw-precache": "^1.1.1",

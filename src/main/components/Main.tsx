@@ -18,6 +18,8 @@ const CodeMirrorEditor = React.lazy(() =>
   import("./elements/CodeMirrorEditor")
 );
 
+const MonacoEditor = React.lazy(() => import("./elements/MonacoEditor"));
+
 export const Main = React.memo(function Main({
   editorRef,
   onChangeToolMode,
@@ -59,18 +61,25 @@ export const Main = React.memo(function Main({
       <Container>
         <Centered>
           <EditorContainer>
-            {/* {editorMode === "monaco" && (
-              <MonacoEditor
-                value={raw}
-                width={showPreview ? "50vw" : "100vw"}
-                onChangeValue={onChangeValue}
-              />
-            )} */}
+            {editorMode === "monaco" && (
+              <Suspense fallback={<Loading />}>
+                <MonacoEditor
+                  value={raw}
+                  width={showPreview ? "50vw" : "100vw"}
+                  onChangeValue={onChangeValue}
+                />
+              </Suspense>
+            )}
             {editorMode === "codemirror" && (
               <Suspense fallback={<Loading />}>
                 <CodeMirrorEditor value={raw} onChangeValue={onChangeValue} />
               </Suspense>
             )}
+            {/* {editorMode === "monaco" && (
+              <Suspense fallback={<Loading />}>
+                <MonacoEditor value={raw} onChangeValue={onChangeValue} />
+              </Suspense>
+            )} */}
             {editorMode === "textarea" && (
               <TextareaEditor
                 ref={editorRef}

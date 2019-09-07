@@ -47,6 +47,9 @@ export const Help = React.memo(() => {
         <dt>Meta + S</dt>
         <dd>(Native FS) Save file</dd>
 
+        <dt>Meta + Shift + S</dt>
+        <dd>(Native FS) Save file as ...</dd>
+
         <dt>Ctrl-1</dt>
         <dd>Toggle Preview</dd>
 

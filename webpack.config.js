@@ -3,6 +3,7 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const HTMLPlugin = require("html-webpack-plugin");
 const WorkerPlugin = require("worker-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
+const MonacoWebpackPlugin = require("monaco-editor-webpack-plugin");
 const { GenerateSW } = require("workbox-webpack-plugin");
 
 const tsLoader = {
@@ -64,6 +65,7 @@ module.exports = {
   },
 
   plugins: [
+    new MonacoWebpackPlugin(),
     new CleanWebpackPlugin(),
     new WorkerPlugin(),
     new HTMLPlugin({

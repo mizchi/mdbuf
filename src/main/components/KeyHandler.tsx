@@ -61,8 +61,9 @@ export function KeyHandler() {
       if (ev.ctrlKey && ev.shiftKey && ev.key.toLocaleLowerCase() === "e") {
         ev.preventDefault();
         if (editorMode === "textarea") {
-          changeEditorMode("codemirror");
-        } else if (editorMode === "codemirror") {
+          changeEditorMode("monaco");
+          // } else if (editorMode === "codemirror") {
+        } else if (editorMode === "monaco") {
           changeEditorMode("textarea");
         }
         return;
