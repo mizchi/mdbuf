@@ -5,8 +5,10 @@ import { AppState } from "../../types";
 import { useWriter } from "../contexts/WriterContext";
 import * as actions from "../reducers";
 import { useAction, useUpdate, useFormat } from "./helpers";
+import { useCurrentBuffer } from "../contexts/CurrentBufferContext";
 
 export function KeyHandler() {
+  const buffer = useCurrentBuffer();
   const writer = useWriter();
   const update = useUpdate();
   const format = useFormat();
@@ -28,7 +30,11 @@ export function KeyHandler() {
           const currentText = await file.text();
           if (currentText != null) {
             update(currentText);
+
+            buffer && buffer.setValue(currentText);
+            buffer && buffer.focus();
           }
+          writer.close();
         } catch (err) {
           console.log("aborted", err);
         }
