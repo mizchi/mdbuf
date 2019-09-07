@@ -3,7 +3,7 @@ import React, { useContext, useState, useCallback } from "react";
 export const WriterContext = React.createContext<{
   handler: any;
   timestamp: number;
-  write(text: string): Promise<void>;
+  write(handler: any, text: string): Promise<void>;
   open(useCurrent?: boolean): Promise<any>;
   close(): Promise<void>;
 }>(null as any);
@@ -12,17 +12,9 @@ export const Provider = function(props: { children: any }) {
   const [handler, setHandler] = useState(null);
   const [timestamp, setTimestamp] = useState(Date.now());
 
-  const write = useCallback(
-    async (text: string) => {
-      await writeFile(handler, text);
-    },
-    [handler]
-  );
-
   const open = useCallback(
     async (useCurrent: boolean = true) => {
-      setTimestamp(Date.now());
-      if (handler && useCurrent) {
+      if (handler != null && useCurrent) {
         return handler;
       }
       // @ts-ignore
@@ -46,6 +38,14 @@ export const Provider = function(props: { children: any }) {
     setHandler(null);
     setTimestamp(Date.now());
   }, [handler]);
+
+  const write = useCallback(
+    async (handler: any, text: string) => {
+      setTimestamp(Date.now());
+      await writeFile(handler, text);
+    },
+    [handler]
+  );
 
   return (
     <WriterContext.Provider value={{ handler, close, open, timestamp, write }}>

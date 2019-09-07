@@ -31,20 +31,6 @@ export const updateRaw = asyncCreator<
   return await api.compile({ raw, line });
 });
 
-export const formatRaw = asyncCreator<
-  { raw: string; remote: WorkerAPI },
-  { html: string; outline: any }
->("formatRaw", async ({ raw, remote: api }) => {
-  nextIdleFrame(() => {
-    const wordCount = Array.from(raw).length;
-    document.title = `mdbuf(${wordCount})`;
-  });
-
-  const formatted = await api.format(raw);
-
-  return await api.compile({ raw: formatted });
-});
-
 export const reducer = reducerWithoutInitialState<AppState>()
   .case(updateRaw.async.started, (state, { raw }) => {
     return {
@@ -54,20 +40,6 @@ export const reducer = reducerWithoutInitialState<AppState>()
     };
   })
   .case(updateRaw.async.done, (state, { result }) => {
-    return {
-      ...state,
-      ...result
-    };
-  })
-
-  .case(formatRaw.async.started, (state, { raw }) => {
-    return {
-      ...state,
-      raw,
-      wordCount: Array.from(raw).length
-    };
-  })
-  .case(formatRaw.async.done, (state, { result }) => {
     return {
       ...state,
       ...result

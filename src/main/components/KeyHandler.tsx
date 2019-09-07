@@ -4,11 +4,12 @@ import { useSelector } from "react-redux";
 import { AppState } from "../../types";
 import { useWriter } from "../contexts/WriterContext";
 import * as actions from "../reducers";
-import { useAction, useUpdate } from "./helpers";
+import { useAction, useUpdate, useFormat } from "./helpers";
 
 export function KeyHandler() {
   const writer = useWriter();
   const update = useUpdate();
+  const format = useFormat();
   const { showPreview, raw, editorMode } = useSelector((s: AppState) =>
     pick(s, ["editorMode", "showPreview", "raw"])
   );
@@ -36,8 +37,8 @@ export function KeyHandler() {
       // cmd + s
       if (meta && ev.key.toLocaleLowerCase() === "s") {
         ev.preventDefault();
-        await writer.open();
-        await writer.write(raw);
+        const handler = await writer.open();
+        await writer.write(handler, raw);
         return;
       }
 
@@ -61,7 +62,7 @@ export function KeyHandler() {
       // Ctrl+Shift+F
       if (ev.ctrlKey && ev.shiftKey && ev.key.toLowerCase() === "f") {
         ev.preventDefault();
-        update(raw);
+        format(raw);
       }
     };
     window.addEventListener("keydown", onWindowKeyDown);

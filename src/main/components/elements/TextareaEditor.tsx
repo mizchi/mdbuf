@@ -5,6 +5,7 @@ import React, {
   useLayoutEffect
 } from "react";
 import styled from "styled-components";
+import { useCurrentBuffer } from "../../contexts/CurrentBufferContext";
 
 const TAB_STR = "  ";
 
@@ -15,6 +16,8 @@ type Props = {
 };
 
 export const TextareaEditor = forwardRef((props: Props, ref: any) => {
+  const buffer = useCurrentBuffer();
+
   let isComposing = false;
 
   // IME Control
@@ -64,21 +67,15 @@ export const TextareaEditor = forwardRef((props: Props, ref: any) => {
   // focus on first mount
   useLayoutEffect(() => {
     if (ref.current) {
+      buffer.setBuffer("textarea", ref.current);
       ref.current.selectionStart = 0;
       ref.current.selectionEnd = 0;
       ref.current.focus();
     }
+    return () => {
+      buffer.setBuffer("textarea", null);
+    };
   }, []);
-
-  // outer effect
-  useLayoutEffect(() => {
-    console.log("change detcted!");
-    if (ref.current && ref.current.value !== props.raw) {
-      console.log("change detcted!");
-      ref.current.value = props.raw;
-      ref.current.focus();
-    }
-  }, [props.raw]);
 
   return (
     <StyledTextarea

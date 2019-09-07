@@ -10,10 +10,10 @@ import { App } from "./components/App";
 import { AppState, WorkerAPI } from "../types";
 import { Provider } from "react-redux";
 import { WorkerAPIContext } from "./contexts/RemoteContext";
+import { Provider as CurrentBufferProvider } from "./contexts/CurrentBufferContext";
 import { Provider as WriterProvider } from "./contexts/WriterContext";
-
+// import logger from "redux-logger";
 import thunkMiddleware, { ThunkMiddleware } from "redux-thunk";
-
 import { reducer } from "./reducers";
 import { createStore, applyMiddleware, AnyAction } from "redux";
 
@@ -22,19 +22,26 @@ const main = async () => {
   const thunk: ThunkMiddleware<AppState, AnyAction> = thunkMiddleware;
   const remote: WorkerAPI = await new (Proxy as any)();
   const firstState = await loadState(remote);
-  const store = createStore(reducer, firstState, applyMiddleware(thunk));
+  const store = createStore(
+    reducer,
+    firstState,
+    // applyMiddleware(thunk, logger),
+    applyMiddleware(thunk)
+  );
 
   ReactDOM.render(
     <WorkerAPIContext.Provider value={remote}>
       <WriterProvider>
-        <Provider store={store}>
-          <App
-            proxy={remote}
-            onUpdateState={newState => {
-              saveState(remote, newState);
-            }}
-          />
-        </Provider>
+        <CurrentBufferProvider>
+          <Provider store={store}>
+            <App
+              proxy={remote}
+              onUpdateState={newState => {
+                saveState(remote, newState);
+              }}
+            />
+          </Provider>
+        </CurrentBufferProvider>
       </WriterProvider>
     </WorkerAPIContext.Provider>,
 
