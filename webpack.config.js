@@ -13,7 +13,7 @@ const tsLoader = {
   }
 };
 
-module.exports = {
+module.exports = (env, argv) => ({
   entry: {
     // compile: path.join(__dirname, "src/third_party/compile"),
     // format: path.join(__dirname, "src/third_party/format"),
@@ -82,12 +82,16 @@ module.exports = {
         to: "assets"
       }
     ]),
-    new GenerateSW({
-      // globDirectory: path.join(__dirname, "dist"),
-      // globPatterns: ["*.{html,js,css}"],
-      swDest: "service-worker.js",
-      clientsClaim: true,
-      skipWaiting: true
-    })
+    ...(argv.mode === "production"
+      ? [
+          new GenerateSW({
+            // globDirectory: path.join(__dirname, "dist"),
+            // globPatterns: ["*.{html,js,css}"],
+            swDest: "service-worker.js",
+            clientsClaim: true,
+            skipWaiting: true
+          })
+        ]
+      : [])
   ]
-};
+});
