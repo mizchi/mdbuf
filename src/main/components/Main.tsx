@@ -4,10 +4,10 @@ import { TextareaEditor } from "./elements/TextareaEditor";
 import { Preview } from "./organisms/Preview";
 import { Outline } from "./organisms/Outline";
 import { Help } from "./organisms/Help";
-import { ToolMode, AppState } from "../../types";
+import { ToolMode, AppState } from "../../shared/types";
 import { useSelector } from "react-redux";
 import { useAction } from "./helpers";
-import { updateRaw } from "../reducers";
+import { updateRaw } from "../../shared/reducers";
 import { useRemote } from "../contexts/RemoteContext";
 
 const Loading = () => (

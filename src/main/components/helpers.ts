@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { useRemote } from "../contexts/RemoteContext";
-import { updateRaw } from "../reducers";
+import { updateRaw } from "../../shared/reducers";
 import { useCurrentBuffer } from "../contexts/CurrentBufferContext";
 
 export function useAction<T extends Function>(

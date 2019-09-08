@@ -1,39 +1,21 @@
-import React, { useRef, useEffect, useLayoutEffect, useCallback } from "react";
-import { BottomHelper } from "./elements/BottomHelper";
-import { Main } from "./Main";
-import { AppState } from "../../types";
-import { WorkerAPI } from "../../types";
-import { createGlobalStyle } from "styled-components";
+import React, { useCallback, useLayoutEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { KeyHandler } from "./KeyHandler";
+import { createGlobalStyle } from "styled-components";
+import { AppState } from "../../shared/types";
+import { changeToolMode, updateShowPreview } from "../../shared/reducers";
+import { BottomHelper } from "./elements/BottomHelper";
 import { VisibilityDetector } from "./elements/VisibilityDetector";
-
-import { changeToolMode, updateRaw, updateShowPreview } from "../reducers";
+import { KeyHandler } from "./KeyHandler";
+import { Main } from "./Main";
 
 // Global State
 let focusedOnce = false;
 
-export function App({
-  proxy,
-  onUpdateState
-}: {
-  proxy: WorkerAPI;
-  onUpdateState: (s: AppState) => void;
-}) {
+export function App() {
   const state = useSelector((s: AppState) => s);
   const dispatch = useDispatch();
   const editorRef: React.RefObject<HTMLTextAreaElement> = useRef(null);
   const previewContainerRef: React.RefObject<HTMLDivElement> = useRef(null);
-
-  useEffect(() => onUpdateState(state), [
-    state.showPreview,
-    state.toolMode,
-    state.editorMode,
-    state.raw,
-    state.html,
-    state.outline
-  ]);
-
   const onChangeToolMode = useAction(changeToolMode);
 
   const onWheel = useCallback((ev: any) => {

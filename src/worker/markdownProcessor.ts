@@ -6,7 +6,7 @@ import katex from "remark-html-katex";
 import html from "remark-html";
 import toc from "remark-toc";
 import frontmatter from "remark-frontmatter";
-import { Outline } from "../types";
+import { Outline } from "../shared/types";
 
 let __remark_cursor_line = 0; // initialize
 function highlightCursorLine() {

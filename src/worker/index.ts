@@ -1,9 +1,9 @@
-import "regenerator-runtime/runtime";
 import * as Comlink from "comlink";
-import { compile } from "./markdownProcessor";
+import "regenerator-runtime/runtime";
+import { AppState, WorkerAPI } from "../shared/types";
 import formatMarkdown from "./formatMarkdown";
+import { compile } from "./markdownProcessor";
 import * as storage from "./storage";
-import { AppState, Item, WorkerAPI } from "../types";
 
 class WorkerAPIImpl implements WorkerAPI {
   async saveCurrentState(data: AppState): Promise<void> {

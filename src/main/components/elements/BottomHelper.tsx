@@ -1,7 +1,7 @@
 import React from "react";
 import { useWriter } from "../../contexts/WriterContext";
 import { useSelector } from "react-redux";
-import { AppState } from "../../../types";
+import { AppState } from "../../../shared/types";
 import { format } from "date-fns";
 
 type Props = {

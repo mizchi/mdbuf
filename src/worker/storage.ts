@@ -1,5 +1,5 @@
 import Dexie from "dexie";
-import { AppState, Item, Save } from "../types";
+import { AppState, Item, Save } from "../shared/types";
 import { compile } from "./markdownProcessor";
 import { ulid } from "ulid";
 import { sortBy } from "lodash-es";

@@ -1,7 +1,7 @@
 import actionCreatorFactory from "typescript-fsa";
 import { reducerWithoutInitialState } from "typescript-fsa-reducers";
 import { asyncFactory } from "typescript-fsa-redux-thunk";
-import { AppState, EditorMode, ToolMode, WorkerAPI } from "../../types";
+import { AppState, EditorMode, ToolMode, WorkerAPI } from "../types";
 
 const actionCreator = actionCreatorFactory();
 const asyncCreator = asyncFactory(actionCreator);
@@ -23,7 +23,7 @@ const nextIdleFrame =
 export const updateRaw = asyncCreator<
   { raw: string; line?: number; remote: WorkerAPI },
   { html: string; outline: any }
->("updateRawWithPreview", async ({ raw, line, remote: api }) => {
+>("updateRaw", async ({ raw, line, remote: api }) => {
   nextIdleFrame(() => {
     const wordCount = Array.from(raw).length;
     document.title = `mdbuf(${wordCount})`;

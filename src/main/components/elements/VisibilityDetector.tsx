@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useCurrentBuffer } from "../../contexts/CurrentBufferContext";
 import { useRemote } from "../../contexts/RemoteContext";
 import { useWriter } from "../../contexts/WriterContext";
-import * as actions from "../../reducers";
+import * as actions from "../../../shared/reducers";
 import { useAction } from "../helpers";
 
 // Restore state on active tab
