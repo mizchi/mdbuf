@@ -10,6 +10,10 @@ export function About() {
       </a>
       <hr />
       <h2>ChangeLog</h2>
+      <h3>v1.1.2</h3>
+      <ul>
+        <li>Heading Block Jump by Meta+Shift+↓/Meta+Shift+↑ (WIP:Imperfect)</li>
+      </ul>
       <h3>v1.1.0</h3>
       <ul>
         <li>Start ChangeLog</li>

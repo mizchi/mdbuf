@@ -5,13 +5,16 @@ import * as actions from "../../shared/reducers";
 import { AppState } from "../../shared/types";
 import { useWriter } from "../contexts/WriterContext";
 import { useAction, useFormat, useOpenFile } from "./_hooks/commands";
+import { useCurrentBuffer } from "../contexts/CurrentBufferContext";
 
 export function KeyHandler() {
   const writer = useWriter();
   const format = useFormat();
   const openFile = useOpenFile();
-  const { showPreview, raw, editorMode, toolMode } = useSelector(
-    (s: AppState) => pick(s, ["editorMode", "showPreview", "raw", "toolMode"])
+  const buffer = useCurrentBuffer();
+  const { showPreview, raw, editorMode, toolMode, outline } = useSelector(
+    (s: AppState) =>
+      pick(s, ["editorMode", "showPreview", "raw", "toolMode", "outline"])
   );
   const updateShowPreview = useAction(actions.updateShowPreview);
   const changeEditorMode = useAction(actions.changeEditorMode);
@@ -23,6 +26,39 @@ export function KeyHandler() {
       if (meta && ev.key.toLocaleLowerCase() === "o") {
         ev.preventDefault();
         openFile();
+      }
+      // cmd + shift + ↓
+      if (meta && ev.shiftKey && ev.key === "ArrowDown") {
+        ev.preventDefault();
+        if (buffer) {
+          const cur = buffer.getCursorPosition();
+          console.log(cur);
+          const m = Math.min(
+            ...outline
+              .map(o => o.start)
+              .concat([Array.from(raw).length])
+              .filter(s => s > cur)
+          );
+          buffer.setCursorPosition(m);
+        }
+        return;
+      }
+      // cmd + shift + ↑
+      if (meta && ev.shiftKey && ev.key === "ArrowUp") {
+        ev.preventDefault();
+        if (buffer) {
+          const cur = buffer.getCursorPosition();
+          console.log(cur);
+          const m = Math.max(
+            ...outline
+              .map(o => o.start)
+              .concat([Array.from(raw).length])
+              .filter(s => s < cur)
+          );
+          console.log("max", m);
+          buffer.setCursorPosition(m);
+        }
+        return;
       }
 
       // cmd + shift + s
@@ -49,8 +85,8 @@ export function KeyHandler() {
         } else {
           updateShowPreview(!showPreview);
         }
-        dispatch(actions.changeToolMode("preview"));
 
+        dispatch(actions.changeToolMode("preview"));
         return;
       }
 
@@ -95,6 +131,6 @@ export function KeyHandler() {
     };
     window.addEventListener("keydown", onWindowKeyDown);
     return () => window.removeEventListener("keydown", onWindowKeyDown);
-  });
+  }, [buffer, writer.handler, raw, editorMode, toolMode, outline]);
   return <></>;
 }
