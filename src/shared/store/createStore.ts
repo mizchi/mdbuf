@@ -7,6 +7,7 @@ import {
 } from "redux";
 import thunkMiddleware, { ThunkMiddleware } from "redux-thunk";
 import { AppState, WorkerAPI } from "../types";
+import { debounce } from "lodash-es";
 
 let _api: WorkerAPI = null as any;
 export async function createStore(api: WorkerAPI) {
@@ -23,18 +24,17 @@ export async function createStore(api: WorkerAPI) {
   return store;
 }
 
-// helpers
-async function saveState(proxy: WorkerAPI, state: AppState): Promise<void> {
-  proxy.saveCurrentState(state);
-}
+const save = debounce(state => {
+  _api.saveCurrentState(state);
+  document.title = "mdbuf(" + Array.from(state.raw).length + ")";
+}, 500);
+
+const saveMiddleware: Middleware<AppState> = store => next => action => {
+  const state = store.getState();
+  save(state);
+  next(action);
+};
 
 async function loadState(proxy: WorkerAPI): Promise<AppState> {
   return proxy.getLastState();
 }
-
-const saveMiddleware: Middleware<AppState> = store => next => action => {
-  // saveState(remote, newState);
-  const state = store.getState();
-  saveState(_api, state);
-  next(action);
-};

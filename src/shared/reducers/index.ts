@@ -14,21 +14,10 @@ export const updateShowPreview = actionCreator<boolean>("update-show-preview");
 
 export const sync = actionCreator<Partial<AppState>>("sync");
 
-const nextIdleFrame =
-  // @ts-ignore
-  window.requestIdleCallback ||
-  window.requestAnimationFrame ||
-  window.setTimeout;
-
 export const updateRaw = asyncCreator<
   { raw: string; line?: number; remote: WorkerAPI },
   { html: string; outline: any }
 >("updateRaw", async ({ raw, line, remote: api }) => {
-  nextIdleFrame(() => {
-    const wordCount = Array.from(raw).length;
-    document.title = `mdbuf(${wordCount})`;
-  });
-
   return await api.compile({ raw, line });
 });
 
