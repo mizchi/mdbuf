@@ -1,8 +1,7 @@
 import Dexie from "dexie";
-import { AppState, Item, Save } from "../shared/types";
-import { compile } from "./markdownProcessor";
 import { ulid } from "ulid";
-import { sortBy } from "lodash-es";
+import { compile } from "./helpers/markdownProcessor";
+import { AppState, Item, Save } from "./types";
 
 export const CURRENT_ITEM_KEY = "$current";
 export const CURRENT_SAVE_KEY = "$current-save";

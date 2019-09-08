@@ -69,7 +69,7 @@ module.exports = (env, argv) => ({
     new CleanWebpackPlugin(),
     new WorkerPlugin(),
     new HTMLPlugin({
-      template: path.join(__dirname, "src/index.html"),
+      template: path.join(__dirname, "src/main/index.html"),
       inject: false
     }),
     new CopyPlugin([
