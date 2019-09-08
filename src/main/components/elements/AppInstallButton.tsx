@@ -25,9 +25,11 @@ export function AppInstallButton() {
     }
   }, [prompt]);
 
-  return (
+  return prompt ? (
     <button disabled={!prompt} onClick={onClickInstall}>
       App Install
     </button>
+  ) : (
+    <></>
   );
 }

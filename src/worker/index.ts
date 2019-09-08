@@ -8,7 +8,7 @@ import { AppState, Item, WorkerAPI } from "../types";
 class WorkerAPIImpl implements WorkerAPI {
   async saveCurrentState(data: AppState): Promise<void> {
     await storage.saveToCurrent(data);
-    console.log("save current state in worker");
+    // console.log("save current state in worker");
   }
 
   async compile(data: {
@@ -20,9 +20,9 @@ class WorkerAPIImpl implements WorkerAPI {
 
   async getLastState(): Promise<AppState> {
     const currentSave = await storage.loadCurrentSave();
-    console.log("getLastState", currentSave);
+    // console.log("getLastState", currentSave);
     if (currentSave) {
-      console.log("existed current item");
+      // console.log("existed current item");
       return currentSave;
     }
 

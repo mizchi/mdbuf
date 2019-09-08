@@ -6,6 +6,7 @@ import { WorkerAPI } from "../../types";
 import { createGlobalStyle } from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { KeyHandler } from "./KeyHandler";
+import { VisibilityDetector } from "./elements/VisibilityDetector";
 
 import { changeToolMode, updateRaw, updateShowPreview } from "../reducers";
 
@@ -35,14 +36,6 @@ export function App({
 
   const onChangeToolMode = useAction(changeToolMode);
 
-  // const onSelectOutlineHeading = useCallback((start: number) => {
-  //   if (editorRef.current) {
-  //     editorRef.current.selectionStart = start;
-  //     editorRef.current.selectionEnd = start;
-  //     editorRef.current.focus();
-  //   }
-  // }, []);
-
   const onWheel = useCallback((ev: any) => {
     if (ev.ctrlKey) {
       ev.preventDefault();
@@ -64,6 +57,7 @@ export function App({
     <>
       <GlobalStyle />
       <KeyHandler />
+      <VisibilityDetector />
       <Main
         editorRef={editorRef}
         previewContainerRef={previewContainerRef}
