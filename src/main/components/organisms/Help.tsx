@@ -1,4 +1,5 @@
 import React from "react";
+import { AppInstallButton } from "../elements/AppInstallButton";
 // @ts-ignore
 const canUseFs = !!window.chooseFileSystemEntries;
 
@@ -39,6 +40,8 @@ export const Help = React.memo(() => {
           </p>
         </div>
       )}
+
+      <AppInstallButton />
 
       <dl>
         <dt>Meta + O</dt>
