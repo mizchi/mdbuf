@@ -135,7 +135,8 @@ const StyledTextarea = styled.textarea`
   resize: none;
   border: none;
   line-height: 1.2;
-  font-family: Menlo, Monaco, "Courier New", monospace;
+  font-family: Menlo, Monaco, "Courier New", monospace, "Segoe UI", Tahoma,
+    Geneva, Verdana, sans-serif;
   /* font-family: MonoAscii, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif; */
 `;
