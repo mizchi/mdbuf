@@ -91,14 +91,14 @@ export const Main = React.memo(function Main({
       {showPreview && (
         <SideTools>
           <ToolSelector>
-            {["preview", "outline", "command"].map(mode => {
+            {["preview", "outline", "command"].map((mode, index) => {
               return (
                 <TabButton
                   key={mode}
                   selected={mode === toolMode}
                   onClick={() => onChangeToolMode(mode as ToolMode)}
                 >
-                  {mode}
+                  {mode}[{index + 1}]
                 </TabButton>
               );
             })}
@@ -167,5 +167,6 @@ const TabButton = styled.div<{ selected: boolean }>`
   height: 100%;
   min-width: 80px;
   align-items: center;
+  padding-right: 3px;
   justify-content: center;
 `;

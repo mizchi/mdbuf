@@ -1,16 +1,10 @@
 import { pick } from "lodash-es";
 import React, { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import * as actions from "../../shared/reducers";
 import { AppState } from "../../shared/types";
 import { useWriter } from "../contexts/WriterContext";
-import * as actions from "../../shared/reducers";
-import {
-  useAction,
-  useUpdate,
-  useFormat,
-  useOpenFile
-} from "./_hooks/commands";
-import { useCurrentBuffer } from "../contexts/CurrentBufferContext";
+import { useAction, useFormat, useOpenFile } from "./_hooks/commands";
 
 export function KeyHandler() {
   const writer = useWriter();
