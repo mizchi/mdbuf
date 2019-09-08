@@ -131,6 +131,6 @@ export function KeyHandler() {
     };
     window.addEventListener("keydown", onWindowKeyDown);
     return () => window.removeEventListener("keydown", onWindowKeyDown);
-  }, [buffer, writer.handler, raw, editorMode, toolMode, outline]);
+  }, [buffer, writer.handler, raw, editorMode, toolMode, outline, showPreview]);
   return <></>;
 }
