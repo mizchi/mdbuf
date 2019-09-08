@@ -73,8 +73,12 @@ export const TextareaEditor = forwardRef((props: Props, ref: any) => {
           return ref.current.selectionStart;
         },
         setCursorPosition(pos: number) {
-          ref.current.selectionStart = pos;
-          ref.current.selectionEnd = pos;
+          const v = ref.current.value;
+          ref.current.value = v.substring(0, pos);
+          ref.current.scrollTop = pos;
+          ref.current.value = v;
+          ref.current.setSelectionRange(pos, pos);
+
         },
         focus() {
           if (ref.current) {
