@@ -135,6 +135,8 @@ const StyledTextarea = styled.textarea`
   resize: none;
   border: none;
   line-height: 1.2;
+  /* -wekbit-antia */
+  -webkit-font-smoothing: antialiased;
   font-family: Menlo, Monaco, "Courier New", monospace, "Segoe UI", Tahoma,
     Geneva, Verdana, sans-serif;
   /* font-family: MonoAscii, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,

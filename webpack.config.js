@@ -4,7 +4,9 @@ const HTMLPlugin = require("html-webpack-plugin");
 const WorkerPlugin = require("worker-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
 const MonacoWebpackPlugin = require("monaco-editor-webpack-plugin");
+const webpack = require("webpack");
 const { GenerateSW } = require("workbox-webpack-plugin");
+const pkg = require("./package");
 
 const tsLoader = {
   loader: "ts-loader",
@@ -68,6 +70,9 @@ module.exports = (env, argv) => ({
     new MonacoWebpackPlugin(),
     new CleanWebpackPlugin(),
     new WorkerPlugin(),
+    new webpack.DefinePlugin({
+      "process.env.VERSION": JSON.stringify(pkg.version)
+    }),
     new HTMLPlugin({
       template: path.join(__dirname, "src/main/index.html"),
       inject: false

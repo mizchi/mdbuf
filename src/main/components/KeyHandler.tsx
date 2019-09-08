@@ -68,6 +68,13 @@ export function KeyHandler() {
         dispatch(actions.changeToolMode("command"));
         return;
       }
+      // Ctrl+3
+      if (ev.ctrlKey && ev.key === "4") {
+        ev.preventDefault();
+        updateShowPreview(true);
+        dispatch(actions.changeToolMode("about"));
+        return;
+      }
 
       // Ctrl+Shift+E
       if (ev.ctrlKey && ev.shiftKey && ev.key.toLocaleLowerCase() === "e") {

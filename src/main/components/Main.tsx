@@ -10,6 +10,7 @@ import { updateRaw } from "../../shared/reducers";
 import { useRemote } from "../contexts/RemoteContext";
 import { CommandPalette } from "./organisms/CommandPallete";
 import { BottomHelper } from "./elements/BottomHelper";
+import { About } from "./organisms/About";
 
 const Loading = () => (
   <div style={{ color: "#fff", paddingLeft: 20 }}>Loading...</div>
@@ -91,7 +92,7 @@ export const Main = React.memo(function Main({
       {showPreview && (
         <SideTools>
           <ToolSelector>
-            {["preview", "outline", "command"].map((mode, index) => {
+            {["preview", "outline", "command", "about"].map((mode, index) => {
               return (
                 <TabButton
                   key={mode}
@@ -105,6 +106,7 @@ export const Main = React.memo(function Main({
           </ToolSelector>
           <ToolContainer ref={previewContainerRef}>
             {toolMode === "command" && <CommandPalette />}
+            {toolMode === "about" && <About />}
             {toolMode === "preview" && <Preview html={html} />}
             {toolMode === "outline" && (
               <OutlineContainer>
