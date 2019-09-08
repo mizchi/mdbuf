@@ -160,13 +160,14 @@ const ToolContainer = styled.div`
 `;
 
 const TabButton = styled.div<{ selected: boolean }>`
-  background-color: ${(p: any) => (p.selected ? "#eee" : "#272822")};
-  color: ${(p: any) => (p.selected ? "#272822" : "#eee")};
+  background-color: ${(p: any) => (p.selected ? "#eee" : "#2d2a2e")};
+  color: ${(p: any) => (p.selected ? "#2d2a2e" : "#eee")};
   cursor: ${(p: any) => (p.selected ? "auto" : "pointer")};
   display: inline-flex;
   height: 100%;
   min-width: 80px;
   align-items: center;
   padding-right: 3px;
+  padding-left: 2px;
   justify-content: center;
 `;

@@ -131,10 +131,11 @@ const StyledTextarea = styled.textarea`
   outline: none;
   font-size: 1.1em;
   color: rgb(232, 232, 212);
-  background: #272822;
+  background: #2d2a2e;
   resize: none;
   border: none;
   line-height: 1.2;
-  font-family: MonoAscii, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  font-family: Menlo, Monaco, "Courier New", monospace;
+  /* font-family: MonoAscii, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif; */
 `;

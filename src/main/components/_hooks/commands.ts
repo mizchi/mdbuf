@@ -65,5 +65,5 @@ export function useFormat() {
       currentBuffer.setValue(text);
       currentBuffer.setCursorPosition(pos);
     }
-  }, [remote, currentBuffer]);
+  }, [remote, currentBuffer, raw]);
 }
