@@ -3,7 +3,7 @@ import { useCurrentBuffer } from "../../contexts/CurrentBufferContext";
 import { useRemote } from "../../contexts/RemoteContext";
 import { useWriter } from "../../contexts/WriterContext";
 import * as actions from "../../../shared/reducers";
-import { useAction } from "../helpers";
+import { useAction } from "../_hooks/commands";
 
 // Restore state on active tab
 export function VisibilityDetector() {

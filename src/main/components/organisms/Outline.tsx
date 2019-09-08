@@ -1,7 +1,10 @@
 import React, { useCallback } from "react";
 import { useCurrentBuffer } from "../../contexts/CurrentBufferContext";
+import { useSelector } from "react-redux";
+import { AppState } from "../../../shared/types";
 
 export const Outline = (props: { outline: Array<any> }) => {
+  const size = useSelector((s: AppState) => Array.from(s.raw).length);
   const buffer = useCurrentBuffer();
   const onClickHeader = useCallback(
     pos => {
@@ -18,17 +21,23 @@ export const Outline = (props: { outline: Array<any> }) => {
       {props.outline.map((heading, index) => {
         const title =
           heading.children && heading.children[0] && heading.children[0].value;
+        const start = heading.start;
+        const end = props.outline[index + 1]
+          ? props.outline[index + 1].start - 1
+          : size;
         return (
-          <div
-            style={{
-              cursor: "pointer"
-            }}
-            key={index}
-            onClick={() => onClickHeader(heading.start)}
-          >
-            {"#".repeat(heading.depth)}
-            &nbsp;
-            {title}: {heading.start}~
+          <div key={index}>
+            <button
+              style={{
+                borderRadius: 1,
+                cursor: "pointer"
+              }}
+              onClick={() => onClickHeader(heading.start)}
+            >
+              {"#".repeat(heading.depth)}
+              &nbsp;
+              {title}: {start}~{end}
+            </button>
           </div>
         );
       })}

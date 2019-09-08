@@ -57,17 +57,12 @@ export function App() {
       <GlobalStyle />
       <KeyHandler />
       <VisibilityDetector />
+      <BottomHelper />
       <Main
         editorRef={editorRef}
         previewContainerRef={previewContainerRef}
         onChangeToolMode={onChangeToolMode}
         onWheel={onWheel}
-      />
-      <BottomHelper
-        wordCount={state.wordCount}
-        onClick={() => {
-          dispatch(updateShowPreview(!state.showPreview));
-        }}
       />
     </>
   );

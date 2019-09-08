@@ -3,12 +3,13 @@ import styled from "styled-components";
 import { TextareaEditor } from "./elements/TextareaEditor";
 import { Preview } from "./organisms/Preview";
 import { Outline } from "./organisms/Outline";
-import { Help } from "./organisms/Help";
 import { ToolMode, AppState } from "../../shared/types";
 import { useSelector } from "react-redux";
-import { useAction } from "./helpers";
+import { useAction } from "./_hooks/commands";
 import { updateRaw } from "../../shared/reducers";
 import { useRemote } from "../contexts/RemoteContext";
+import { CommandPalette } from "./organisms/CommandPallete";
+import { BottomHelper } from "./elements/BottomHelper";
 
 const Loading = () => (
   <div style={{ color: "#fff", paddingLeft: 20 }}>Loading...</div>
@@ -61,6 +62,8 @@ export const Main = React.memo(function Main({
 
   return (
     <>
+      <BottomHelper />
+
       <Container>
         <Centered>
           <EditorContainer>
@@ -88,12 +91,12 @@ export const Main = React.memo(function Main({
       {showPreview && (
         <SideTools>
           <ToolSelector>
-            {["preview", "outline", "help"].map(mode => {
+            {["preview", "outline", "command"].map(mode => {
               return (
                 <TabButton
                   key={mode}
                   selected={mode === toolMode}
-                  onClick={() => onChangeToolMode(mode as any)}
+                  onClick={() => onChangeToolMode(mode as ToolMode)}
                 >
                   {mode}
                 </TabButton>
@@ -101,13 +104,13 @@ export const Main = React.memo(function Main({
             })}
           </ToolSelector>
           <ToolContainer ref={previewContainerRef}>
+            {toolMode === "command" && <CommandPalette />}
             {toolMode === "preview" && <Preview html={html} />}
             {toolMode === "outline" && (
               <OutlineContainer>
                 <Outline outline={outline} />
               </OutlineContainer>
             )}
-            {toolMode === "help" && <Help />}
           </ToolContainer>
         </SideTools>
       )}

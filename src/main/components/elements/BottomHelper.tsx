@@ -1,17 +1,25 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { useWriter } from "../../contexts/WriterContext";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { AppState } from "../../../shared/types";
 import { format } from "date-fns";
+import { updateShowPreview } from "../../../shared/reducers";
+import { pick } from "lodash-es";
 
-type Props = {
-  wordCount: number;
-  onClick: (e: any) => void;
-};
-
-export const BottomHelper = React.memo(function BottomHelper(props: Props) {
+export function BottomHelper() {
   const writer = useWriter();
-  const size = useSelector((s: AppState) => s.raw.length);
+  const dispatch = useDispatch();
+  const { showPreview } = useSelector((s: AppState) =>
+    pick(s, ["showPreview"])
+  );
+  const onClickEye = useCallback(
+    (ev: any) => {
+      ev.preventDefault();
+      dispatch(updateShowPreview(!showPreview));
+    },
+    [showPreview]
+  );
+
   return (
     <div
       style={{
@@ -19,6 +27,7 @@ export const BottomHelper = React.memo(function BottomHelper(props: Props) {
         right: "20px",
         bottom: "20px",
         padding: 3,
+        outline: "none",
         paddingRight: 7,
         borderRadius: 2,
         background: "#333",
@@ -26,11 +35,10 @@ export const BottomHelper = React.memo(function BottomHelper(props: Props) {
       }}
     >
       &nbsp;
-      <button style={{ borderRadius: 3 }} onClick={props.onClick}>
+      <button style={{ borderRadius: 3 }} onClick={onClickEye}>
         👀
       </button>
       &nbsp;
-      <span>wc:{size}</span>
       {writer.handler && (
         <>
           &nbsp;
@@ -40,4 +48,4 @@ export const BottomHelper = React.memo(function BottomHelper(props: Props) {
       )}
     </div>
   );
-});
+}

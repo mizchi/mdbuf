@@ -2,6 +2,7 @@ import "regenerator-runtime/runtime";
 import "github-markdown-css/github-markdown.css";
 import "highlight.js/styles/default.css";
 import "katex/dist/katex.min.css";
+// import "ress";
 import { proxy, wrap } from "comlink";
 import React from "react";
 import ReactDOM from "react-dom";
