@@ -1,8 +1,7 @@
-import { WorkerAPI } from "./../../types";
 import actionCreatorFactory from "typescript-fsa";
 import { reducerWithoutInitialState } from "typescript-fsa-reducers";
 import { asyncFactory } from "typescript-fsa-redux-thunk";
-import { AppState, ToolMode, EditorMode } from "../../types";
+import { AppState, EditorMode, ToolMode, WorkerAPI } from "../../types";
 
 const actionCreator = actionCreatorFactory();
 const asyncCreator = asyncFactory(actionCreator);
@@ -12,6 +11,8 @@ export const changeToolMode = actionCreator<ToolMode>("change-tool-mode");
 export const changeEditorMode = actionCreator<EditorMode>("change-editor-mode");
 
 export const updateShowPreview = actionCreator<boolean>("update-show-preview");
+
+export const sync = actionCreator<Partial<AppState>>("sync");
 
 const nextIdleFrame =
   // @ts-ignore
@@ -43,6 +44,12 @@ export const reducer = reducerWithoutInitialState<AppState>()
     return {
       ...state,
       ...result
+    };
+  })
+  .case(sync, (state, other) => {
+    return {
+      ...state,
+      ...other
     };
   })
   .case(updateShowPreview, (state, showPreview) => {
