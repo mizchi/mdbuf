@@ -11,6 +11,7 @@ const TAB_STR = "  ";
 
 type Props = {
   raw: string;
+  disabled?: boolean;
   onChangeValue: (value: string) => void;
   onWheel: (event: SyntheticEvent<HTMLTextAreaElement>) => void;
 };
@@ -76,13 +77,17 @@ export const TextareaEditor = forwardRef((props: Props, ref: any) => {
           ref.current.selectionEnd = pos;
         },
         focus() {
-          ref.current.focus();
+          if (ref.current) {
+            ref.current.focus();
+          }
         },
         getValue() {
           return ref.current.value;
         },
         setValue(value: string) {
-          ref.current.value = value;
+          if (ref.current) {
+            ref.current.value = value;
+          }
         }
       });
       if (false && buffer.lastOffset) {
@@ -104,6 +109,7 @@ export const TextareaEditor = forwardRef((props: Props, ref: any) => {
   return (
     <StyledTextarea
       ref={ref}
+      disabled={props.disabled}
       spellCheck={false}
       defaultValue={props.raw}
       onChange={onChange}

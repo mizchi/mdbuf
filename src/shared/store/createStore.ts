@@ -8,11 +8,11 @@ import {
 import thunkMiddleware, { ThunkMiddleware } from "redux-thunk";
 import { AppState, WorkerAPI } from "../types";
 import { debounce } from "lodash-es";
+import { initialState } from "../data";
 
 let _api: WorkerAPI = null as any;
-export async function createStore(api: WorkerAPI) {
+export function createStore(api: WorkerAPI) {
   _api = api;
-  const initialState = await loadState(api);
   const store = _createStore(
     reducer,
     initialState,
@@ -34,7 +34,3 @@ const saveMiddleware: Middleware<AppState> = store => next => action => {
   save(state);
   next(action);
 };
-
-async function loadState(proxy: WorkerAPI): Promise<AppState> {
-  return proxy.getLastState();
-}

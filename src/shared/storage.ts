@@ -61,28 +61,3 @@ export async function getItems(): Promise<Item[]> {
   const items = await Items.toArray();
   return items.filter(t => t.id !== CURRENT_ITEM_KEY);
 }
-
-export const initialText = `# Markdown Buffer
-
-- Desktop PWA Support
-- Autosave
-- Off Thread Markdown Compiling
-
-## Markdown
-
-**emphasis** ~~strike~~ _italic_
-
-> Quote
-
-\`\`\`js
-// code highlight
-class Foo {
-  constructor() {
-    console.log("xxx");
-  }
-}
-\`\`\`
-
-## Math by KaTeX
-$ y = x^3 + 2ax^2 + b $
-`;

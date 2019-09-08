@@ -28,16 +28,23 @@ export const Main = React.memo(function Main({
   onWheel: (event: SyntheticEvent<HTMLTextAreaElement>) => void;
 }) {
   const api = useRemote();
-  const { html, raw, outline, editorMode, toolMode, showPreview } = useSelector(
-    (s: AppState) => ({
-      html: s.html,
-      raw: s.raw,
-      outline: s.outline,
-      toolMode: s.toolMode,
-      editorMode: s.editorMode,
-      showPreview: s.showPreview
-    })
-  );
+  const {
+    html,
+    raw,
+    outline,
+    editorMode,
+    toolMode,
+    showPreview,
+    initialized
+  } = useSelector((s: AppState) => ({
+    initialized: s.initialized,
+    html: s.html,
+    raw: s.raw,
+    outline: s.outline,
+    toolMode: s.toolMode,
+    editorMode: s.editorMode,
+    showPreview: s.showPreview
+  }));
 
   const onChangeValue = useAction(
     (raw: string) => {
@@ -68,6 +75,7 @@ export const Main = React.memo(function Main({
             )}
             {editorMode === "textarea" && (
               <TextareaEditor
+                disabled={!initialized}
                 ref={editorRef}
                 raw={raw}
                 onChangeValue={onChangeValue}

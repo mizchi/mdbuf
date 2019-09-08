@@ -20,6 +20,7 @@ export type AppState = {
   toolMode: ToolMode;
   editorMode: EditorMode;
   writingHandlerName?: string;
+  initialized: boolean;
   // server built state
   html: string;
   outline: Outline;
@@ -39,12 +40,9 @@ export type WorkerAPI = {
     raw: string;
     line?: number;
   }): Promise<{ html: string; outline: Array<any> }>;
-
   getLastState(): Promise<AppState>;
-
-  // utils
-  // format by prettier
   format(raw: string): Promise<string>;
+  setDispatch(dispatch: any): Promise<void>;
 };
 
 export type PatchWithTimestamp = {

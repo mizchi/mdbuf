@@ -6,7 +6,7 @@ const canUseFs = !!window.chooseFileSystemEntries;
 export const Help = React.memo(() => {
   return (
     <div style={{ padding: 10 }}>
-      {canUseFs && (
+      {!canUseFs && (
         <div
           style={{
             padding: "4px 2px",

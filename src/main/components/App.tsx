@@ -1,17 +1,21 @@
-import React, { useCallback, useLayoutEffect, useRef } from "react";
+import React, { useCallback, useLayoutEffect, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createGlobalStyle } from "styled-components";
 import { AppState } from "../../shared/types";
-import { changeToolMode, updateShowPreview } from "../../shared/reducers";
+import { changeToolMode, updateShowPreview, sync } from "../../shared/reducers";
 import { BottomHelper } from "./elements/BottomHelper";
 import { VisibilityDetector } from "./elements/VisibilityDetector";
 import { KeyHandler } from "./KeyHandler";
 import { Main } from "./Main";
+import { useRemote } from "../contexts/RemoteContext";
+import { useCurrentBuffer } from "../contexts/CurrentBufferContext";
 
 // Global State
 let focusedOnce = false;
 
 export function App() {
+  const remote = useRemote();
+  const currentBuffer = useCurrentBuffer();
   const state = useSelector((s: AppState) => s);
   const dispatch = useDispatch();
   const editorRef: React.RefObject<HTMLTextAreaElement> = useRef(null);
@@ -34,6 +38,19 @@ export function App() {
       editorRef.current.focus();
     }
   }, []);
+
+  useEffect(() => {
+    if (!state.initialized) {
+      (async () => {
+        const state = await remote.getLastState();
+        dispatch(sync(state));
+        if (currentBuffer) {
+          currentBuffer.setValue(state.raw);
+          currentBuffer.focus();
+        }
+      })();
+    }
+  }, [state.initialized, currentBuffer]);
 
   return (
     <>
