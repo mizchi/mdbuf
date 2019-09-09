@@ -45,7 +45,12 @@ export const reducer = reducerWithoutInitialState<AppState>()
     return { ...state, showPreview };
   })
   .case(changeToolMode, (state, toolMode) => {
-    return { ...state, toolMode };
+    const isSameMode = state.toolMode === toolMode;
+    return {
+      ...state,
+      toolMode,
+      showPreview: !(state.showPreview && isSameMode)
+    };
   })
   .case(changeEditorMode, (state, editorMode) => {
     return { ...state, editorMode };

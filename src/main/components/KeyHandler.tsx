@@ -55,7 +55,6 @@ export function KeyHandler() {
               .concat([Array.from(raw).length])
               .filter(s => s < cur)
           );
-          console.log("max", m);
           buffer.setCursorPosition(m);
         }
         return;
@@ -80,12 +79,6 @@ export function KeyHandler() {
       // Ctrl+1
       if (ev.ctrlKey && ev.key === "1") {
         ev.preventDefault();
-        if (toolMode !== "preview") {
-          updateShowPreview(true);
-        } else {
-          updateShowPreview(!showPreview);
-        }
-
         dispatch(actions.changeToolMode("preview"));
         return;
       }
@@ -93,21 +86,18 @@ export function KeyHandler() {
       // Ctrl+2
       if (ev.ctrlKey && ev.key === "2") {
         ev.preventDefault();
-        updateShowPreview(true);
         dispatch(actions.changeToolMode("outline"));
         return;
       }
       // Ctrl+3
       if (ev.ctrlKey && ev.key === "3") {
         ev.preventDefault();
-        updateShowPreview(true);
         dispatch(actions.changeToolMode("command"));
         return;
       }
       // Ctrl+3
       if (ev.ctrlKey && ev.key === "4") {
         ev.preventDefault();
-        updateShowPreview(true);
         dispatch(actions.changeToolMode("about"));
         return;
       }
@@ -117,7 +107,6 @@ export function KeyHandler() {
         ev.preventDefault();
         if (editorMode === "textarea") {
           changeEditorMode("monaco");
-          // } else if (editorMode === "codemirror") {
         } else if (editorMode === "monaco") {
           changeEditorMode("textarea");
         }
