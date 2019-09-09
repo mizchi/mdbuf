@@ -8,6 +8,7 @@ export function About() {
       <a href="https://twitter.com/mizchi" target="_blank">
         @mizchi
       </a>
+      <p>This site uses Google Analytics.</p>
       <hr />
       <h2>ChangeLog</h2>
       <h3>v1.1.5</h3>

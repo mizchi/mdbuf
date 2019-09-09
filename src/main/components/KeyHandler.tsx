@@ -79,6 +79,7 @@ export function KeyHandler() {
       // Ctrl+1
       if (ev.ctrlKey && ev.key === "1") {
         ev.preventDefault();
+        ga("send", "event", "command", "show-preview");
         dispatch(actions.changeToolMode("preview"));
         return;
       }
@@ -86,18 +87,21 @@ export function KeyHandler() {
       // Ctrl+2
       if (ev.ctrlKey && ev.key === "2") {
         ev.preventDefault();
+        ga("send", "event", "command", "show-outline");
         dispatch(actions.changeToolMode("outline"));
         return;
       }
       // Ctrl+3
       if (ev.ctrlKey && ev.key === "3") {
+        ga("send", "event", "command", "show-command");
         ev.preventDefault();
         dispatch(actions.changeToolMode("command"));
         return;
       }
-      // Ctrl+3
+      // Ctrl+4
       if (ev.ctrlKey && ev.key === "4") {
         ev.preventDefault();
+        ga("send", "event", "command", "show-about");
         dispatch(actions.changeToolMode("about"));
         return;
       }
@@ -105,6 +109,7 @@ export function KeyHandler() {
       // Ctrl+Shift+E
       if (ev.ctrlKey && ev.shiftKey && ev.key.toLocaleLowerCase() === "e") {
         ev.preventDefault();
+        ga("send", "event", "command", "change-editor");
         if (editorMode === "textarea") {
           changeEditorMode("monaco");
         } else if (editorMode === "monaco") {

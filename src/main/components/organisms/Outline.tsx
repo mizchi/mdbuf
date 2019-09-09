@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useCurrentBuffer } from "../../contexts/CurrentBufferContext";
 import { useSelector } from "react-redux";
 import { AppState } from "../../../shared/types";
@@ -15,6 +15,9 @@ export const Outline = (props: { outline: Array<any> }) => {
     },
     [buffer]
   );
+  useEffect(() => {
+    ga("send", "event", "outline", "show");
+  }, []);
   return (
     <>
       {props.outline.length === 0 && <span>(No heading block)</span>}
