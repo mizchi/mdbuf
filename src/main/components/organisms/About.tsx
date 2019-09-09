@@ -10,6 +10,10 @@ export function About() {
       </a>
       <hr />
       <h2>ChangeLog</h2>
+      <h3>v1.1.5</h3>
+      <ul>
+        <li>Fix mode change on active (Ctrl-num)</li>
+      </ul>
       <h3>v1.1.2</h3>
       <ul>
         <li>Heading Block Jump by Meta+Shift+↓/Meta+Shift+↑ (WIP:Imperfect)</li>
