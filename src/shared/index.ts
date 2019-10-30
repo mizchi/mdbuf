@@ -6,6 +6,7 @@ import { compile } from "./helpers/markdownProcessor";
 import * as storage from "./storage";
 
 let _dispatch: any;
+const reAmpersand = /&amp;/g;
 export const api: WorkerAPI = {
   // Dispatch action to main thread
   async setDispatch(dispatch: any) {
@@ -18,7 +19,7 @@ export const api: WorkerAPI = {
     raw: string;
     line?: number;
   }): Promise<{ html: string; outline: Array<any> }> {
-    return compile(data.raw, data.line);
+    return compile(data.raw.replace(reAmpersand, "&#38;"), data.line);
   },
   async getLastState(): Promise<AppState> {
     const currentSave = await storage.loadCurrentSave();
