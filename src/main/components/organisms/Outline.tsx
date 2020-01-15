@@ -2,6 +2,7 @@ import React, { useCallback, useEffect } from "react";
 import { useCurrentBuffer } from "../../contexts/CurrentBufferContext";
 import { useSelector } from "react-redux";
 import { AppState } from "../../../shared/types";
+import { sendGA } from "../../utils";
 
 export const Outline = (props: { outline: Array<any> }) => {
   const size = useSelector((s: AppState) => Array.from(s.raw).length);
@@ -16,7 +17,7 @@ export const Outline = (props: { outline: Array<any> }) => {
     [buffer]
   );
   useEffect(() => {
-    ga("send", "event", "outline", "show");
+    sendGA("send", "event", "outline", "show");
   }, []);
   return (
     <>

@@ -6,15 +6,21 @@ import { AppState } from "../../shared/types";
 import { useWriter } from "../contexts/WriterContext";
 import { useAction, useFormat, useOpenFile } from "./_hooks/commands";
 import { useCurrentBuffer } from "../contexts/CurrentBufferContext";
+import { sendGA } from "../utils";
 
 export function KeyHandler() {
   const writer = useWriter();
   const format = useFormat();
   const openFile = useOpenFile();
   const buffer = useCurrentBuffer();
-  const { showPreview, raw, editorMode, toolMode, outline } = useSelector(
-    (s: AppState) =>
-      pick(s, ["editorMode", "showPreview", "raw", "toolMode", "outline"])
+  const {
+    showPreview,
+    raw,
+    editorMode,
+    toolMode,
+    outline
+  } = useSelector((s: AppState) =>
+    pick(s, ["editorMode", "showPreview", "raw", "toolMode", "outline"])
   );
   const updateShowPreview = useAction(actions.updateShowPreview);
   const changeEditorMode = useAction(actions.changeEditorMode);
@@ -79,7 +85,7 @@ export function KeyHandler() {
       // Ctrl+1
       if (ev.ctrlKey && ev.key === "1") {
         ev.preventDefault();
-        ga("send", "event", "command", "show-preview");
+        sendGA("send", "event", "command", "show-preview");
         dispatch(actions.changeToolMode("preview"));
         return;
       }
@@ -87,13 +93,13 @@ export function KeyHandler() {
       // Ctrl+2
       if (ev.ctrlKey && ev.key === "2") {
         ev.preventDefault();
-        ga("send", "event", "command", "show-outline");
+        sendGA("send", "event", "command", "show-outline");
         dispatch(actions.changeToolMode("outline"));
         return;
       }
       // Ctrl+3
       if (ev.ctrlKey && ev.key === "3") {
-        ga("send", "event", "command", "show-command");
+        sendGA("send", "event", "command", "show-command");
         ev.preventDefault();
         dispatch(actions.changeToolMode("command"));
         return;
@@ -101,7 +107,7 @@ export function KeyHandler() {
       // Ctrl+4
       if (ev.ctrlKey && ev.key === "4") {
         ev.preventDefault();
-        ga("send", "event", "command", "show-about");
+        sendGA("send", "event", "command", "show-about");
         dispatch(actions.changeToolMode("about"));
         return;
       }
@@ -109,7 +115,7 @@ export function KeyHandler() {
       // Ctrl+Shift+E
       if (ev.ctrlKey && ev.shiftKey && ev.key.toLocaleLowerCase() === "e") {
         ev.preventDefault();
-        ga("send", "event", "command", "change-editor");
+        sendGA("send", "event", "command", "change-editor");
         if (editorMode === "textarea") {
           changeEditorMode("monaco");
         } else if (editorMode === "monaco") {

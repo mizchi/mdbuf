@@ -1,3 +1,4 @@
+import { sendGA } from "./../../utils";
 import { AppState } from "./../../../shared/types";
 import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,7 +12,7 @@ export function useOpenFile() {
   const currentBuffer = useCurrentBuffer();
   const writer = useWriter();
   return async () => {
-    ga("send", "event", "command", "openFile");
+    sendGA("send", "event", "command", "openFile");
     try {
       // @ts-ignore
       const readHandler = await window.chooseFileSystemEntries();
@@ -59,7 +60,7 @@ export function useFormat() {
   const currentBuffer = useCurrentBuffer();
   const raw = useSelector((s: AppState) => s.raw);
   return useCallback(async () => {
-    ga("send", "event", "command", "format");
+    sendGA("send", "event", "command", "format");
 
     const text = await remote.format(raw);
     dispatch(updateRaw.action({ raw: text, remote }));
