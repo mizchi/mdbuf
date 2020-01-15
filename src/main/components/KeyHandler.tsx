@@ -22,7 +22,6 @@ export function KeyHandler() {
   } = useSelector((s: AppState) =>
     pick(s, ["editorMode", "showPreview", "raw", "toolMode", "outline"])
   );
-  const updateShowPreview = useAction(actions.updateShowPreview);
   const changeEditorMode = useAction(actions.changeEditorMode);
   const dispatch = useDispatch();
 

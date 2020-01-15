@@ -5,7 +5,6 @@ const {
 const HTMLPlugin = require("html-webpack-plugin");
 const WorkerPlugin = require("worker-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
-const MonacoWebpackPlugin = require("monaco-editor-webpack-plugin");
 const webpack = require("webpack");
 const {
   GenerateSW
@@ -21,8 +20,6 @@ const tsLoader = {
 
 module.exports = (env, argv) => ({
   entry: {
-    // compile: path.join(__dirname, "src/third_party/compile"),
-    // format: path.join(__dirname, "src/third_party/format"),
     main: path.join(__dirname, "src/main")
   },
   output: {
@@ -64,7 +61,7 @@ module.exports = (env, argv) => ({
   },
 
   plugins: [
-    new MonacoWebpackPlugin(),
+    // new MonacoWebpackPlugin(),
     new CleanWebpackPlugin(),
     new WorkerPlugin(),
     new webpack.DefinePlugin({

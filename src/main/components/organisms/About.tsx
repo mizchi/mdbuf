@@ -11,6 +11,10 @@ export function About() {
       <p>This site uses Google Analytics.</p>
       <hr />
       <h2>ChangeLog</h2>
+      <h3>v1.1.7</h3>
+      <ul>
+        <li>Refactor</li>
+      </ul>
       <h3>v1.1.6</h3>
       <ul>
         <li>Use google analytics</li>
