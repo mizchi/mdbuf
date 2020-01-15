@@ -1,11 +1,15 @@
 const path = require("path");
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const {
+  CleanWebpackPlugin
+} = require("clean-webpack-plugin");
 const HTMLPlugin = require("html-webpack-plugin");
 const WorkerPlugin = require("worker-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
 const MonacoWebpackPlugin = require("monaco-editor-webpack-plugin");
 const webpack = require("webpack");
-const { GenerateSW } = require("workbox-webpack-plugin");
+const {
+  GenerateSW
+} = require("workbox-webpack-plugin");
 const pkg = require("./package");
 
 const tsLoader = {
@@ -30,19 +34,14 @@ module.exports = (env, argv) => ({
     extensions: [".js", ".ts", ".tsx"]
   },
   module: {
-    rules: [
-      {
-        test: /\.w\.ts$/,
-        use: [
-          {
-            loader: "worker-loader",
-            options: {
-              publicPath: process.env.ASSET_HOST || "/",
-              inline: true
-            }
-          },
-          tsLoader
-        ]
+    rules: [{
+        test: /\.worker\.(js|ts)$/i,
+        use: [{
+          loader: 'comlink-loader',
+          options: {
+            singleton: true
+          }
+        }]
       },
       {
         test: /\.css$/i,
@@ -50,14 +49,12 @@ module.exports = (env, argv) => ({
       },
       {
         test: /\.(jpg|jpeg|png|woff|woff2|eot|ttf|svg)$/,
-        use: [
-          {
-            loader: "url-loader",
-            options: {
-              limit: 8192
-            }
+        use: [{
+          loader: "url-loader",
+          options: {
+            limit: 8192
           }
-        ]
+        }]
       },
       {
         test: /\.tsx?/,
@@ -77,8 +74,7 @@ module.exports = (env, argv) => ({
       template: path.join(__dirname, "src/main/index.html"),
       inject: false
     }),
-    new CopyPlugin([
-      {
+    new CopyPlugin([{
         from: "src/manifest.webmanifest",
         to: "manifest.webmanifest"
       },
@@ -87,16 +83,14 @@ module.exports = (env, argv) => ({
         to: "assets"
       }
     ]),
-    ...(argv.mode === "production"
-      ? [
-          new GenerateSW({
-            // globDirectory: path.join(__dirname, "dist"),
-            // globPatterns: ["*.{html,js,css}"],
-            swDest: "service-worker.js",
-            clientsClaim: true,
-            skipWaiting: true
-          })
-        ]
-      : [])
+    ...(argv.mode === "production" ? [
+      new GenerateSW({
+        // globDirectory: path.join(__dirname, "dist"),
+        // globPatterns: ["*.{html,js,css}"],
+        swDest: "service-worker.js",
+        clientsClaim: true,
+        skipWaiting: true
+      })
+    ] : [])
   ]
 });

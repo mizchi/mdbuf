@@ -2,8 +2,8 @@ import "regenerator-runtime/runtime";
 import "github-markdown-css/github-markdown.css";
 import "highlight.js/styles/default.css";
 import "katex/dist/katex.min.css";
-// import "ress";
-import { proxy, wrap } from "comlink";
+
+import { wrap, proxy } from "comlink";
 import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
@@ -27,8 +27,8 @@ Site Data
 const main = async () => {
   console.time("mount");
   const worker = new Worker("../worker/index.ts", { type: "module" });
-  const remote: WorkerAPI = wrap(worker);
-  const store = createStore(remote);
+  const remote: WorkerAPI = wrap(worker) as any;
+  const store = createStore(remote as WorkerAPI);
   remote.setDispatch(proxy(store.dispatch));
 
   clearTimeout(timeoutId);
