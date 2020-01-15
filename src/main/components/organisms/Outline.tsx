@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from "react";
-import { useCurrentBuffer } from "../../contexts/CurrentBufferContext";
 import { useSelector } from "react-redux";
-import { AppState } from "../../../shared/types";
+import { useCurrentBuffer } from "../../contexts/CurrentBufferContext";
+import { AppState } from "../../types";
 import { sendGA } from "../../utils";
 
 export const Outline = (props: { outline: Array<any> }) => {

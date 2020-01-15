@@ -1,7 +1,8 @@
+import { MarkdownCompiler } from "../../main/api/markdownProcessor.worker";
 import actionCreatorFactory from "typescript-fsa";
 import { reducerWithoutInitialState } from "typescript-fsa-reducers";
 import { asyncFactory } from "typescript-fsa-redux-thunk";
-import { AppState, EditorMode, ToolMode, WorkerAPI } from "../types";
+import { AppState, EditorMode, ToolMode } from "../types";
 
 const actionCreator = actionCreatorFactory();
 const asyncCreator = asyncFactory(actionCreator);
@@ -14,11 +15,13 @@ export const updateShowPreview = actionCreator<boolean>("update-show-preview");
 
 export const sync = actionCreator<Partial<AppState>>("sync");
 
+let markdownCompiler: MarkdownCompiler;
 export const updateRaw = asyncCreator<
-  { raw: string; line?: number; remote: WorkerAPI },
+  { raw: string; line?: number },
   { html: string; outline: any }
->("updateRaw", async ({ raw, line, remote: api }) => {
-  return await api.compile({ raw, line });
+>("updateRaw", async ({ raw, line }) => {
+  markdownCompiler = markdownCompiler ?? (await new MarkdownCompiler());
+  return await markdownCompiler.compile(raw, line);
 });
 
 export const reducer = reducerWithoutInitialState<AppState>()

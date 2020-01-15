@@ -16,7 +16,9 @@ import "monaco-editor/esm/vs/basic-languages/html/html.contribution.js";
 // @ts-ignore
 self.MonacoEnvironment = {
   getWorker(_moduleId: string, _label: string) {
-    return new Worker("monaco-editor/esm/vs/editor/editor.worker.js");
+    return new Worker("monaco-editor/esm/vs/editor/editor.worker.js", {
+      type: "module"
+    });
   }
 };
 
@@ -76,30 +78,14 @@ export default (props: {
       newEditor.layout();
       newEditor.focus();
       setEditor(newEditor);
-      // @ts-ignore
-      // global.editor = newEditor;
-      if (false && buffer.lastOffset) {
-        // const lines = newEditor
-        //   .getValue()
-        //   .substr(0, buffer.lastOffset)
-        //   .split("\n");
-        // const line = lines.length;
-        // lines[lines.length - 1];
-        // const ch = Array.from(lines[lines.length - 1]).length;
-        // // debugger;
-        // newEditor.setSelection(
-        //   monaco.Range.fromPositions(new monaco.Position(line, ch))
-        // );
-      }
 
       buffer.set({
-        setCursorPosition(pos) {
+        setCursorPosition(pos: any) {
           const lines = newEditor
             .getValue()
             .substr(0, pos)
             .split("\n");
           const ch = lines[lines.length - 1].length;
-
           newEditor.setSelection(
             monaco.Range.fromPositions(new monaco.Position(lines.length, ch))
           );

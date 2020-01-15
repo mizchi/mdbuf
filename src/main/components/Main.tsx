@@ -3,11 +3,10 @@ import styled from "styled-components";
 import { TextareaEditor } from "./elements/TextareaEditor";
 import { Preview } from "./organisms/Preview";
 import { Outline } from "./organisms/Outline";
-import { ToolMode, AppState } from "../../shared/types";
+import { ToolMode, AppState } from "../types";
 import { useSelector } from "react-redux";
 import { useAction } from "./_hooks/commands";
-import { updateRaw } from "../../shared/reducers";
-import { useRemote } from "../contexts/RemoteContext";
+import { updateRaw } from "../reducers";
 import { CommandPalette } from "./organisms/CommandPallete";
 import { BottomHelper } from "./elements/BottomHelper";
 import { About } from "./organisms/About";
@@ -29,7 +28,6 @@ export const Main = React.memo(function Main({
   onChangeToolMode: (value: ToolMode) => void;
   onWheel: (event: SyntheticEvent<HTMLTextAreaElement>) => void;
 }) {
-  const api = useRemote();
   const {
     html,
     raw,
@@ -53,9 +51,9 @@ export const Main = React.memo(function Main({
       if (editorRef.current) {
         const el = editorRef.current as HTMLTextAreaElement;
         const line = el.value.substr(0, el.selectionStart).split("\n").length;
-        return updateRaw.action({ raw, remote: api, line });
+        return updateRaw.action({ raw, line });
       } else {
-        return updateRaw.action({ raw, remote: api });
+        return updateRaw.action({ raw });
       }
     },
     [raw]

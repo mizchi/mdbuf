@@ -1,9 +1,9 @@
 import React, { useCallback } from "react";
 import { useWriter } from "../../contexts/WriterContext";
 import { useSelector, useDispatch } from "react-redux";
-import { AppState } from "../../../shared/types";
+import { AppState } from "../../types";
 import { format } from "date-fns";
-import { updateShowPreview } from "../../../shared/reducers";
+import { updateShowPreview } from "../../reducers";
 import { pick } from "lodash-es";
 
 export function BottomHelper() {

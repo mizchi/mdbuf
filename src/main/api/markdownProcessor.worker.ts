@@ -87,14 +87,13 @@ export const replaceProcessor = (newProcessor: any) => {
   processor = newProcessor;
 };
 
-export const compile = (
-  raw: string,
-  cursor?: number
-): { html: string; outline: Outline } => {
-  __remark_cursor_line = cursor || 0;
-  const html = processor.processSync(raw).toString();
-  return {
-    html,
-    outline
-  };
-};
+export class MarkdownCompiler {
+  compile(raw: string, cursor?: number): { html: string; outline: Outline } {
+    __remark_cursor_line = cursor || 0;
+    const html = processor.processSync(raw).toString();
+    return {
+      html,
+      outline
+    };
+  }
+}

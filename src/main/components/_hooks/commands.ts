@@ -1,9 +1,9 @@
+import { MarkdownFormatter } from "../../api/formatter.worker";
 import { sendGA } from "./../../utils";
-import { AppState } from "./../../../shared/types";
+import { AppState } from "../../types";
 import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useRemote } from "../../contexts/RemoteContext";
-import { updateRaw } from "../../../shared/reducers";
+import { updateRaw } from "../../reducers";
 import { useCurrentBuffer } from "../../contexts/CurrentBufferContext";
 import { useWriter } from "../../contexts/WriterContext";
 
@@ -44,30 +44,27 @@ export function useAction<T extends Function>(
 }
 
 export function useUpdate() {
-  const remote = useRemote();
   const dispatch = useDispatch();
-  return useCallback(
-    async (currentText: string) => {
-      dispatch(updateRaw.action({ raw: currentText, remote }));
-    },
-    [remote]
-  );
+  return useCallback(async (currentText: string) => {
+    dispatch(updateRaw.action({ raw: currentText }));
+  }, []);
 }
 
+let formatter: MarkdownFormatter;
 export function useFormat() {
-  const remote = useRemote();
   const dispatch = useDispatch();
   const currentBuffer = useCurrentBuffer();
   const raw = useSelector((s: AppState) => s.raw);
   return useCallback(async () => {
     sendGA("send", "event", "command", "format");
+    formatter = formatter ?? (await new MarkdownFormatter());
 
-    const text = await remote.format(raw);
-    dispatch(updateRaw.action({ raw: text, remote }));
+    const text = await formatter.format(raw);
+    dispatch(updateRaw.action({ raw: text }));
     if (currentBuffer) {
       const pos = currentBuffer.getCursorPosition();
       currentBuffer.setValue(text);
       currentBuffer.setCursorPosition(pos);
     }
-  }, [remote, currentBuffer, raw]);
+  }, [currentBuffer, raw]);
 }

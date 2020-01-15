@@ -1,5 +1,5 @@
 import React, { useContext, useState, useCallback } from "react";
-import { EditorAPI } from "../../shared/types";
+import { EditorAPI } from "../types";
 
 export const CurrentBufferContext = React.createContext<{
   set: (api: EditorAPI | null) => void;

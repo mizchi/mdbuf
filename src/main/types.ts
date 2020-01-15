@@ -11,7 +11,7 @@ export type Item = {
   updatedAt: number;
 };
 
-export type EditorMode = "textarea" | "codemirror" | "monaco";
+export type EditorMode = "textarea" | "monaco";
 export type ToolMode = "preview" | "outline" | "save" | "command" | "about";
 export type AppState = {
   wordCount: number;
@@ -33,17 +33,6 @@ export type Outline = Array<{
   end: number;
   children: any;
 }>;
-
-export type WorkerAPI = {
-  saveCurrentState(data: AppState): Promise<void>;
-  compile(data: {
-    raw: string;
-    line?: number;
-  }): Promise<{ html: string; outline: Array<any> }>;
-  getLastState(): Promise<AppState>;
-  format(raw: string): Promise<string>;
-  setDispatch(dispatch: any): Promise<void>;
-};
 
 export type PatchWithTimestamp = {
   value: string;

@@ -1,8 +1,8 @@
 import { pick } from "lodash-es";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import * as actions from "../../shared/reducers";
-import { AppState } from "../../shared/types";
+import * as actions from "../reducers";
+import { AppState } from "../types";
 import { useWriter } from "../contexts/WriterContext";
 import { useAction, useFormat, useOpenFile } from "./_hooks/commands";
 import { useCurrentBuffer } from "../contexts/CurrentBufferContext";

@@ -1,23 +1,22 @@
 import React, { useCallback, useLayoutEffect, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createGlobalStyle } from "styled-components";
-import { AppState } from "../../shared/types";
-import { changeToolMode, updateShowPreview, sync } from "../../shared/reducers";
+import { AppState } from "../types";
+import { changeToolMode, updateShowPreview, sync } from "../reducers";
 import { BottomHelper } from "./elements/BottomHelper";
 import { VisibilityDetector } from "./elements/VisibilityDetector";
 import { KeyHandler } from "./KeyHandler";
 import { Main } from "./Main";
-import { useRemote } from "../contexts/RemoteContext";
 import { useCurrentBuffer } from "../contexts/CurrentBufferContext";
+import { getLastState } from "../store/createStore";
 
 // Global State
 let focusedOnce = false;
 
 export function App() {
-  const remote = useRemote();
+  const dispatch = useDispatch();
   const currentBuffer = useCurrentBuffer();
   const state = useSelector((s: AppState) => s);
-  const dispatch = useDispatch();
   const editorRef: React.RefObject<HTMLTextAreaElement> = useRef(null);
   const previewContainerRef: React.RefObject<HTMLDivElement> = useRef(null);
   const onChangeToolMode = useAction(changeToolMode);
@@ -42,7 +41,7 @@ export function App() {
   useEffect(() => {
     if (!state.initialized) {
       (async () => {
-        const state = await remote.getLastState();
+        const state = await getLastState();
         dispatch(sync(state));
         if (currentBuffer) {
           currentBuffer.setValue(state.raw);
