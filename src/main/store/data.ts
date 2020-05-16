@@ -22,7 +22,9 @@ class Foo {
 
 ## Math by KaTeX
 
-$ y = x^3 + 2ax^2 + b $
+$$
+y = x^3 + 2ax^2 + b
+$$
 `;
 
 export const initialState: AppState = {
@@ -33,5 +35,5 @@ export const initialState: AppState = {
   showPreview: true,
   initialized: false,
   toolMode: "preview",
-  editorMode: "textarea"
+  editorMode: "textarea",
 };
