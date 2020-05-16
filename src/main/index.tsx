@@ -2,6 +2,7 @@ import "regenerator-runtime/runtime";
 import "github-markdown-css/github-markdown.css";
 import "highlight.js/styles/default.css";
 import "katex/dist/katex.min.css";
+import "prism-themes/themes/prism-a11y-dark.css";
 
 import React from "react";
 import ReactDOM from "react-dom";
@@ -23,21 +24,32 @@ Site Data
 
 const main = async () => {
   console.time("mount");
-  // const worker = new Worker("../worker/index.ts", { type: "module" });
-  // const remote: WorkerAPI = wrap(worker) as any;
   const store = createStore();
 
   clearTimeout(timeoutId);
   ReactDOM.render(
-    // <WorkerAPIContext.Provider value={remote}>
-    <WriterProvider>
-      <CurrentBufferProvider>
-        <Provider store={store}>
-          <App />
-        </Provider>
-      </CurrentBufferProvider>
-    </WriterProvider>,
-    // </WorkerAPIContext.Provider>,
+    <>
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+      * {
+        box-sizing: border-box;
+      }
+      .markdown-body pre {
+        background: black;
+        color: white;
+      }
+    `,
+        }}
+      />
+      <WriterProvider>
+        <CurrentBufferProvider>
+          <Provider store={store}>
+            <App />
+          </Provider>
+        </CurrentBufferProvider>
+      </WriterProvider>
+    </>,
     document.querySelector("#root")
   );
   console.timeEnd("mount");

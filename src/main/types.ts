@@ -16,23 +16,14 @@ export type ToolMode = "preview" | "outline" | "save" | "command" | "about";
 export type AppState = {
   wordCount: number;
   raw: string;
+  ast: null | any;
   showPreview: boolean;
   toolMode: ToolMode;
   editorMode: EditorMode;
   writingHandlerName?: string;
   initialized: boolean;
-  // server built state
-  html: string;
-  outline: Outline;
+  toc: Array<any>;
 };
-
-export type Outline = Array<{
-  type: string;
-  depth: number;
-  start: number;
-  end: number;
-  children: any;
-}>;
 
 export type PatchWithTimestamp = {
   value: string;

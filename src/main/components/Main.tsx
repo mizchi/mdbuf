@@ -21,7 +21,7 @@ export const Main = React.memo(function Main({
   editorRef,
   onChangeToolMode,
   onWheel,
-  previewContainerRef
+  previewContainerRef,
 }: {
   editorRef: React.RefObject<HTMLTextAreaElement>;
   previewContainerRef: React.RefObject<HTMLDivElement>;
@@ -29,21 +29,21 @@ export const Main = React.memo(function Main({
   onWheel: (event: SyntheticEvent<HTMLTextAreaElement>) => void;
 }) {
   const {
-    html,
+    ast,
     raw,
-    outline,
     editorMode,
     toolMode,
     showPreview,
-    initialized
+    toc,
+    initialized,
   } = useSelector((s: AppState) => ({
     initialized: s.initialized,
-    html: s.html,
+    ast: s.ast,
     raw: s.raw,
-    outline: s.outline,
+    toc: s.toc,
     toolMode: s.toolMode,
     editorMode: s.editorMode,
-    showPreview: s.showPreview
+    showPreview: s.showPreview,
   }));
 
   const onChangeValue = useAction(
@@ -105,10 +105,11 @@ export const Main = React.memo(function Main({
           <ToolContainer ref={previewContainerRef}>
             {toolMode === "command" && <CommandPalette />}
             {toolMode === "about" && <About />}
-            {toolMode === "preview" && <Preview html={html} />}
+            {toolMode === "preview" && <Preview ast={ast} />}
             {toolMode === "outline" && (
               <OutlineContainer>
-                <Outline outline={outline} />
+                WIP
+                {/* <Outline outline={outline} /> */}
               </OutlineContainer>
             )}
           </ToolContainer>
@@ -125,6 +126,7 @@ const OutlineContainer = styled.div`
 const Container = styled.div`
   flex: 1;
   height: 100vh;
+  overflow: none;
 `;
 
 const Centered = styled.div`
@@ -138,7 +140,7 @@ const EditorContainer = styled.div`
   max-width: 960px;
   margin-left: auto;
   margin-right: auto;
-  padding-top: 8px;
+  /* padding-top: 8px; */
 `;
 
 const SideTools = styled.div`

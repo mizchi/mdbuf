@@ -18,24 +18,28 @@ export const sync = actionCreator<Partial<AppState>>("sync");
 let markdownCompiler: MarkdownCompiler;
 export const updateRaw = asyncCreator<
   { raw: string; line?: number },
-  { html: string; outline: any }
->("updateRaw", async ({ raw, line }) => {
-  markdownCompiler = markdownCompiler ?? (await new MarkdownCompiler());
-  return await markdownCompiler.compile(raw, line);
-});
+  { toc: Array<any>; ast: any; frontmatter: any }
+>(
+  "updateRaw",
+  async ({ raw, line }): Promise<any> => {
+    markdownCompiler = markdownCompiler ?? (await new MarkdownCompiler());
+    return markdownCompiler.compile(raw, line);
+  }
+);
 
 export const reducer = reducerWithoutInitialState<AppState>()
-  .case(updateRaw.async.started, (state, { raw }) => {
+  .case(updateRaw.async.started, (state, payload) => {
     return {
       ...state,
-      raw,
-      wordCount: Array.from(raw).length,
+      raw: payload.raw,
+      wordCount: Array.from(payload.raw).length,
     };
   })
   .case(updateRaw.async.done, (state, { result }) => {
     return {
       ...state,
-      ...result,
+      ast: result.ast,
+      toc: result.toc,
     };
   })
   .case(sync, (state, other) => {
