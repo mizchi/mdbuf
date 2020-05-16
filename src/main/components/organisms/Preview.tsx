@@ -1,35 +1,34 @@
-import React, { useLayoutEffect } from "react";
-import morphdom from "morphdom";
+import React, { useLayoutEffect, useRef } from "react";
+import { compile } from "amdx-runner";
 
-export const Preview = React.memo(function Preview(props: { html: string }) {
-  const ref: React.RefObject<HTMLDivElement> = React.createRef();
-
+export const Preview = React.memo(function Preview(props: { ast: any | null }) {
+  const ref = useRef<HTMLDivElement>(null);
   useLayoutEffect(() => {
     if (ref.current) {
-      if (ref.current.childNodes.length === 0) {
-        ref.current.innerHTML = props.html;
-      } else {
-        requestAnimationFrame(() => {
-          morphdom(
-            ref.current as HTMLElement,
-            `<div class="markdown-body">${props.html}</div>`
-          );
-        });
+      const hit = ref.current.querySelector(".cursor-focused");
+      if (hit) {
+        hit.scrollIntoView();
       }
     }
+  }, [props.ast]);
 
-    requestAnimationFrame(() => {
-      if (ref.current) {
-        const focused = ref.current.querySelector(".cursor-focused");
-        if (focused) {
-          focused.scrollIntoView({
-            // behavior: "smooth",
-            block: "nearest"
-          });
-        }
-      }
-    });
-  });
-
-  return <div className="markdown-body" ref={ref} />;
+  const el = props.ast ? (
+    compile(props.ast, {
+      components: {},
+      h: React.createElement,
+      Fragment: React.Fragment,
+      props: {},
+    })
+  ) : (
+    <></>
+  );
+  return (
+    <div
+      style={{ width: "100%", height: "calc(100vh - 32px)", overflow: "auto" }}
+    >
+      <div ref={ref} className="markdown-body" style={{ padding: 0 }}>
+        {el}
+      </div>
+    </div>
+  );
 });

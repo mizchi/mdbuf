@@ -18,10 +18,11 @@ export function KeyHandler() {
     raw,
     editorMode,
     toolMode,
-    outline
+    toc,
   } = useSelector((s: AppState) =>
-    pick(s, ["editorMode", "showPreview", "raw", "toolMode", "outline"])
+    pick(s, ["editorMode", "showPreview", "raw", "toolMode", "toc"])
   );
+
   const changeEditorMode = useAction(actions.changeEditorMode);
   const dispatch = useDispatch();
 
@@ -38,13 +39,13 @@ export function KeyHandler() {
         if (buffer) {
           const cur = buffer.getCursorPosition();
           console.log(cur);
-          const m = Math.min(
-            ...outline
-              .map(o => o.start)
-              .concat([Array.from(raw).length])
-              .filter(s => s > cur)
-          );
-          buffer.setCursorPosition(m);
+          // const m = Math.min(
+          //   ...outline
+          //     .map((o) => o.start)
+          //     .concat([Array.from(raw).length])
+          //     .filter((s) => s > cur)
+          // );
+          // buffer.setCursorPosition(m);
         }
         return;
       }
@@ -54,13 +55,13 @@ export function KeyHandler() {
         if (buffer) {
           const cur = buffer.getCursorPosition();
           console.log(cur);
-          const m = Math.max(
-            ...outline
-              .map(o => o.start)
-              .concat([Array.from(raw).length])
-              .filter(s => s < cur)
-          );
-          buffer.setCursorPosition(m);
+          // const m = Math.max(
+          //   ...outline
+          //     .map((o) => o.start)
+          //     .concat([Array.from(raw).length])
+          //     .filter((s) => s < cur)
+          // );
+          // buffer.setCursorPosition(m);
         }
         return;
       }
@@ -130,6 +131,6 @@ export function KeyHandler() {
     };
     window.addEventListener("keydown", onWindowKeyDown);
     return () => window.removeEventListener("keydown", onWindowKeyDown);
-  }, [buffer, writer.handler, raw, editorMode, toolMode, outline, showPreview]);
+  }, [buffer, writer.handler, raw, editorMode, toolMode, toc, showPreview]);
   return <></>;
 }

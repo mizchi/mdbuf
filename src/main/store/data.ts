@@ -29,9 +29,9 @@ $$
 
 export const initialState: AppState = {
   raw: "",
+  ast: null,
   wordCount: 0,
-  html: "",
-  outline: [],
+  toc: [],
   showPreview: true,
   initialized: false,
   toolMode: "preview",
