@@ -78,12 +78,12 @@ export function CommandPalette() {
             style={{
               padding: "4px 2px",
               outline: "1px solid black",
-              boxSizing: "border-box"
+              boxSizing: "border-box",
             }}
           >
             <strong>Exprerimental: Use native file systems</strong>
             <p>
-              To use native fs, use Chrome Canary (78>=).&nbsp;
+              {`To use native fs, use Chrome Canary (78>=).`}&nbsp;
               <a
                 target="_blank"
                 href="https://www.google.com/intl/ja/chrome/canary/"
@@ -97,7 +97,7 @@ export function CommandPalette() {
                   width: "95%",
                   fontSize: "1.2em",
                   padding: 3,
-                  background: "wheat"
+                  background: "wheat",
                 }}
                 // style={{ padding: 5, background: "wheat" }}
               >

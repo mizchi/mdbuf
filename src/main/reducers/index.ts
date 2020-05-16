@@ -29,19 +29,19 @@ export const reducer = reducerWithoutInitialState<AppState>()
     return {
       ...state,
       raw,
-      wordCount: Array.from(raw).length
+      wordCount: Array.from(raw).length,
     };
   })
   .case(updateRaw.async.done, (state, { result }) => {
     return {
       ...state,
-      ...result
+      ...result,
     };
   })
   .case(sync, (state, other) => {
     return {
       ...state,
-      ...other
+      ...other,
     };
   })
   .case(updateShowPreview, (state, showPreview) => {
@@ -52,7 +52,7 @@ export const reducer = reducerWithoutInitialState<AppState>()
     return {
       ...state,
       toolMode,
-      showPreview: !(state.showPreview && isSameMode)
+      showPreview: !(state.showPreview && isSameMode),
     };
   })
   .case(changeEditorMode, (state, editorMode) => {

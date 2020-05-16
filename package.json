@@ -52,7 +52,7 @@
     "mdast-util-toc": "^5.0.1",
     "monaco-editor": "^0.19.3",
     "morphdom": "^2.5.12",
-    "prettier": "^1.19.1",
+    "prettier": "^2.0.5",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-redux": "^7.1.3",
