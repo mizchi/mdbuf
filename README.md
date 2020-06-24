@@ -2,7 +2,7 @@
 
 Markdown Edit & Preview
 
-Try here https://markdown-buffer.netlify.com/
+Try here https://mdbuf.netlify.com/
 
 ## Features
 
