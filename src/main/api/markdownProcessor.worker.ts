@@ -76,7 +76,7 @@ const defaultProcessor = remark()
   .use(math)
   .use(toc)
   .use(katex)
-  .use(hljs, { exclude: ["vue"] })
+  .use(hljs, { exclude: ["vue", "graphql", "gql"] })
   .use(html)
   .use(frontmatter, ["yaml"])
   .use(buildOutline);
