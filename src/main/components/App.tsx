@@ -2,7 +2,7 @@ import React, { useCallback, useLayoutEffect, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createGlobalStyle } from "styled-components";
 import { AppState } from "../types";
-import { changeToolMode, updateShowPreview, sync } from "../reducers";
+import { changeToolMode, sync } from "../reducers";
 import { BottomHelper } from "./elements/BottomHelper";
 import { VisibilityDetector } from "./elements/VisibilityDetector";
 import { KeyHandler } from "./KeyHandler";
