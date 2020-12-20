@@ -151,17 +151,31 @@ const ToolSelector = styled.div`
   color: white;
 `;
 
+const WHITE = "#eee";
+const BACKGROUND_COLOR_DARK = "#333";
+
 const ToolContainer = styled.div`
   height: calc(100vh - 32px);
   width: calc(100vw / 2);
   overflow-x: auto;
   overflow-y: auto;
-  background: #eee;
+  background: ${WHITE};
+  @media (prefers-color-scheme: dark) {
+    background-color: ${BACKGROUND_COLOR_DARK};
+    color: ${WHITE};
+    .markdown-body {
+      color: ${WHITE};
+    }
+  }
 `;
 
 const TabButton = styled.div<{ selected: boolean }>`
-  background-color: ${(p: any) => (p.selected ? "#eee" : "#2d2a2e")};
-  color: ${(p: any) => (p.selected ? "#2d2a2e" : "#eee")};
+  background-color: ${(p: any) => (p.selected ? WHITE : "#2d2a2e")};
+  color: ${(p: any) => (p.selected ? "#2d2a2e" : WHITE )};
+  @media (prefers-color-scheme: dark) {
+    background-color: ${(p: any) => (p.selected ? BACKGROUND_COLOR_DARK : "#2d2a2e")};
+    color: ${WHITE};
+  }
   cursor: ${(p: any) => (p.selected ? "auto" : "pointer")};
   display: inline-flex;
   height: 100%;
