@@ -69,6 +69,7 @@
     "remark-math": "^4.0.0",
     "remark-toc": "^7.2.0",
     "ress": "^4.0.0",
+    "string-length": "^4.0.2",
     "styled-components": "^5.2.3",
     "typescript-fsa": "^3.0.0",
     "typescript-fsa-reducers": "^1.2.2",

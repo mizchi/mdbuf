@@ -5,6 +5,7 @@ import { AppState } from "../../types";
 import { format } from "date-fns";
 import { updateShowPreview } from "../../reducers";
 import { pick } from "lodash-es";
+import stringLength from "string-length";
 
 export function BottomHelper() {
   const writer = useWriter();
@@ -20,7 +21,7 @@ export function BottomHelper() {
     [showPreview]
   );
   const [charCount, wordCount] = useSelector((s: AppState) => {
-    const cc = Array.from(s.raw).length;
+    const cc = stringLength(s.raw);
     const wc = cc === 0 ? 0 : s.raw.trim().split(" ").length;
     return [cc, wc] as const;
   });
