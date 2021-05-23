@@ -28,7 +28,7 @@ import { StorageArea } from "kv-storage-polyfill";
 const storage = new StorageArea("state");
 const key = "$current";
 
-const save = debounce(async state => {
+const save = debounce(async (state: AppState) => {
   console.log("[save]", state);
   await storage.set(key, state);
   // _api.saveCurrentState(state);
@@ -36,7 +36,7 @@ const save = debounce(async state => {
 }, 500);
 
 const saveMiddleware: Middleware<AppState> = store => next => action => {
-  const state = store.getState();
+  const state: AppState = store.getState();
   save(state);
   next(action);
 };
