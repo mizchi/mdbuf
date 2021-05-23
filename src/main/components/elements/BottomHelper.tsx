@@ -19,6 +19,11 @@ export function BottomHelper() {
     },
     [showPreview]
   );
+  const [charCount, wordCount] = useSelector((s: AppState) => {
+    const cc = Array.from(s.raw).length;
+    const wc = cc === 0 ? 0 : s.raw.trim().split(" ").length;
+    return [cc, wc] as const;
+  });
 
   return (
     <div
@@ -38,6 +43,9 @@ export function BottomHelper() {
       <button style={{ borderRadius: 3 }} onClick={onClickEye}>
         👀
       </button>
+      <span style={{ padding: "0 8px"}}>
+        cc:{charCount} wc:{wordCount}
+      </span>
       &nbsp;
       {writer.handler && (
         <>
