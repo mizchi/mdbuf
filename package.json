@@ -43,7 +43,7 @@
   "dependencies": {
     "comlink": "^4.2.0",
     "date-fns": "^2.21.1",
-    "dexie": "^3.0.3",
+    "dexie": "^3.2.2",
     "diff": "^5.0.0",
     "github-markdown-css": "^4.0.0",
     "kv-storage-polyfill": "^2.0.0",
